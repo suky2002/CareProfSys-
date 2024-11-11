@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import Recommendation from './Recommendation';
+import SkillForm from './SkillForm';
 
 function App() {
-  return <h1>Hello, VR/WebXR World!</h1>;
+  const [selectedSkills, setSelectedSkills] = useState(null);
+
+  const handleRecommend = (skills) => {
+    setSelectedSkills(skills);
+  };
+
+  return (
+    <div>
+      {!selectedSkills ? (
+        <SkillForm onRecommend={handleRecommend} />
+      ) : (
+        <Recommendation selectedSkills={selectedSkills} />
+      )}
+    </div>
+  );
 }
 
 export default App;
