@@ -1,0 +1,1244 @@
+CareerStage,IndustryCluster,CareerPath,JobTitle,JobSOCCode,EntryLevelWage,AverageWage
+NOW,Advanced Manufacturing,Business Operations & Sales,Customer Service Representatives,43-4051,25850,34530
+NOW,Advanced Manufacturing,Business Operations & Sales,Receptionists and Information Clerks,43-4171,21040,26600
+"NOW,Advanced Manufacturing,Business Operations & Sales,""Office Clerks, General"",43-9061,22440,31640"
+NEXT,Advanced Manufacturing,Business Operations & Sales,First-Line Supervisors of Non-Retail Sales Workers,41-1012,49660,71560
+NEXT,Advanced Manufacturing,Business Operations & Sales,First-Line Supervisors of Office and Administrative Support Workers,43-1011,41230,56110
+NEXT,Advanced Manufacturing,Business Operations & Sales,Executive Secretaries and Executive Administrative Assistants,43-6011,44750,57460
+LATER,Advanced Manufacturing,Business Operations & Sales,General and Operations Managers,11-1021,57360,106730
+LATER,Advanced Manufacturing,Business Operations & Sales,Sales Managers,nov.22,76040,133120
+"LATER,Advanced Manufacturing,Business Operations & Sales,""Sales Rep., Wholesale & Manufacturing, Technical & Scientific Products"",41-4011,54250,84320"
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Electrical and Electronics Drafters,17-3012,43610,55370
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Mechanical Drafters,17-3013,39640,51900
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Civil Engineering Technicians,17-3022,39480,51060
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Electrical and Electronic Engineering Technicians,17-3023,49320,62330
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Industrial Engineering Technicians,17-3026,42650,61840
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Mechanical Engineering Technicians,17-3027,37960,53490
+NEXT,Advanced Manufacturing,Engineering and Maintenance,Industrial Machinery Mechanics,49-9041,40560,54310
+LATER,Advanced Manufacturing,Engineering and Maintenance,Architectural and Engineering Managers,nov.41,106270,135440
+LATER,Advanced Manufacturing,Engineering and Maintenance,Civil Engineers,17-2051,61710,85090
+LATER,Advanced Manufacturing,Engineering and Maintenance,Electrical Engineers,17-2071,73490,94530
+LATER,Advanced Manufacturing,Engineering and Maintenance,Industrial Engineers,17-2112,65960,86620
+LATER,Advanced Manufacturing,Engineering and Maintenance,Mechanical Engineers,17-2141,66350,86360
+NEXT,Advanced Manufacturing,Production,Electricians,47-2111,46530,61630
+NEXT,Advanced Manufacturing,Production,Sheet Metal Workers,47-2211,38160,63400
+NEXT,Advanced Manufacturing,Production,Millwrights,49-9044,38550,58140
+NEXT,Advanced Manufacturing,Production,First-Line Supervisors of Production and Operating Workers,51-1011,41920,57630
+"NEXT,Advanced Manufacturing,Production,""Computer Numerically Controlled Machine Tool Programmers, Metal and Plastic"",51-4012,39610,51140"
+NEXT,Advanced Manufacturing,Production,Machinists,51-4041,32850,44660
+NEXT,Advanced Manufacturing,Production,Tool and Die Makers,51-4111,43880,58590
+LATER,Advanced Manufacturing,Production,Industrial Production Managers,nov.51,71430,101000
+NOW,Bioscience,Animal Sciences,Nonfarm Animal Caretakers,39-2021,18350,23630
+"NOW,Bioscience,Animal Sciences,""Farmworkers, Farm, Ranch, and Aquacultural Animals"",45-2093,20980,25970"
+NEXT,Bioscience,Animal Sciences,Veterinary Technologists and Technicians,29-2056,27560,34840
+LATER,Bioscience,Animal Sciences,Veterinarians,29-1131,69360,96250
+NEXT,Bioscience,Production,Industrial Engineering Technicians,17-3026,42650,61840
+NEXT,Bioscience,Production,Mechanical Engineering Technicians,17-3027,37960,53490
+NEXT,Bioscience,Production,Industrial Machinery Mechanics,49-9041,40560,54310
+"NEXT,Bioscience,Production,""Maintenance and Repair Workers, General"",49-9071,27790,38140"
+NEXT,Bioscience,Production,First-Line Supervisors of Production and Operating Workers,51-1011,41920,57630
+NEXT,Bioscience,Production,Machinists,51-4041,32850,44660
+NEXT,Bioscience,Production,Chemical Plant and System Operators,51-8091,57280,68280
+LATER,Bioscience,Production,Industrial Production Managers,nov.51,71430,101000
+LATER,Bioscience,Production,Industrial Engineers,17-2112,65960,86620
+LATER,Bioscience,Production,Mechanical Engineers,17-2141,66350,86360
+"NOW,Bioscience,Research and Development,""Weighers, Measurers, Checkers, and Samplers, Recordkeeping"",43-5111,22190,30660"
+"NOW,Bioscience,Research and Development,""Farmworkers and Laborers, Crop, Nursery, and Greenhouse"",45-2092,20170,27370"
+NEXT,Bioscience,Research and Development,Agricultural and Food Science Technicians,19-4011,29380,43330
+NEXT,Bioscience,Research and Development,Chemical Technicians,19-4031,36970,51360
+"NEXT,Bioscience,Research and Development,""First-Line Supervisors of Farming, Fishing, and Forestry Workers"",45-1011,37630,48610"
+LATER,Bioscience,Research and Development,Natural Sciences Managers,nov.21,63770,113730
+LATER,Bioscience,Research and Development,Chemical Engineers,17-2041,76670,104960
+LATER,Bioscience,Research and Development,Food Scientists and Technologists,19-1012,43050,69580
+LATER,Bioscience,Research and Development,Biochemists and Biophysicists,19-1021,56250,87010
+"LATER,Bioscience,Research and Development,""Medical Scientists, Except Epidemiologists"",19-1042,45270,63800"
+LATER,Bioscience,Research and Development,Chemists,19-2031,51110,72080
+LATER,Bioscience,Research and Development,Biological Technicians,19-4021,32850,40730
+NEXT,Construction,Engineering and Quality Control,Architectural and Civil Drafters,17-3011,38670,50970
+NEXT,Construction,Engineering and Quality Control,Electrical and Electronics Drafters,17-3012,43610,55370
+NEXT,Construction,Engineering and Quality Control,Mechanical Drafters,17-3013,39640,51900
+NEXT,Construction,Engineering and Quality Control,Civil Engineering Technicians,17-3022,39480,51060
+NEXT,Construction,Engineering and Quality Control,Electrical and Electronic Engineering Technicians,17-3023,49320,62330
+NEXT,Construction,Engineering and Quality Control,Environmental Engineering Technicians,17-3025,31440,43840
+NEXT,Construction,Engineering and Quality Control,Mechanical Engineering Technicians,17-3027,37960,53490
+LATER,Construction,Engineering and Quality Control,Architectural and Engineering Managers,nov.41,106270,135440
+"LATER,Construction,Engineering and Quality Control,""Architects, Except Landscape and Naval"",17-1011,51990,75970"
+LATER,Construction,Engineering and Quality Control,Surveyors,17-1022,42920,56180
+LATER,Construction,Engineering and Quality Control,Civil Engineers,17-2051,61710,85090
+LATER,Construction,Engineering and Quality Control,Electrical Engineers,17-2071,73490,94530
+LATER,Construction,Engineering and Quality Control,Environmental Engineers,17-2081,55490,75570
+"LATER,Construction,Engineering and Quality Control,""Health and Safety Engineers, Except Mining Safety Engineers and Inspectors"",17-2111,65380,88870"
+LATER,Construction,Engineering and Quality Control,Mechanical Engineers,17-2141,66350,86360
+NOW,Construction,Skilled Trades,Carpet Installers,47-2041,34920,50920
+NOW,Construction,Skilled Trades,Construction Laborers,47-2061,29980,45540
+"NOW,Construction,Skilled Trades,""Insulation Workers, Floor, Ceiling, and Wall"",47-2131,24700,39350"
+NOW,Construction,Skilled Trades,Pipelayers,47-2151,37550,54850
+"NOW,Construction,Skilled Trades,""Helpers--Brickmasons, Blockmasons, Stonemasons, and Tile and Marble Setters"",47-3011,31910,47260"
+NOW,Construction,Skilled Trades,Helpers--Carpenters,47-3012,28940,36310
+NOW,Construction,Skilled Trades,Helpers--Electricians,47-3013,27680,35350
+"NOW,Construction,Skilled Trades,""Helpers--Painters, Paperhangers, Plasterers, and Stucco Masons"",47-3014,26560,40100"
+"NOW,Construction,Skilled Trades,""Helpers--Pipelayers, Plumbers, Pipefitters, and Steamfitters"",47-3015,29520,43230"
+NOW,Construction,Skilled Trades,Helpers--Roofers,47-3016,36830,47120
+"NOW,Construction,Skilled Trades,""Helpers--Installation, Maintenance, and Repair Workers"",49-9098,22200,29700"
+"NOW,Construction,Skilled Trades,""Laborers and Freight, Stock, and Material Movers, Hand"",53-7062,22430,29750"
+NEXT,Construction,Skilled Trades,Boilermakers,47-2011,35760,55370
+NEXT,Construction,Skilled Trades,Brickmasons and Blockmasons,47-2021,54610,63710
+NEXT,Construction,Skilled Trades,Stonemasons,47-2022,31930,46060
+NEXT,Construction,Skilled Trades,Carpenters,47-2031,37340,54370
+NEXT,Construction,Skilled Trades,Tile and Marble Setters,47-2044,31990,53490
+NEXT,Construction,Skilled Trades,Electricians,47-2111,46530,61630
+NEXT,Construction,Skilled Trades,Glaziers,47-2121,36450,52320
+"NEXT,Construction,Skilled Trades,""Insulation Workers, Mechanical"",47-2132,46700,58470"
+"NEXT,Construction,Skilled Trades,""Plumbers, Pipefitters, and Steamfitters"",47-2152,44010,63500"
+NEXT,Construction,Skilled Trades,Plasterers and Stucco Masons,47-2161,30430,43640
+NEXT,Construction,Skilled Trades,Reinforcing Iron and Rebar Workers,47-2171,46320,65980
+NEXT,Construction,Skilled Trades,Sheet Metal Workers,47-2211,38160,63400
+NEXT,Construction,Skilled Trades,Structural Iron and Steel Workers,47-2221,40800,57020
+NEXT,Construction,Skilled Trades,Elevator Installers and Repairers,47-4021,56900,77200
+"NEXT,Construction,Skilled Trades,""First-Line Supervisors of Mechanics, Installers, and Repairers"",49-1011,44280,60630"
+"NEXT,Construction,Skilled Trades,""Mobile Heavy Equipment Mechanics, Except Engines"",49-3042,40080,51040"
+"NEXT,Construction,Skilled Trades,""Heating, Air Conditioning, and Refrigeration Mechanics and Installers"",49-9021,33820,46930"
+NEXT,Construction,Skilled Trades,Millwrights,49-9044,38550,58140
+NEXT,Construction,Skilled Trades,Electrical Power-Line Installers and Repairers,49-9051,51690,68100
+NEXT,Construction,Skilled Trades,Telecommunications Line Installers and Repairers,49-9052,33880,48440
+NEXT,Construction,Skilled Trades,Excavating and Loading Machine and Dragline Operators,53-7032,31600,44270
+LATER,Construction,Skilled Trades,Construction Managers,nov.21,68890,99180
+LATER,Construction,Skilled Trades,Cost Estimators,13-1051,46050,65100
+LATER,Construction,Skilled Trades,Commercial and Industrial Designers,27-1021,39840,57010
+LATER,Construction,Skilled Trades,Interior Designers,27-1025,42050,63310
+NOW,Education,Administrative and Business Support Services,Customer Service Representatives,43-4051,25850,34530
+"NOW,Education,Administrative and Business Support Services,""Interviewers, Except Eligibility and Loan"",43-4111,24020,31990"
+NOW,Education,Administrative and Business Support Services,Receptionists and Information Clerks,43-4171,21040,26600
+NOW,Education,Administrative and Business Support Services,Data Entry Keyers,43-9021,26100,30830
+NOW,Education,Administrative and Business Support Services,Word Processors and Typists,43-9022,26560,33500
+"NOW,Education,Administrative and Business Support Services,""Office Clerks, General"",43-9061,22440,31640"
+"NOW,Education,Administrative and Business Support Services,""Office & Administrative Support Workers, All Other"",43-9199,31740,37900"
+NEXT,Education,Administrative and Business Support Services,Web Developers,15-1134,40600,59210
+NEXT,Education,Administrative and Business Support Services,Computer User Support Specialists,15-1151,34390,46570
+NEXT,Education,Administrative and Business Support Services,Computer Network Support Specialists,15-1152,40750,55100
+NEXT,Education,Administrative and Business Support Services,First-Line Supervisors of Office and Administrative Support Workers,43-1011,41230,56110
+"NEXT,Education,Administrative and Business Support Services,""Bookkeeping, Accounting, and Auditing Clerks"",43-3031,28720,37800"
+"NEXT,Education,Administrative and Business Support Services,""Human Resources Assistants, Except Payroll and Timekeeping"",43-4161,33250,40420"
+NEXT,Education,Administrative and Business Support Services,Executive Secretaries and Executive Administrative Assistants,43-6011,44750,57460
+LATER,Education,Administrative and Business Support Services,General and Operations Managers,11-1021,57360,106730
+LATER,Education,Administrative and Business Support Services,Administrative Services Managers,nov.11,62290,89270
+LATER,Education,Administrative and Business Support Services,Computer and Information Systems Managers,nov.21,97360,130240
+LATER,Education,Administrative and Business Support Services,Financial Managers,nov.31,91630,134210
+LATER,Education,Administrative and Business Support Services,Human Resources Managers,nov.21,83320,119950
+LATER,Education,Administrative and Business Support Services,Human Resources Specialists,13-1071,43630,63910
+LATER,Education,Administrative and Business Support Services,Management Analysts,13-1111,56410,78850
+"LATER,Education,Administrative and Business Support Services,""Meeting, Convention, and Event Planners"",13-1121,32800,48510"
+LATER,Education,Administrative and Business Support Services,Fundraisers,13-1131,39770,52840
+LATER,Education,Administrative and Business Support Services,Training and Development Specialists,13-1151,40250,59880
+LATER,Education,Administrative and Business Support Services,Market Research Analysts & Marketing Specialists,13-1161,41100,64510
+"LATER,Education,Administrative and Business Support Services,""Business Operations Specialists, All Other"",13-1199,49600,72000"
+LATER,Education,Administrative and Business Support Services,Accountants and Auditors,13-2011,48320,70180
+LATER,Education,Administrative and Business Support Services,Budget Analysts,13-2031,56930,71670
+LATER,Education,Administrative and Business Support Services,Network and Computer Systems Administrators,15-1142,60620,80280
+LATER,Education,Administrative and Business Support Services,Graphic Designers,27-1024,34810,49410
+LATER,Education,Administrative and Business Support Services,Public Relations Specialists,27-3031,40930,59360
+NOW,Education,Instruction,Childcare Workers,39-9011,18480,22850
+"NEXT,Education,Instruction,""Preschool Teachers, Except Special Education"",25-2011,21020,27360"
+NEXT,Education,Instruction,Self-Enrichment Education Teachers,25-3021,19850,38310
+NEXT,Education,Instruction,Teacher Assistants,25-9041,19400,26220
+"LATER,Education,Instruction,""Education Admin., Preschool & Childcare Center"",nov.31,35510,48940"
+"LATER,Education,Instruction,""Education Admin., Elementary & Secondary"",nov.32,72080,95080"
+"LATER,Education,Instruction,""Education Administrators, Postsecondary"",nov.33,64290,107700"
+"LATER,Education,Instruction,""Computer Science Teachers, Postsecondary"",25-1021,57520,85810"
+"LATER,Education,Instruction,""Mathematical Science Teachers, Postsecondary"",25-1022,51570,88500"
+"LATER,Education,Instruction,""Engineering Teachers, Postsecondary"",25-1032,74580,105360"
+"LATER,Education,Instruction,""Biological Science Teachers, Postsecondary"",25-1042,58520,100660"
+"LATER,Education,Instruction,""Chemistry Teachers, Postsecondary"",25-1052,58040,90260"
+"LATER,Education,Instruction,""Political Science Teachers, Postsecondary"",25-1065,58390,87860"
+"LATER,Education,Instruction,""Psychology Teachers, Postsecondary"",25-1066,54900,80410"
+"LATER,Education,Instruction,""Sociology Teachers, Postsecondary"",25-1067,56170,90080"
+"LATER,Education,Instruction,""Health Specialties Teachers, Postsecondary"",25-1071,83910,163280"
+"LATER,Education,Instruction,""Nursing Instructors and Teachers, Postsecondary"",25-1072,56880,75490"
+"LATER,Education,Instruction,""Education Teachers, Postsecondary"",25-1081,51330,75040"
+"LATER,Education,Instruction,""Criminal Justice and Law Enforcement Teachers, Postsecondary"",25-1111,50140,74860"
+"LATER,Education,Instruction,""Law Teachers, Postsecondary"",25-1112,58960,112020"
+"LATER,Education,Instruction,""Art, Drama, and Music Teachers, Postsecondary"",25-1121,53830,78930"
+"LATER,Education,Instruction,""Communications Teachers, Postsecondary"",25-1122,51820,75250"
+"LATER,Education,Instruction,""English Language and Literature Teachers, Postsecondary"",25-1123,44510,76650"
+"LATER,Education,Instruction,""Foreign Language and Literature Teachers, Postsecondary"",25-1124,49640,76480"
+"LATER,Education,Instruction,""History Teachers, Postsecondary"",25-1125,53250,79040"
+"LATER,Education,Instruction,""Philosophy and Religion Teachers, Postsecondary"",25-1126,45050,70890"
+LATER,Education,Instruction,Graduate Teaching Assistants,25-1191,19200,32680
+"LATER,Education,Instruction,""Recreation & Fitness Studies Teachers, Postsec."",25-1193,54160,91490"
+"LATER,Education,Instruction,""Vocational Education Teachers, Postsecondary"",25-1194,34510,49940"
+"LATER,Education,Instruction,""Kindergarten Teachers, Except Special Education"",25-2012,41700,52700"
+"LATER,Education,Instruction,""Elementary School Teachers, Except Special Ed."",25-2021,38830,52700"
+"LATER,Education,Instruction,""Middle School Teachers, Except Special and Career/Technical Education"",25-2022,41120,52620"
+"LATER,Education,Instruction,""Secondary School Teachers, Except Special and Career/Technical Education"",25-2031,38600,51720"
+"LATER,Education,Instruction,""Career/Technical Education Teachers, Secondary School"",25-2032,38110,50120"
+"LATER,Education,Instruction,""Special Education Teachers, Preschool"",25-2051,20930,37180"
+"LATER,Education,Instruction,""Special Education Teachers, Kindergarten and Elementary School"",25-2052,38890,53910"
+"LATER,Education,Instruction,""Special Education Teachers, Middle School"",25-2053,40130,52630"
+"LATER,Education,Instruction,""Special Education Teachers, Secondary School"",25-2054,36590,47250"
+LATER,Education,Instruction,Adult Basic and Secondary Education and Literacy Teachers and Instructors,25-3011,36060,51300
+"NOW,Education,Professional Services,""Library Assistants, Clerical"",43-4121,18350,22580"
+NEXT,Education,Professional Services,Library Technicians,25-4031,27550,35690
+NEXT,Education,Professional Services,Licensed Practical and Licensed Vocational Nurses,29-2061,35060,41180
+NEXT,Education,Professional Services,Occupational Therapy Assistants,31-2011,48870,57850
+NEXT,Education,Professional Services,Physical Therapist Assistants,31-2021,44210,53330
+NEXT,Education,Professional Services,Medical Assistants,31-9092,26370,31370
+"LATER,Education,Professional Services,""Clinical, Counseling, and School Psychologists"",19-3031,44980,64510"
+"LATER,Education,Professional Services,""Educational, Guidance, School, and Vocational Counselors"",21-1012,36350,49610"
+"LATER,Education,Professional Services,""Child, Family, and School Social Workers"",21-1021,31340,37050"
+LATER,Education,Professional Services,Librarians,25-4021,40110,53240
+LATER,Education,Professional Services,Instructional Coordinators,25-9031,39370,56280
+LATER,Education,Professional Services,Coaches and Scouts,27-2022,19430,43050
+LATER,Education,Professional Services,Interpreters and Translators,27-3091,38430,59660
+LATER,Education,Professional Services,Occupational Therapists,29-1122,66540,77460
+LATER,Education,Professional Services,Physical Therapists,29-1123,67450,82710
+LATER,Education,Professional Services,Speech-Language Pathologists,29-1127,54370,74140
+LATER,Education,Professional Services,Registered Nurses,29-1141,50330,63300
+NOW,Education,Support Services,Security Guards,33-9032,24700,36740
+NOW,Education,Support Services,Crossing Guards,33-9091,25410,29150
+"NOW,Education,Support Services,""Cooks, Institution and Cafeteria"",35-2012,19200,24250"
+NOW,Education,Support Services,Food Preparation Workers,35-2021,18220,21480
+"NOW,Education,Support Services,""Counter Attendants, Cafeteria, Food Concession, and Coffee Shop"",35-3022,17960,20180"
+"NOW,Education,Support Services,""Janitors and Cleaners, Except Maids and Housekeeping Cleaners"",37-2011,20110,25670"
+NOW,Education,Support Services,Maids and Housekeeping Cleaners,37-2012,18870,22050
+NOW,Education,Support Services,Landscaping and Groundskeeping Workers,37-3011,22400,28650
+NOW,Education,Support Services,Cashiers,41-2011,17890,21250
+"NOW,Education,Support Services,""Bus Drivers, School or Special Client"",53-3022,21430,30280"
+NEXT,Education,Support Services,Food Service Managers,nov.51,34270,49980
+NEXT,Education,Support Services,Audio and Video Equipment Technicians,27-4011,30790,41830
+NEXT,Education,Support Services,First-Line Supervisors of Food Preparation and Serving Workers,35-1012,22280,30750
+NEXT,Education,Support Services,First-Line Supervisors of Housekeeping and Janitorial Workers,37-1011,28280,38580
+"NEXT,Education,Support Services,""Supervisors of Landscaping, Lawn Service & Groundskeeping Workers"",37-1012,36210,47030"
+"NEXT,Education,Support Services,""Maintenance and Repair Workers, General"",49-9071,27790,38140"
+LATER,Education,Support Services,General and Operations Managers,11-1021,57360,106730
+NEXT,Energy,Engineering and Quality Control,Architectural and Civil Drafters,17-3011,38670,50970
+NEXT,Energy,Engineering and Quality Control,Electrical and Electronics Drafters,17-3012,43610,55370
+NEXT,Energy,Engineering and Quality Control,Mechanical Drafters,17-3013,39640,51900
+NEXT,Energy,Engineering and Quality Control,Civil Engineering Technicians,17-3022,39480,51060
+NEXT,Energy,Engineering and Quality Control,Electrical and Electronic Engineering Technicians,17-3023,49320,62330
+NEXT,Energy,Engineering and Quality Control,Environmental Engineering Technicians,17-3025,31440,43840
+NEXT,Energy,Engineering and Quality Control,Industrial Engineering Technicians,17-3026,42650,61840
+NEXT,Energy,Engineering and Quality Control,Mechanical Engineering Technicians,17-3027,37960,53490
+LATER,Energy,Engineering and Quality Control,Architectural and Engineering Managers,nov.41,106270,135440
+LATER,Energy,Engineering and Quality Control,Civil Engineers,17-2051,61710,85090
+LATER,Energy,Engineering and Quality Control,Electrical Engineers,17-2071,73490,94530
+LATER,Energy,Engineering and Quality Control,Environmental Engineers,17-2081,55490,75570
+LATER,Energy,Engineering and Quality Control,Industrial Engineers,17-2112,65960,86620
+LATER,Energy,Engineering and Quality Control,Mechanical Engineers,17-2141,66350,86360
+NEXT,Energy,Production,Electricians,47-2111,46530,61630
+NEXT,Energy,Production,Sheet Metal Workers,47-2211,38160,63400
+"NEXT,Energy,Production,""Electrical and Electronics Repairers, Commercial and Industrial Equipment"",49-2094,39410,52870"
+NEXT,Energy,Production,Industrial Machinery Mechanics,49-9041,40560,54310
+NEXT,Energy,Production,First-Line Supervisors of Production and Operating Workers,51-1011,41920,57630
+"NEXT,Energy,Production,""Computer Numerically Controlled Machine Tool Programmers, Metal and Plastic"",51-4012,39610,51140"
+NEXT,Energy,Production,Machinists,51-4041,32850,44660
+NEXT,Energy,Production,Chemical Plant and System Operators,51-8091,57280,68280
+NEXT,Energy,Production,Semiconductor Processors,51-9141,27840,36300
+LATER,Energy,Production,Industrial Production Managers,nov.51,71430,101000
+LATER,Energy,Production,Occupational Health and Safety Specialists,29-9011,48330,66990
+NOW,Financial and Professional,Business Operations,Receptionists and Information Clerks,43-4171,21040,26600
+NOW,Financial and Professional,Business Operations,Data Entry Keyers,43-9021,26100,30830
+"NOW,Financial and Professional,Business Operations,""Mail Clerks and Mail Machine Operators, Except Postal Service"",43-9051,25250,30190"
+"NOW,Financial and Professional,Business Operations,""Office Clerks, General"",43-9061,22440,31640"
+NEXT,Financial and Professional,Business Operations,First-Line Supervisors of Office and Administrative Support Workers,43-1011,41230,56110
+"NEXT,Financial and Professional,Business Operations,""Human Resources Assistants, Except Payroll and Timekeeping"",43-4161,33250,40420"
+NEXT,Financial and Professional,Business Operations,Executive Secretaries and Executive Administrative Assistants,43-6011,44750,57460
+LATER,Financial and Professional,Business Operations,General and Operations Managers,11-1021,57360,106730
+LATER,Financial and Professional,Business Operations,Administrative Services Managers,nov.11,62290,89270
+LATER,Financial and Professional,Business Operations,Human Resources Managers,nov.21,83320,119950
+LATER,Financial and Professional,Business Operations,Human Resources Specialists,13-1071,43630,63910
+LATER,Financial and Professional,Business Operations,Management Analysts,13-1111,56410,78850
+"LATER,Financial and Professional,Business Operations,""Compensation, Benefits & Job Analysis Specialists"",13-1141,48980,65480"
+LATER,Financial and Professional,Business Operations,Training and Development Specialists,13-1151,40250,59880
+NOW,Financial and Professional,Financial and Insurance Services,Tellers,43-3071,21870,26250
+"NOW,Financial and Professional,Financial and Insurance Services,""Financial Clerks, All Other"",43-3099,31290,40210"
+"NEXT,Financial and Professional,Financial and Insurance Services,""Claims Adjusters, Examiners, and Investigators"",13-1031,47920,64130"
+"NEXT,Financial and Professional,Financial and Insurance Services,""Insurance Appraisers, Auto Damage"",13-1032,62940,89790"
+"NEXT,Financial and Professional,Financial and Insurance Services,""Bookkeeping, Accounting, and Auditing Clerks"",43-3031,28720,37800"
+LATER,Financial and Professional,Financial and Insurance Services,Financial Managers,nov.31,91630,134210
+LATER,Financial and Professional,Financial and Insurance Services,Accountants and Auditors,13-2011,48320,70180
+LATER,Financial and Professional,Financial and Insurance Services,Credit Analysts,13-2041,50110,76980
+LATER,Financial and Professional,Financial and Insurance Services,Financial Analysts,13-2051,61470,94930
+LATER,Financial and Professional,Financial and Insurance Services,Personal Financial Advisors,13-2052,47780,89710
+LATER,Financial and Professional,Financial and Insurance Services,Insurance Underwriters,13-2053,44670,66380
+LATER,Financial and Professional,Financial and Insurance Services,Financial Examiners,13-2061,46460,73660
+LATER,Financial and Professional,Financial and Insurance Services,Credit Counselors,13-2071,36980,53070
+LATER,Financial and Professional,Financial and Insurance Services,Loan Officers,13-2072,49480,76520
+LATER,Financial and Professional,Financial and Insurance Services,Actuaries,15-2011,64900,101140
+"LATER,Financial and Professional,Financial and Insurance Services,""Securities, Commodities, and Financial Services Sales Agents"",41-3031,34180,80550"
+NOW,Financial and Professional,Legal Services,File Clerks,43-4071,24890,33530
+"NOW,Financial and Professional,Legal Services,""Office Clerks, General"",43-9061,22440,31640"
+NEXT,Financial and Professional,Legal Services,Paralegals and Legal Assistants,23-2011,38730,52340
+NEXT,Financial and Professional,Legal Services,Executive Secretaries and Executive Administrative Assistants,43-6011,44750,57460
+LATER,Financial and Professional,Legal Services,Lawyers,23-1011,66650,115520
+NOW,Financial and Professional,Sales and Marketing,Telemarketers,41-9041,17980,23520
+NOW,Financial and Professional,Sales and Marketing,Customer Service Representatives,43-4051,25850,34530
+NEXT,Financial and Professional,Sales and Marketing,First-Line Supervisors of Non-Retail Sales Workers,41-1012,49660,71560
+LATER,Financial and Professional,Sales and Marketing,Advertising and Promotions Managers,nov.11,74970,122450
+LATER,Financial and Professional,Sales and Marketing,Marketing Managers,nov.21,92160,136100
+LATER,Financial and Professional,Sales and Marketing,Sales Managers,nov.22,76040,133120
+LATER,Financial and Professional,Sales and Marketing,Public Relations and Fundraising Managers,nov.31,72340,108580
+"LATER,Financial and Professional,Sales and Marketing,""Meeting, Convention, and Event Planners"",13-1121,32800,48510"
+LATER,Financial and Professional,Sales and Marketing,Market Research Analysts & Marketing Specialists,13-1161,41100,64510
+LATER,Financial and Professional,Sales and Marketing,Graphic Designers,27-1024,34810,49410
+LATER,Financial and Professional,Sales and Marketing,Public Relations Specialists,27-3031,40930,59360
+NOW,Health Care,Business Operations,Customer Service Representatives,43-4051,25850,34530
+NOW,Health Care,Business Operations,Receptionists and Information Clerks,43-4171,21040,26600
+"NOW,Health Care,Business Operations,""Office Clerks, General"",43-9061,22440,31640"
+NEXT,Health Care,Business Operations,Web Developers,15-1134,40600,59210
+NEXT,Health Care,Business Operations,Computer User Support Specialists,15-1151,34390,46570
+NEXT,Health Care,Business Operations,Medical Records and Health Information Technicians,29-2071,31420,41620
+NEXT,Health Care,Business Operations,Medical Transcriptionists,31-9094,26200,34390
+NEXT,Health Care,Business Operations,First-Line Supervisors of Office and Administrative Support Workers,43-1011,41230,56110
+LATER,Health Care,Business Operations,Public Relations and Fundraising Managers,nov.31,72340,108580
+LATER,Health Care,Business Operations,Administrative Services Managers,nov.11,62290,89270
+LATER,Health Care,Business Operations,Medical and Health Services Managers,nov.11,75040,106810
+LATER,Health Care,Business Operations,Accountants and Auditors,13-2011,48320,70180
+LATER,Health Care,Business Operations,Computer Systems Analysts,15-1121,65550,88110
+"LATER,Health Care,Business Operations,""Software Developers, Applications"",15-1132,75590,96100"
+LATER,Health Care,Business Operations,Network and Computer Systems Administrators,15-1142,60620,80280
+LATER,Health Care,Business Operations,Public Relations Specialists,27-3031,40930,59360
+NOW,Health Care,Diagnostic and Therapeutic,Psychiatric Aides,31-1013,23140,27950
+NEXT,Health Care,Diagnostic and Therapeutic,Radiation Therapists,29-1124,64280,77680
+NEXT,Health Care,Diagnostic and Therapeutic,Respiratory Therapists,29-1126,45020,54760
+NEXT,Health Care,Diagnostic and Therapeutic,Dental Hygienists,29-2021,63070,69980
+NEXT,Health Care,Diagnostic and Therapeutic,Diagnostic Medical Sonographers,29-2032,57790,71730
+NEXT,Health Care,Diagnostic and Therapeutic,Radiologic Technologists,29-2034,44570,54000
+NEXT,Health Care,Diagnostic and Therapeutic,Occupational Therapy Assistants,31-2011,48870,57850
+NEXT,Health Care,Diagnostic and Therapeutic,Massage Therapists,31-9011,31450,37950
+NEXT,Health Care,Diagnostic and Therapeutic,Dental Assistants,31-9091,30510,36900
+NEXT,Health Care,Diagnostic and Therapeutic,Phlebotomists,31-9097,26570,31630
+LATER,Health Care,Diagnostic and Therapeutic,Healthcare Social Workers,21-1022,33630,45620
+LATER,Health Care,Diagnostic and Therapeutic,Mental Health and Substance Abuse Social Workers,21-1023,24740,34710
+"LATER,Health Care,Diagnostic and Therapeutic,""Dentists, General"",29-1021,119110,180350"
+LATER,Health Care,Diagnostic and Therapeutic,Pharmacists,29-1051,112850,123610
+LATER,Health Care,Diagnostic and Therapeutic,Obstetricians and Gynecologists,29-1064,101020,219750
+LATER,Health Care,Diagnostic and Therapeutic,Psychiatrists,29-1066,153920,235180
+LATER,Health Care,Diagnostic and Therapeutic,Occupational Therapists,29-1122,66540,77460
+LATER,Health Care,Diagnostic and Therapeutic,Speech-Language Pathologists,29-1127,54370,74140
+NOW,Health Care,Patient Care,Home Health Aides,31-1011,20270,22660
+NOW,Health Care,Patient Care,Orderlies,31-1015,19210,22910
+NOW,Health Care,Patient Care,Physical Therapist Aides,31-2022,19870,26110
+NOW,Health Care,Patient Care,Personal Care Aides,39-9021,19040,21730
+NEXT,Health Care,Patient Care,Emergency Medical Technicians and Paramedics,29-2041,25140,34500
+NEXT,Health Care,Patient Care,Surgical Technologists,29-2055,34860,42720
+NEXT,Health Care,Patient Care,Licensed Practical and Licensed Vocational Nurses,29-2061,35060,41180
+NEXT,Health Care,Patient Care,Nursing Assistants,31-1014,20830,25360
+NEXT,Health Care,Patient Care,Physical Therapist Assistants,31-2021,44210,53330
+NEXT,Health Care,Patient Care,Medical Assistants,31-9092,26370,31370
+LATER,Health Care,Patient Care,Anesthesiologists,29-1061,190430,249950
+LATER,Health Care,Patient Care,Family and General Practitioners,29-1062,60340,172940
+"LATER,Health Care,Patient Care,""Pediatricians, General"",29-1065,124210,195800"
+LATER,Health Care,Patient Care,Physician Assistants,29-1071,53200,91480
+LATER,Health Care,Patient Care,Physical Therapists,29-1123,67450,82710
+LATER,Health Care,Patient Care,Registered Nurses,29-1141,50330,63300
+LATER,Health Care,Patient Care,Nurse Anesthetists,29-1151,130320,151680
+LATER,Health Care,Patient Care,Nurse Practitioners,29-1171,84750,96490
+NOW,Hospitality,Administrative and Support Services,Security Guards,33-9032,24700,36740
+"NOW,Hospitality,Administrative and Support Services,""Janitors and Cleaners, Except Maids and Housekeeping Cleaners"",37-2011,20110,25670"
+NOW,Hospitality,Administrative and Support Services,Maids and Housekeeping Cleaners,37-2012,18870,22050
+NOW,Hospitality,Administrative and Support Services,Landscaping and Groundskeeping Workers,37-3011,22400,28650
+NOW,Hospitality,Administrative and Support Services,Customer Service Representatives,43-4051,25850,34530
+"NOW,Hospitality,Administrative and Support Services,""Hotel, Motel, and Resort Desk Clerks"",43-4081,18590,22080"
+"NOW,Hospitality,Administrative and Support Services,""Office Clerks, General"",43-9061,22440,31640"
+NOW,Hospitality,Administrative and Support Services,Laundry and Dry-Cleaning Workers,51-6011,18300,21660
+NEXT,Hospitality,Administrative and Support Services,Lodging Managers,nov.81,29550,45800
+NEXT,Hospitality,Administrative and Support Services,First-Line Supervisors of Housekeeping and Janitorial Workers,37-1011,28280,38580
+"NEXT,Hospitality,Administrative and Support Services,""Supervisors of Landscaping, Lawn Service & Groundskeeping Workers"",37-1012,36210,47030"
+NEXT,Hospitality,Administrative and Support Services,First-Line Supervisors of Office and Administrative Support Workers,43-1011,41230,56110
+"NEXT,Hospitality,Administrative and Support Services,""Bookkeeping, Accounting, and Auditing Clerks"",43-3031,28720,37800"
+NEXT,Hospitality,Administrative and Support Services,Executive Secretaries and Executive Administrative Assistants,43-6011,44750,57460
+"NEXT,Hospitality,Administrative and Support Services,""Maintenance and Repair Workers, General"",49-9071,27790,38140"
+LATER,Hospitality,Administrative and Support Services,General and Operations Managers,11-1021,57360,106730
+LATER,Hospitality,Administrative and Support Services,Administrative Services Managers,nov.11,62290,89270
+LATER,Hospitality,Administrative and Support Services,Financial Managers,nov.31,91630,134210
+LATER,Hospitality,Administrative and Support Services,Human Resources Managers,nov.21,83320,119950
+LATER,Hospitality,Administrative and Support Services,Human Resources Specialists,13-1071,43630,63910
+LATER,Hospitality,Administrative and Support Services,Training and Development Specialists,13-1151,40250,59880
+LATER,Hospitality,Administrative and Support Services,Accountants and Auditors,13-2011,48320,70180
+"NOW,Hospitality,Entertainment,""Lifeguards, Ski Patrol, and Other Recreational Protective Service"",33-9092,17600,18970"
+NOW,Hospitality,Entertainment,Gaming Dealers,39-3011,18530,29960
+"NOW,Hospitality,Entertainment,""Ushers, Lobby Attendants, and Ticket Takers"",39-3031,17630,20920"
+NOW,Hospitality,Entertainment,Amusement and Recreation Attendants,39-3091,17890,21010
+NOW,Hospitality,Entertainment,Gaming Change Persons and Booth Cashiers,41-2012,21980,27500
+NEXT,Hospitality,Entertainment,Gaming Managers,nov.71,46750,63230
+NEXT,Hospitality,Entertainment,Craft Artists,27-1012,23080,27000
+NEXT,Hospitality,Entertainment,Audio and Video Equipment Technicians,27-4011,30790,41830
+NEXT,Hospitality,Entertainment,Sound Engineering Technicians,27-4014,35060,52270
+NEXT,Hospitality,Entertainment,Photographers,27-4021,21760,36970
+LATER,Hospitality,Entertainment,General and Operations Managers,11-1021,57360,106730
+"LATER,Hospitality,Entertainment,""Agents & Business Mgr., Artists, Performers, Athl."",13-1011,29430,39480"
+LATER,Hospitality,Entertainment,Museum Technicians and Conservators,25-4013,31510,40230
+"LATER,Hospitality,Entertainment,""Fine Artists, Including Painters, Sculptors, and Illustrators"",27-1013,25780,39610"
+LATER,Hospitality,Entertainment,Multimedia Artists and Animators,27-1014,40820,56340
+LATER,Hospitality,Entertainment,Set and Exhibit Designers,27-1027,33620,48190
+LATER,Hospitality,Entertainment,Coaches and Scouts,27-2022,19430,43050
+LATER,Hospitality,Entertainment,Music Directors and Composers,27-2041,35260,52660
+LATER,Hospitality,Entertainment,Writers and Authors,27-3043,44110,64770
+LATER,Hospitality,Entertainment,Athletic Trainers,29-9091,38670,45720
+"NOW,Hospitality,Food Service,""Cooks, Fast Food"",35-2011,17660,19530"
+"NOW,Hospitality,Food Service,""Cooks, Institution and Cafeteria"",35-2012,19200,24250"
+"NOW,Hospitality,Food Service,""Cooks, Short Order"",35-2015,17640,20360"
+NOW,Hospitality,Food Service,Food Preparation Workers,35-2021,18220,21480
+NOW,Hospitality,Food Service,Bartenders,35-3011,17970,24890
+"NOW,Hospitality,Food Service,""Combined Food Preparation and Serving Workers, Including Fast Food"",35-3021,17640,19990"
+"NOW,Hospitality,Food Service,""Counter Attendants, Cafeteria, Food Concession, and Coffee Shop"",35-3022,17960,20180"
+NOW,Hospitality,Food Service,Waiters and Waitresses,35-3031,17790,21110
+"NOW,Hospitality,Food Service,""Food Servers, Nonrestaurant"",35-3041,18070,21090"
+NOW,Hospitality,Food Service,Dining Room and Cafeteria Attendants and Bartender Helpers,35-9011,17880,21330
+NOW,Hospitality,Food Service,Dishwashers,35-9021,18030,20560
+"NOW,Hospitality,Food Service,""Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop"",35-9031,17880,19890"
+"NOW,Hospitality,Food Service,""Food Preparation and Serving Related Workers, All Other"",35-9099,18700,21640"
+NEXT,Hospitality,Food Service,Food Service Managers,nov.51,34270,49980
+NEXT,Hospitality,Food Service,First-Line Supervisors of Food Preparation and Serving Workers,35-1012,22280,30750
+"NEXT,Hospitality,Food Service,""Cooks, Restaurant"",35-2014,19530,23800"
+NEXT,Hospitality,Food Service,Bakers,51-3011,19460,24420
+LATER,Hospitality,Food Service,General and Operations Managers,11-1021,57360,106730
+"NOW,Hospitality,Sales and Marketing,""Media and Communication Workers, All Other"",27-3099,41670,51350"
+NOW,Hospitality,Sales and Marketing,Cashiers,41-2011,17890,21250
+NOW,Hospitality,Sales and Marketing,Counter and Rental Clerks,41-2021,21130,32380
+NOW,Hospitality,Sales and Marketing,Retail Salespersons,41-2031,19150,27140
+NOW,Hospitality,Sales and Marketing,Customer Service Representatives,43-4051,25850,34530
+NOW,Hospitality,Sales and Marketing,Reservation and Transportation Ticket Agents and Travel Clerks,43-4181,26750,39440
+"NEXT,Hospitality,Sales and Marketing,""Property, Real Estate & Community Assoc. Mgr."",nov.41,25970,53300"
+NEXT,Hospitality,Sales and Marketing,First-Line Supervisors of Retail Sales Workers,41-1011,29650,41020
+NEXT,Hospitality,Sales and Marketing,First-Line Supervisors of Non-Retail Sales Workers,41-1012,49660,71560
+LATER,Hospitality,Sales and Marketing,Advertising and Promotions Managers,nov.11,74970,122450
+LATER,Hospitality,Sales and Marketing,Marketing Managers,nov.21,92160,136100
+LATER,Hospitality,Sales and Marketing,Sales Managers,nov.22,76040,133120
+LATER,Hospitality,Sales and Marketing,Public Relations and Fundraising Managers,nov.31,72340,108580
+"LATER,Hospitality,Sales and Marketing,""Meeting, Convention, and Event Planners"",13-1121,32800,48510"
+LATER,Hospitality,Sales and Marketing,Fundraisers,13-1131,39770,52840
+LATER,Hospitality,Sales and Marketing,Market Research Analysts & Marketing Specialists,13-1161,41100,64510
+LATER,Hospitality,Sales and Marketing,Art Directors,27-1011,66660,104760
+LATER,Hospitality,Sales and Marketing,Multimedia Artists and Animators,27-1014,40820,56340
+LATER,Hospitality,Sales and Marketing,Graphic Designers,27-1024,34810,49410
+LATER,Hospitality,Sales and Marketing,Public Relations Specialists,27-3031,40930,59360
+NEXT,Information Technology,Information Support Services,Computer User Support Specialists,15-1151,34390,46570
+NEXT,Information Technology,Information Support Services,Computer Network Support Specialists,15-1152,40750,55100
+LATER,Information Technology,Information Support Services,Computer and Information Systems Managers,nov.21,97360,130240
+LATER,Information Technology,Information Support Services,Computer Systems Analysts,15-1121,65550,88110
+LATER,Information Technology,Information Support Services,Information Security Analysts,15-1122,64060,91630
+LATER,Information Technology,Information Support Services,Network and Computer Systems Administrators,15-1142,60620,80280
+LATER,Information Technology,Information Support Services,Computer Network Architects,15-1143,77000,97120
+NEXT,Information Technology,Programming and Development,Web Developers,15-1134,40600,59210
+LATER,Information Technology,Programming and Development,Computer and Information Systems Managers,nov.21,97360,130240
+LATER,Information Technology,Programming and Development,Computer Programmers,15-1131,59760,80030
+"LATER,Information Technology,Programming and Development,""Software Developers, Applications"",15-1132,75590,96100"
+"LATER,Information Technology,Programming and Development,""Software Developers, Systems Software"",15-1133,74690,96200"
+LATER,Information Technology,Programming and Development,Graphic Designers,27-1024,34810,49410
+NOW,Transportation and Logistics,Procurement and Sales,Cashiers,41-2011,17890,21250
+NOW,Transportation and Logistics,Procurement and Sales,Counter and Rental Clerks,41-2021,21130,32380
+NOW,Transportation and Logistics,Procurement and Sales,Telemarketers,41-9041,17980,23520
+NOW,Transportation and Logistics,Procurement and Sales,Customer Service Representatives,43-4051,25850,34530
+NOW,Transportation and Logistics,Procurement and Sales,Driver/Sales Workers,53-3031,19010,29190
+NEXT,Transportation and Logistics,Procurement and Sales,First-Line Supervisors of Non-Retail Sales Workers,41-1012,49660,71560
+LATER,Transportation and Logistics,Procurement and Sales,Sales Managers,nov.22,76040,133120
+LATER,Transportation and Logistics,Procurement and Sales,Purchasing Managers,nov.61,105080,143470
+"LATER,Transportation and Logistics,Procurement and Sales,""Sales Rep., Wholesale & Manufacturing, Technical & Scientific Products"",41-4011,54250,84320"
+NOW,Transportation and Logistics,Transportation,Light Truck or Delivery Services Drivers,53-3033,23410,35060
+NEXT,Transportation and Logistics,Transportation,Automotive Service Technicians and Mechanics,49-3023,30220,41900
+NEXT,Transportation and Logistics,Transportation,Bus & Truck Mechanics & Diesel Engine Specialists,49-3031,33860,43860
+NEXT,Transportation and Logistics,Transportation,Aircraft Cargo Handling Supervisors,53-1011,38580,48520
+NEXT,Transportation and Logistics,Transportation,Airfield Operations Specialists,53-2022,31530,41920
+NEXT,Transportation and Logistics,Transportation,Heavy and Tractor-Trailer Truck Drivers,53-3032,33120,43480
+NEXT,Transportation and Logistics,Transportation,Locomotive Engineers,53-4011,56750,68670
+NOW,Transportation and Logistics,Warehousing and Distribution,Order Clerks,43-4151,23780,32450
+NOW,Transportation and Logistics,Warehousing and Distribution,Cargo and Freight Agents,43-5011,35960,43970
+"NOW,Transportation and Logistics,Warehousing and Distribution,""Shipping, Receiving, and Traffic Clerks"",43-5071,26180,33990"
+NOW,Transportation and Logistics,Warehousing and Distribution,Stock Clerks and Order Fillers,43-5081,20000,26680
+NOW,Transportation and Logistics,Warehousing and Distribution,Conveyor Operators and Tenders,53-7011,29430,35700
+NOW,Transportation and Logistics,Warehousing and Distribution,Industrial Truck and Tractor Operators,53-7051,26530,34360
+"NOW,Transportation and Logistics,Warehousing and Distribution,""Laborers and Freight, Stock, and Material Movers, Hand"",53-7062,22430,29750"
+"NOW,Transportation and Logistics,Warehousing and Distribution,""Packers and Packagers, Hand"",53-7064,19620,25870"
+"NEXT,Transportation and Logistics,Warehousing and Distribution,""Bookkeeping, Accounting, and Auditing Clerks"",43-3031,28720,37800"
+LATER,Transportation and Logistics,Warehousing and Distribution,Logisticians,13-1081,54470,76570
+"NEXT,Energy,Production,""Welders, Cutters, Solderers, and Brazers"",51-4121,30100,38730"
+"NEXT,Transportation and Logistics,Transportation,""Dispatchers, Except Police, Fire, and Ambulance"",43-5032,31750,43550"
+NEXT,Health Care,Business Operations,Billing and Posting Clerks,43-3021,29020,35750
+NEXT,Advanced Manufacturing,Production,Structural Metal Fabricators and Fitters,51-2041,30680,37820
+"NEXT,Hospitality,Administrative and Support Services,""Secretaries & Administrative Assistants, Except Legal, Medical, & Executive"",43-6014,25610,33590"
+"NEXT,Bioscience,Production,""Mixing and Blending Machine Setters, Operators, and Tenders"",51-9023,32260,41680"
+NEXT,Hospitality,Sales and Marketing,Merchandise Displayers and Window Trimmers,27-1026,23180,28590
+NEXT,Transportation and Logistics,Procurement and Sales,Parts Salespersons,41-2022,21670,31750
+NEXT,Education,Professional Services,Community Health Workers,21-1094,30730,38280
+"NEXT,Transportation and Logistics,Warehousing and Distribution,""Production, Planning, and Expediting Clerks"",43-5061,35550,48140"
+"NEXT,Energy,Production,""Coil Winders, Tapers, and Finishers"",51-2021,25980,34560"
+NEXT,Health Care,Diagnostic and Therapeutic,Occupational Therapy Aides,31-2012,19020,28550
+"NEXT,Hospitality,Sales and Marketing,""Sales Representatives, Services, All Other"",41-3099,31820,52940"
+NEXT,Education,Administrative and Business Support Services,Bill and Account Collectors,43-3011,25390,32820
+NEXT,Construction,Skilled Trades,Drywall and Ceiling Tile Installers,47-2081,31540,43450
+"NEXT,Transportation and Logistics,Transportation,""Railroad Brake, Signal, and Switch Operators"",53-4021,47360,61450"
+NEXT,Financial and Professional,Financial and Insurance Services,Loan Interviewers and Clerks,43-4131,28150,38010
+"NEXT,Advanced Manufacturing,Business Operations & Sales,""Secretaries & Administrative Assistants, Except Legal, Medical, & Executive"",43-6014,25610,33590"
+"NEXT,Financial and Professional,Sales and Marketing,""Sales Representatives, Services, All Other"",41-3099,31820,52940"
+NEXT,Advanced Manufacturing,Production,Chemical Equipment Operators and Tenders,51-9011,29350,40680
+NEXT,Education,Professional Services,Social and Human Service Assistants,21-1093,20440,28120
+"NEXT,Bioscience,Animal Sciences,""Farmers, Ranchers & Other Ag. Managers"",nov.13,39680,59740"
+NEXT,Health Care,Diagnostic and Therapeutic,Social and Human Service Assistants,21-1093,20440,28120
+"NEXT,Energy,Production,""Computer-Controlled Machine Tool Operators, Metal and Plastic"",51-4011,31740,39790"
+NEXT,Hospitality,Entertainment,Dancers,27-2031,0,0
+"NEXT,Advanced Manufacturing,Production,""Lathe & Turning Machine Tool Setters, Operators, & Tenders, Metal & Plastic"",51-4034,29200,40400"
+"NEXT,Financial and Professional,Business Operations,""Secretaries & Administrative Assistants, Except Legal, Medical, & Executive"",43-6014,25610,33590"
+"NEXT,Education,Administrative and Business Support Services,""Secretaries & Administrative Assistants, Except Legal, Medical, & Executive"",43-6014,25610,33590"
+"NEXT,Hospitality,Food Service,""Cooks, All Other"",35-2019,18740,28220"
+"NEXT,Advanced Manufacturing,Production,""Computer-Controlled Machine Tool Operators, Metal and Plastic"",51-4011,31740,39790"
+NEXT,Hospitality,Food Service,Chefs and Head Cooks,35-1011,31060,44800
+NEXT,Health Care,Diagnostic and Therapeutic,Pharmacy Technicians,29-2052,24850,30610
+"NEXT,Advanced Manufacturing,Production,""Cutting, Punching & Press Machine Setters, Oper. & Tenders, Metal & Plastic"",51-4031,26860,33860"
+"NEXT,Financial and Professional,Financial and Insurance Services,""Title Examiners, Abstractors, and Searchers"",23-2093,34060,49240"
+NEXT,Energy,Production,Structural Metal Fabricators and Fitters,51-2041,30680,37820
+NEXT,Financial and Professional,Legal Services,Legal Secretaries,43-6012,30480,41730
+NEXT,Transportation and Logistics,Transportation,Railroad Conductors and Yardmasters,53-4031,52730,64170
+NEXT,Bioscience,Production,Packaging and Filling Machine Operators & Tenders,51-9111,24310,32670
+NEXT,Bioscience,Animal Sciences,Veterinary Assistants & Lab. Animal Caretakers,31-9096,19770,24680
+NEXT,Financial and Professional,Sales and Marketing,New Accounts Clerks,43-4141,25570,30810
+"NEXT,Bioscience,Research and Development,""Inspectors, Testers, Sorters, Samplers & Weighers"",51-9061,29530,40330"
+"NEXT,Transportation and Logistics,Procurement and Sales,""Sales Rep., Wholesale & Manufacturing, Except Tech. & Scientific Products"",41-4012,37930,63700"
+NEXT,Construction,Skilled Trades,Supervisors of Construction and Extraction Workers,47-1011,51730,71550
+"NEXT,Advanced Manufacturing,Business Operations & Sales,""Sales Rep., Wholesale & Manufacturing, Except Tech. & Scientific Products"",41-4012,37930,63700"
+NEXT,Financial and Professional,Business Operations,Payroll and Timekeeping Clerks,43-3051,29400,39250
+"NEXT,Bioscience,Production,""Maintenance Workers, Machinery"",49-9043,37870,46740"
+NEXT,Transportation and Logistics,Procurement and Sales,Procurement Clerks,43-3061,32480,39220
+NEXT,Education,Administrative and Business Support Services,Payroll and Timekeeping Clerks,43-3051,29400,39250
+"NEXT,Advanced Manufacturing,Production,""Extruding & Drawing Machine Setters, Operators, & Tenders, Metal & Plastic"",51-4021,27610,34620"
+NEXT,Education,Professional Services,Residential Advisors,39-9041,22220,28470
+NEXT,Construction,Skilled Trades,Operating Engineers and Other Construction Equipment Operators,47-2073,36860,54140
+NEXT,Hospitality,Administrative and Support Services,Concierges,39-6012,21250,25240
+"NEXT,Transportation and Logistics,Transportation,""Trans., Storage, and Distribution Managers"",nov.71,68310,96580"
+"NEXT,Hospitality,Entertainment,""Umpires, Referees, and Other Sports Officials"",27-2023,18420,29880"
+"NEXT,Advanced Manufacturing,Production,""Coating, Painting, and Spraying Machine Setters, Operators, and Tenders"",51-9121,26750,35210"
+"NEXT,Advanced Manufacturing,Production,""Multiple Machine Tool Setters, Operators, and Tenders, Metal and Plastic"",51-4081,27870,34440"
+NEXT,Financial and Professional,Financial and Insurance Services,Brokerage Clerks,43-4011,36490,45640
+"NEXT,Advanced Manufacturing,Engineering and Maintenance,""Maintenance Workers, Machinery"",49-9043,37870,46740"
+NEXT,Health Care,Business Operations,Medical Secretaries,43-6013,26520,33030
+NEXT,Construction,Skilled Trades,Cement Masons and Concrete Finishers,47-2051,37040,53000
+NEXT,Energy,Engineering and Quality Control,Surveying and Mapping Technicians,17-3031,32270,41460
+NEXT,Advanced Manufacturing,Production,Engine and Other Machine Assemblers,51-2031,34070,40350
+NEXT,Energy,Production,Engine and Other Machine Assemblers,51-2031,34070,40350
+NEXT,Transportation and Logistics,Transportation,Commercial Pilots,53-2012,61310,85060
+NEXT,Health Care,Diagnostic and Therapeutic,Community Health Workers,21-1094,30730,38280
+"NEXT,Construction,Engineering and Quality Control,""Inspectors, Testers, Sorters, Samplers & Weighers"",51-9061,29530,40330"
+"NEXT,Bioscience,Production,""Sep., Filtering, Clarifying, Precipitating Still Mach. Set., Oper. & Tend."",51-9012,32220,39580"
+NEXT,Construction,Skilled Trades,Roofers,47-2181,32950,46110
+NEXT,Financial and Professional,Financial and Insurance Services,Tax Preparers,13-2082,24760,41020
+"NEXT,Transportation and Logistics,Warehousing and Distribution,""Trans., Storage, and Distribution Managers"",nov.71,68310,96580"
+NEXT,Construction,Engineering and Quality Control,Construction and Building Inspectors,47-4011,41810,51400
+NEXT,Advanced Manufacturing,Production,Packaging and Filling Machine Operators & Tenders,51-9111,24310,32670
+"NEXT,Energy,Engineering and Quality Control,""Inspectors, Testers, Sorters, Samplers & Weighers"",51-9061,29530,40330"
+NEXT,Hospitality,Entertainment,Musicians and Singers,27-2042,0,0
+"NEXT,Energy,Production,""Multiple Machine Tool Setters, Operators, and Tenders, Metal and Plastic"",51-4081,27870,34440"
+"NEXT,Advanced Manufacturing,Production,""Welders, Cutters, Solderers, and Brazers"",51-4121,30100,38730"
+NEXT,Hospitality,Sales and Marketing,Advertising Sales Agents,41-3011,25310,46210
+NEXT,Financial and Professional,Financial and Insurance Services,Insurance Claims and Policy Processing Clerks,43-9041,29800,41990
+NEXT,Hospitality,Entertainment,Actors,27-2011,0,0
+NEXT,Financial and Professional,Business Operations,Billing and Posting Clerks,43-3021,29020,35750
+"NEXT,Financial and Professional,Financial and Insurance Services,""Credit Authorizers, Checkers, and Clerks"",43-4041,29050,35720"
+"NEXT,Advanced Manufacturing,Production,""Grind., Lap., Polish. & Buff. Mach. Tool Set., Oper. & Tend., Met. & Plast."",51-4033,27790,37370"
+"NEXT,Advanced Manufacturing,Production,""Molding, Coremaking & Casting Machine Set., Oper. & Tend., Metal & Plastic"",51-4072,22570,29070"
+NEXT,Financial and Professional,Business Operations,Bill and Account Collectors,43-3011,25390,32820
+NEXT,Financial and Professional,Sales and Marketing,Advertising Sales Agents,41-3011,25310,46210
+"NEXT,Construction,Skilled Trades,""Welders, Cutters, Solderers, and Brazers"",51-4121,30100,38730"
+NEXT,Bioscience,Production,Chemical Equipment Operators and Tenders,51-9011,29350,40680
+"NEXT,Construction,Skilled Trades,""Painters, Construction and Maintenance"",47-2141,35560,50240"
+"NEXT,Construction,Skilled Trades,""Paving, Surfacing, and Tamping Equipment Operators"",47-2071,34520,50060"
+"NEXT,Advanced Manufacturing,Production,""Extruding, Forming, Pressing & Compacting Machine Setters, Oper. & Tenders"",51-9041,29670,35930"
+NOW,Engineering,Engineering Design,Data Scientist,15-1152,66659,103875
+NEXT,Engineering,Engineering Design,Cybersecurity Specialist,15-1132,54217,105952
+NOW,Information Technology,Software Development,Electrical Engineer,17-2112,69252,109573
+NOW,Information Technology,Cybersecurity,AI Engineer,15-1121,67789,87137
+NEXT,Engineering,Engineering Design,Cybersecurity Specialist,15-1121,51316,74868
+NOW,Engineering,Data Science,AI Engineer,17-2141,52477,90874
+NOW,Information Technology,Software Development,Mechanical Engineer,15-1121,66428,108090
+NEXT,Engineering,Network Administration,Quality Assurance Engineer,15-1132,65268,111310
+NOW,Engineering,Software Development,DevOps Engineer,15-1121,67626,76587
+NOW,Engineering,Data Science,DevOps Engineer,15-1152,62452,95297
+NOW,Engineering,Software Development,Software Engineer,17-2112,50120,107466
+NOW,Information Technology,Cybersecurity,Mechanical Engineer,15-1121,68819,111786
+NOW,Information Technology,Software Development,Mechanical Engineer,17-2112,58656,115714
+NOW,Engineering,Project Management,DevOps Engineer,17-2051,68499,95142
+NEXT,Information Technology,Data Science,Systems Analyst,15-1121,61246,119177
+NOW,Information Technology,Software Development,Cybersecurity Specialist,15-1152,69001,81733
+NEXT,Information Technology,Network Administration,Systems Analyst,17-2071,53052,116504
+NOW,Information Technology,Engineering Design,AI Engineer,17-2071,68367,100447
+NEXT,Engineering,Network Administration,Systems Analyst,17-2141,53463,83936
+NEXT,Engineering,Cybersecurity,Electrical Engineer,17-2071,65342,94354
+NEXT,Engineering,Data Science,Civil Engineer,15-1256,66816,93061
+NOW,Information Technology,Software Development,Electrical Engineer,15-1256,63109,92723
+NEXT,Engineering,Network Administration,Software Developer,15-1256,67315,109307
+NEXT,Information Technology,Software Development,Quality Assurance Engineer,15-1152,67635,76259
+NOW,Information Technology,Project Management,Quality Assurance Engineer,17-2112,57695,81958
+NEXT,Information Technology,Cybersecurity,Data Scientist,17-2051,64844,88077
+NEXT,Information Technology,Software Development,Systems Analyst,17-2112,68682,117471
+NEXT,Information Technology,Data Science,Mechanical Engineer,17-2141,55519,96775
+NEXT,Information Technology,Network Administration,DevOps Engineer,15-1121,68447,83951
+NOW,Information Technology,Project Management,Data Scientist,17-2141,62378,113049
+NEXT,Information Technology,Project Management,Systems Analyst,15-1132,54449,97349
+NOW,Information Technology,Cybersecurity,Cybersecurity Specialist,17-2141,68672,80195
+NEXT,Engineering,Data Science,AI Engineer,17-2051,61949,75507
+NOW,Engineering,Project Management,Software Developer,15-1132,56577,76946
+NOW,Engineering,Engineering Design,Civil Engineer,15-1152,56769,112654
+NEXT,Engineering,Cybersecurity,Quality Assurance Engineer,15-1256,69058,88767
+NOW,Information Technology,Engineering Design,Mechanical Engineer,17-2141,59718,102577
+NEXT,Information Technology,Software Development,Electrical Engineer,17-2071,66545,99806
+NOW,Engineering,Project Management,DevOps Engineer,17-2051,61177,112764
+NEXT,Information Technology,Data Science,Software Developer,15-1256,69000,84902
+NEXT,Engineering,Engineering Design,Mechanical Engineer,17-2141,58333,89694
+NOW,Engineering,Project Management,Software Engineer,17-2051,61329,89389
+NEXT,Engineering,Engineering Design,Quality Assurance Engineer,17-2051,61034,76407
+NEXT,Engineering,Project Management,DevOps Engineer,17-2141,69194,98884
+NEXT,Engineering,Cybersecurity,Systems Analyst,15-1152,63931,111215
+NOW,Engineering,Network Administration,Software Developer,15-1152,64616,115199
+NEXT,Engineering,Software Development,Software Engineer,17-2112,59790,101189
+NOW,Information Technology,Software Development,Data Scientist,15-1152,68249,77172
+NOW,Information Technology,Cybersecurity,Electrical Engineer,17-2112,52171,91535
+NEXT,Information Technology,Project Management,Software Engineer,15-1152,57020,115083
+NEXT,Engineering,Network Administration,Systems Analyst,17-2071,51951,114541
+NEXT,Engineering,Data Science,Electrical Engineer,15-1256,66778,77344
+NOW,Engineering,Software Development,Systems Analyst,15-1152,64001,100548
+NOW,Information Technology,Software Development,Software Developer,17-2112,68592,88808
+NEXT,Information Technology,Data Science,Electrical Engineer,15-1132,53715,98186
+NOW,Engineering,Project Management,Network Engineer,15-1256,65262,108025
+NOW,Engineering,Cybersecurity,Civil Engineer,15-1121,55219,110663
+NOW,Information Technology,Engineering Design,Network Engineer,15-1121,62158,104401
+NEXT,Engineering,Project Management,DevOps Engineer,17-2141,53002,112109
+NOW,Information Technology,Data Science,Software Developer,17-2141,68480,110477
+NOW,Engineering,Software Development,DevOps Engineer,17-2141,69630,88975
+NOW,Information Technology,Data Science,DevOps Engineer,17-2051,58521,107749
+NEXT,Information Technology,Engineering Design,AI Engineer,17-2051,57286,77866
+NOW,Engineering,Project Management,Quality Assurance Engineer,15-1132,51168,97644
+NEXT,Information Technology,Engineering Design,Cybersecurity Specialist,15-1256,67606,90980
+NEXT,Information Technology,Software Development,Electrical Engineer,15-1132,67303,117012
+NOW,Engineering,Project Management,Quality Assurance Engineer,17-2141,66921,78051
+NEXT,Information Technology,Project Management,Civil Engineer,15-1152,67210,82125
+NEXT,Information Technology,Network Administration,Electrical Engineer,15-1132,57908,102179
+NEXT,Information Technology,Data Science,Network Engineer,15-1152,50823,92771
+NEXT,Information Technology,Data Science,Software Engineer,17-2112,65175,84035
+NEXT,Information Technology,Network Administration,DevOps Engineer,15-1152,58843,81865
+NOW,Engineering,Data Science,Systems Analyst,15-1256,52363,78456
+NEXT,Information Technology,Cybersecurity,Software Engineer,17-2141,59114,70519
+NEXT,Engineering,Network Administration,Software Engineer,17-2051,65794,96194
+NEXT,Information Technology,Project Management,Quality Assurance Engineer,15-1256,68092,87142
+NOW,Engineering,Data Science,Systems Analyst,15-1121,51113,119581
+NEXT,Engineering,Cybersecurity,Software Engineer,17-2112,52483,117084
+NEXT,Information Technology,Project Management,Mechanical Engineer,17-2141,61376,73853
+NOW,Information Technology,Software Development,Software Engineer,17-2112,68556,76282
+NEXT,Engineering,Network Administration,Data Scientist,15-1256,66091,116817
+NEXT,Engineering,Data Science,Software Developer,17-2112,66498,113020
+NOW,Engineering,Cybersecurity,Civil Engineer,17-2051,57979,97325
+NEXT,Engineering,Network Administration,Civil Engineer,15-1152,54703,116910
+NEXT,Information Technology,Data Science,Cybersecurity Specialist,15-1132,58965,91100
+NOW,Engineering,Cybersecurity,Mechanical Engineer,17-2071,65634,119529
+NOW,Engineering,Network Administration,Network Engineer,17-2051,64387,76668
+NOW,Engineering,Data Science,AI Engineer,15-1121,52878,82105
+NOW,Engineering,Cybersecurity,Mechanical Engineer,15-1152,53601,81214
+NEXT,Engineering,Engineering Design,Systems Analyst,17-2071,66844,73184
+NEXT,Engineering,Engineering Design,Network Engineer,17-2141,68728,76818
+NOW,Information Technology,Software Development,Systems Analyst,17-2051,67033,116358
+NOW,Engineering,Network Administration,DevOps Engineer,17-2051,50692,86969
+NEXT,Information Technology,Project Management,Data Scientist,15-1132,57020,82552
+NOW,Information Technology,Cybersecurity,Data Scientist,15-1121,62372,83172
+NEXT,Information Technology,Network Administration,Electrical Engineer,15-1256,57408,91939
+NEXT,Information Technology,Data Science,Network Engineer,17-2141,56078,113158
+NEXT,Engineering,Data Science,Systems Analyst,17-2051,57401,103937
+NEXT,Information Technology,Engineering Design,DevOps Engineer,17-2141,67503,113509
+NOW,Engineering,Network Administration,Network Engineer,15-1121,60461,82499
+NEXT,Information Technology,Engineering Design,Quality Assurance Engineer,15-1121,52114,116601
+NEXT,Engineering,Engineering Design,Software Developer,17-2112,56746,74688
+NEXT,Engineering,Network Administration,Network Engineer,15-1256,61346,93396
+NEXT,Information Technology,Engineering Design,Electrical Engineer,17-2112,54118,84937
+NEXT,Engineering,Software Development,Mechanical Engineer,15-1121,56370,77335
+NEXT,Information Technology,Data Science,Electrical Engineer,15-1152,67272,104224
+NOW,Engineering,Data Science,AI Engineer,15-1132,66154,95075
+NEXT,Engineering,Engineering Design,Systems Analyst,17-2112,62887,83799
+NOW,Engineering,Project Management,Quality Assurance Engineer,15-1132,62389,93915
+NOW,Engineering,Project Management,Civil Engineer,17-2112,60236,71486
+NOW,Engineering,Engineering Design,Electrical Engineer,17-2141,62040,77620
+NEXT,Information Technology,Cybersecurity,Electrical Engineer,17-2112,56631,118618
+NEXT,Information Technology,Network Administration,Electrical Engineer,17-2051,63366,94253
+NEXT,Information Technology,Project Management,AI Engineer,17-2071,65411,82285
+NOW,Information Technology,Data Science,Cybersecurity Specialist,17-2141,55105,70287
+NEXT,Engineering,Engineering Design,DevOps Engineer,17-2051,64326,97482
+NOW,Information Technology,Network Administration,DevOps Engineer,15-1256,58308,101099
+NOW,Information Technology,Network Administration,Civil Engineer,15-1152,53500,103910
+NOW,Information Technology,Cybersecurity,Software Developer,15-1121,60419,90035
+NOW,Engineering,Software Development,AI Engineer,15-1132,56815,116437
+NOW,Engineering,Engineering Design,Cybersecurity Specialist,15-1256,64835,109743
+NOW,Information Technology,Data Science,Data Scientist,15-1121,60461,74197
+NEXT,Information Technology,Project Management,DevOps Engineer,17-2071,59510,90239
+NOW,Information Technology,Network Administration,Network Engineer,17-2112,63577,100696
+NEXT,Information Technology,Data Science,Network Engineer,15-1132,68319,108830
+NEXT,Information Technology,Software Development,Cybersecurity Specialist,17-2051,65261,111285
+NEXT,Information Technology,Data Science,DevOps Engineer,15-1256,61874,103239
+NOW,Information Technology,Data Science,DevOps Engineer,17-2051,59354,113944
+NOW,Information Technology,Cybersecurity,Systems Analyst,15-1132,68479,86207
+NOW,Information Technology,Project Management,Cybersecurity Specialist,17-2112,69233,77958
+NOW,Engineering,Project Management,Network Engineer,17-2071,58096,97210
+NOW,Information Technology,Cybersecurity,DevOps Engineer,17-2112,55950,114175
+NOW,Information Technology,Data Science,Data Scientist,15-1256,50835,100114
+NOW,Information Technology,Project Management,Mechanical Engineer,15-1121,67565,71763
+NOW,Engineering,Cybersecurity,Electrical Engineer,17-2051,56938,95775
+NOW,Information Technology,Engineering Design,Software Engineer,15-1132,55955,75846
+NEXT,Information Technology,Network Administration,Mechanical Engineer,17-2112,52813,82114
+NOW,Information Technology,Cybersecurity,DevOps Engineer,15-1121,53213,114628
+NOW,Engineering,Cybersecurity,Software Engineer,17-2071,50487,112750
+NEXT,Engineering,Project Management,Software Engineer,15-1132,57416,111310
+NEXT,Information Technology,Software Development,Civil Engineer,17-2051,57800,114432
+NOW,Engineering,Project Management,Electrical Engineer,15-1256,63403,95687
+NEXT,Engineering,Data Science,Data Scientist,15-1132,68526,96007
+NOW,Information Technology,Cybersecurity,Systems Analyst,17-2051,63723,83339
+NEXT,Information Technology,Software Development,DevOps Engineer,15-1256,59009,98530
+NEXT,Engineering,Network Administration,Cybersecurity Specialist,17-2051,58333,91836
+NEXT,Information Technology,Software Development,Quality Assurance Engineer,15-1256,68692,89860
+NEXT,Information Technology,Project Management,Quality Assurance Engineer,15-1256,54354,116991
+NEXT,Information Technology,Network Administration,Quality Assurance Engineer,17-2071,50409,95701
+NEXT,Information Technology,Engineering Design,Electrical Engineer,17-2141,54396,83971
+NEXT,Information Technology,Network Administration,Quality Assurance Engineer,17-2051,54729,83763
+NEXT,Information Technology,Data Science,Software Engineer,17-2051,60582,73569
+NOW,Engineering,Software Development,Civil Engineer,15-1152,67854,112025
+NOW,Information Technology,Network Administration,Civil Engineer,15-1121,56658,97589
+NOW,Information Technology,Data Science,Civil Engineer,15-1121,66866,95339
+NEXT,Information Technology,Software Development,Cybersecurity Specialist,17-2112,68330,76532
+NEXT,Engineering,Engineering Design,Electrical Engineer,15-1132,51741,115836
+NOW,Information Technology,Data Science,AI Engineer,17-2051,61493,106371
+NEXT,Information Technology,Project Management,Systems Analyst,15-1152,60212,110010
+NEXT,Information Technology,Cybersecurity,Quality Assurance Engineer,15-1256,50850,72215
+NEXT,Engineering,Cybersecurity,Network Engineer,17-2112,62699,114914
+NOW,Engineering,Network Administration,Software Engineer,15-1132,67362,101957
+NEXT,Engineering,Project Management,Network Engineer,15-1256,51554,98049
+NOW,Engineering,Network Administration,Data Scientist,17-2071,53164,82780
+NOW,Engineering,Engineering Design,DevOps Engineer,17-2141,63607,86726
+NEXT,Engineering,Data Science,Quality Assurance Engineer,17-2051,67620,116905
+NOW,Engineering,Data Science,Electrical Engineer,17-2071,61502,91750
+NEXT,Information Technology,Data Science,Software Engineer,15-1121,55728,78281
+NOW,Information Technology,Software Development,Quality Assurance Engineer,17-2051,68960,96747
+NEXT,Engineering,Project Management,Quality Assurance Engineer,15-1256,52532,104232
+NOW,Information Technology,Software Development,AI Engineer,17-2051,52249,74491
+NEXT,Information Technology,Cybersecurity,Quality Assurance Engineer,15-1256,52140,95503
+NEXT,Information Technology,Network Administration,Network Engineer,17-2141,60011,94902
+NEXT,Information Technology,Network Administration,DevOps Engineer,17-2141,66408,111940
+NOW,Engineering,Network Administration,Mechanical Engineer,17-2051,66813,85280
+NOW,Information Technology,Engineering Design,Electrical Engineer,17-2051,53923,119090
+NEXT,Information Technology,Cybersecurity,DevOps Engineer,17-2051,56599,100230
+NEXT,Engineering,Project Management,DevOps Engineer,15-1132,64431,78742
+NOW,Information Technology,Cybersecurity,Systems Analyst,15-1152,52767,84683
+NEXT,Engineering,Engineering Design,DevOps Engineer,17-2141,64482,90348
+NEXT,Engineering,Project Management,Civil Engineer,15-1132,66712,114306
+NOW,Engineering,Cybersecurity,Software Developer,15-1132,60123,86688
+NOW,Information Technology,Data Science,Mechanical Engineer,15-1132,66751,79471
+NOW,Engineering,Network Administration,DevOps Engineer,17-2141,50559,88020
+NEXT,Engineering,Network Administration,Quality Assurance Engineer,15-1152,69060,87595
+NOW,Information Technology,Software Development,Cybersecurity Specialist,15-1121,56706,100555
+NOW,Engineering,Software Development,Quality Assurance Engineer,17-2112,50887,119453
+NOW,Engineering,Data Science,AI Engineer,15-1256,53949,107335
+NOW,Engineering,Engineering Design,Quality Assurance Engineer,17-2112,50175,112313
+NEXT,Information Technology,Cybersecurity,Cybersecurity Specialist,17-2071,69577,74953
+NEXT,Engineering,Data Science,Quality Assurance Engineer,15-1256,64351,107810
+NEXT,Information Technology,Software Development,Electrical Engineer,17-2141,51800,76167
+NEXT,Information Technology,Engineering Design,Cybersecurity Specialist,15-1152,68627,84775
+NOW,Information Technology,Engineering Design,Software Developer,17-2071,63775,119503
+NOW,Information Technology,Project Management,Network Engineer,15-1121,57877,100328
+NOW,Engineering,Engineering Design,Systems Analyst,17-2071,66307,81821
+NEXT,Engineering,Software Development,Quality Assurance Engineer,15-1256,61261,75014
+NOW,Engineering,Project Management,Software Developer,17-2141,61771,73558
+NEXT,Information Technology,Cybersecurity,AI Engineer,17-2141,64720,112264
+NEXT,Information Technology,Data Science,Software Developer,15-1132,60118,82612
+NOW,Finance,Software Development,Cybersecurity Analyst,29-1141,32362,46525
+NEXT,Information Technology,Finance & Accounting,Civil Project Engineer,43-5081,44218,54939
+NOW,Finance,Software Development,Mechanical Design Engineer,17-2051,31632,72092
+NOW,Logistics,Automotive Engineering,Civil Project Engineer,43-5081,34542,65639
+NOW,Logistics,IT Support,Electrical Systems Engineer,15-1256,42381,70119
+NOW,Finance,Automotive Engineering,Tax Consultant,17-2112,35384,71747
+NOW,Engineering,Finance & Accounting,Tax Consultant,17-2051,39270,71283
+NEXT,Engineering,Medical Services,Civil Project Engineer,29-1141,40701,56394
+NOW,Healthcare,Supply Chain Management,Financial Auditor,15-1256,35201,45183
+NOW,Healthcare,Automotive Engineering,Civil Project Engineer,17-2051,37434,75034
+NEXT,Logistics,Supply Chain Management,Pharmacy Assistant,15-1132,34066,60540
+NEXT,Engineering,Medical Services,Logistics Planner,15-1121,40214,71225
+NOW,Logistics,Medical Services,Pharmacy Assistant,43-5081,37166,61896
+NEXT,Engineering,Supply Chain Management,Clinical Laboratory Technician,43-5081,37625,56563
+NEXT,Information Technology,Medical Services,Civil Project Engineer,29-1141,36140,63773
+NOW,Logistics,Medical Services,Supply Chain Analyst,17-2112,36753,60820
+NOW,Logistics,Medical Services,Logistics Planner,17-2141,33258,50539
+NEXT,Engineering,Supply Chain Management,Tax Consultant,13-2051,35371,61524
+NEXT,Finance,IT Support,IT Support Specialist,17-2141,38624,51917
+NOW,Healthcare,Medical Services,Logistics Planner,11-3071,35823,77074
+NEXT,Healthcare,Finance & Accounting,Civil Project Engineer,29-1141,31349,71676
+NOW,Healthcare,IT Support,Logistics Planner,15-1256,37549,56858
+NOW,Logistics,Medical Services,Cybersecurity Analyst,17-2141,38872,65485
+NEXT,Healthcare,Automotive Engineering,Supply Chain Analyst,15-1132,42364,45660
+NEXT,Finance,Supply Chain Management,Pharmacy Assistant,15-1152,39561,54994
+NEXT,Logistics,Software Development,Civil Project Engineer,13-2051,44619,49736
+NEXT,Finance,Software Development,Risk Compliance Officer,43-5081,40294,61611
+NEXT,Logistics,Medical Services,Automotive Quality Engineer,13-2051,32544,53933
+NEXT,Engineering,Software Development,IT Support Specialist,17-2112,34690,69145
+NOW,Engineering,Supply Chain Management,Junior Software Developer,15-1152,44148,52122
+NOW,Finance,Medical Services,Automotive Quality Engineer,17-2051,33000,67602
+NEXT,Healthcare,Finance & Accounting,Warehouse Operations Manager,15-1132,42660,53798
+NEXT,Logistics,Medical Services,Registered Nurse,17-2141,37487,46383
+NEXT,Finance,Medical Services,Supply Chain Analyst,13-2051,30518,76278
+NEXT,Engineering,Software Development,Clinical Laboratory Technician,17-2141,44575,67333
+NOW,Healthcare,Software Development,Registered Nurse,43-5081,37026,76782
+NEXT,Finance,Medical Services,Risk Compliance Officer,15-1121,35173,47134
+NOW,Finance,Supply Chain Management,Pharmacy Assistant,17-2112,42643,46121
+NEXT,Logistics,Supply Chain Management,Civil Project Engineer,17-2141,41392,47818
+NOW,Finance,Finance & Accounting,Logistics Planner,15-1152,33030,53498
+NOW,Information Technology,Automotive Engineering,Cybersecurity Analyst,15-1121,32161,79270
+NOW,Logistics,Supply Chain Management,Senior Software Developer,15-1132,34915,71136
+NEXT,Logistics,Finance & Accounting,Clinical Laboratory Technician,43-5081,30666,62293
+NEXT,Healthcare,IT Support,Network Administrator,15-1121,30630,64492
+NOW,Logistics,IT Support,IT Support Specialist,15-1121,42307,62781
+NEXT,Information Technology,Software Development,Network Administrator,17-2112,37097,53722
+NOW,Finance,Supply Chain Management,Senior Software Developer,17-2141,43269,68849
+NOW,Logistics,Software Development,Warehouse Operations Manager,29-1141,32908,72375
+NOW,Healthcare,Software Development,Network Administrator,43-5081,30986,69568
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2071,30343,73052
+NEXT,Logistics,Medical Services,Civil Project Engineer,17-2112,43136,48382
+NOW,Finance,IT Support,Network Administrator,17-2071,38232,52415
+NOW,Logistics,Automotive Engineering,Electrical Systems Engineer,15-1152,38446,76340
+NOW,Information Technology,Automotive Engineering,Network Administrator,15-1152,44712,53168
+NEXT,Engineering,Finance & Accounting,Risk Compliance Officer,15-1256,40781,51437
+NOW,Engineering,Software Development,Clinical Laboratory Technician,17-2071,30260,58934
+NEXT,Healthcare,Software Development,Logistics Planner,15-1132,41452,50649
+NOW,Healthcare,IT Support,Pharmacy Assistant,17-2071,35667,73132
+NOW,Engineering,Finance & Accounting,IT Support Specialist,15-1132,36557,72710
+NEXT,Healthcare,Medical Services,Pharmacy Assistant,17-2051,36119,74655
+NOW,Healthcare,Software Development,Cybersecurity Analyst,15-1256,44689,68301
+NOW,Logistics,Medical Services,Cybersecurity Analyst,17-2112,39206,66991
+NOW,Engineering,Supply Chain Management,Pharmacy Assistant,17-2112,31382,75489
+NOW,Logistics,Software Development,Junior Software Developer,15-1121,36804,65600
+NOW,Finance,IT Support,Network Administrator,29-1141,36257,46350
+NOW,Healthcare,IT Support,Financial Auditor,15-1256,30582,63902
+NOW,Information Technology,IT Support,Senior Software Developer,15-1132,37158,50148
+NEXT,Logistics,Software Development,IT Support Specialist,17-2071,41311,79383
+NOW,Engineering,Finance & Accounting,Registered Nurse,11-3071,30508,76322
+NOW,Logistics,Automotive Engineering,Supply Chain Analyst,15-1256,39578,52523
+NEXT,Finance,Finance & Accounting,Mechanical Design Engineer,13-2051,44470,63765
+NOW,Logistics,Automotive Engineering,Logistics Planner,43-5081,30467,74357
+NEXT,Engineering,Medical Services,Financial Auditor,15-1152,34829,75290
+NEXT,Information Technology,Finance & Accounting,Logistics Planner,11-3071,31833,53163
+NOW,Logistics,Finance & Accounting,Junior Software Developer,17-2112,41654,49804
+NEXT,Healthcare,Software Development,Civil Project Engineer,15-1121,30609,66081
+NOW,Logistics,Supply Chain Management,Junior Software Developer,17-2051,30126,78813
+NOW,Finance,Finance & Accounting,Registered Nurse,29-1141,39364,57105
+NEXT,Engineering,Software Development,Senior Software Developer,29-1141,40013,57281
+NOW,Engineering,Software Development,Senior Software Developer,43-5081,42781,58417
+NEXT,Finance,Software Development,Tax Consultant,15-1121,36176,76252
+NEXT,Engineering,Finance & Accounting,Mechanical Design Engineer,15-1152,37088,66151
+NEXT,Finance,IT Support,Electrical Systems Engineer,17-2141,38962,57087
+NEXT,Logistics,Software Development,Pharmacy Assistant,17-2141,35185,72642
+NEXT,Information Technology,Software Development,Network Administrator,13-2051,43159,47097
+NEXT,Logistics,IT Support,Clinical Laboratory Technician,15-1132,35767,67480
+NOW,Healthcare,Medical Services,Pharmacy Assistant,17-2071,40464,51052
+NOW,Finance,Medical Services,Cybersecurity Analyst,17-2141,32447,65986
+NOW,Finance,Software Development,Tax Consultant,13-2051,41133,58168
+NOW,Healthcare,Supply Chain Management,Financial Auditor,13-2051,35522,66731
+NEXT,Information Technology,Software Development,Senior Software Developer,17-2141,42713,55349
+NOW,Logistics,Medical Services,Clinical Laboratory Technician,43-5081,38497,78897
+NEXT,Finance,Finance & Accounting,Network Administrator,29-1141,35772,57075
+NOW,Engineering,IT Support,Tax Consultant,15-1256,34417,66959
+NOW,Healthcare,IT Support,Risk Compliance Officer,29-1141,44386,55666
+NEXT,Engineering,Medical Services,Risk Compliance Officer,15-1256,31401,70362
+NEXT,Engineering,Finance & Accounting,Tax Consultant,17-2051,40873,67527
+NEXT,Logistics,IT Support,Cybersecurity Analyst,11-3071,43424,61779
+NEXT,Engineering,Automotive Engineering,Risk Compliance Officer,15-1132,38283,65218
+NEXT,Healthcare,Supply Chain Management,Logistics Planner,43-5081,42839,64116
+NOW,Information Technology,Software Development,Registered Nurse,29-1141,35855,60908
+NOW,Healthcare,Finance & Accounting,Registered Nurse,15-1132,31089,69314
+NOW,Logistics,Software Development,Supply Chain Analyst,15-1132,38688,69126
+NEXT,Logistics,Supply Chain Management,Mechanical Design Engineer,43-5081,37420,61851
+NEXT,Finance,Finance & Accounting,Electrical Systems Engineer,17-2141,30959,78266
+NEXT,Logistics,Software Development,Cybersecurity Analyst,17-2112,30299,51485
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,17-2051,36732,68139
+NEXT,Information Technology,Finance & Accounting,Warehouse Operations Manager,15-1121,39338,77132
+NOW,Healthcare,Finance & Accounting,Financial Auditor,11-3071,34909,75316
+NEXT,Engineering,Finance & Accounting,Risk Compliance Officer,15-1132,40991,48091
+NOW,Engineering,Supply Chain Management,IT Support Specialist,11-3071,36566,61602
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,17-2051,36443,60858
+NOW,Engineering,IT Support,Clinical Laboratory Technician,11-3071,33274,45697
+NOW,Engineering,Supply Chain Management,Civil Project Engineer,43-5081,34357,64421
+NOW,Finance,Software Development,Network Administrator,17-2141,34711,63997
+NEXT,Healthcare,Supply Chain Management,Clinical Laboratory Technician,15-1256,40526,49799
+NOW,Finance,Supply Chain Management,Mechanical Design Engineer,29-1141,38046,58737
+NOW,Engineering,Finance & Accounting,Tax Consultant,17-2112,40098,67530
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,43-5081,35657,50893
+NOW,Engineering,IT Support,IT Support Specialist,17-2071,41043,79943
+NOW,Information Technology,IT Support,Clinical Laboratory Technician,15-1256,35669,60570
+NOW,Information Technology,IT Support,Clinical Laboratory Technician,17-2071,36720,66707
+NEXT,Information Technology,Software Development,Logistics Planner,17-2071,35916,52713
+NOW,Logistics,Automotive Engineering,Logistics Planner,15-1152,33713,52310
+NOW,Finance,IT Support,Automotive Quality Engineer,13-2051,42070,52580
+NOW,Healthcare,Medical Services,Junior Software Developer,17-2112,40705,58550
+NOW,Healthcare,Supply Chain Management,Logistics Planner,15-1121,43196,48902
+NOW,Logistics,Finance & Accounting,Supply Chain Analyst,17-2112,31331,79816
+NOW,Finance,Software Development,Electrical Systems Engineer,17-2141,37536,78267
+NOW,Engineering,Medical Services,Supply Chain Analyst,15-1256,31410,53206
+NOW,Engineering,Automotive Engineering,Pharmacy Assistant,15-1132,33134,66732
+NEXT,Logistics,IT Support,Registered Nurse,15-1121,33532,70589
+NEXT,Healthcare,Supply Chain Management,Senior Software Developer,15-1121,30972,47237
+NEXT,Healthcare,Finance & Accounting,Logistics Planner,15-1132,37501,46617
+NEXT,Information Technology,Automotive Engineering,Cybersecurity Analyst,17-2071,35801,76975
+NEXT,Engineering,Medical Services,Clinical Laboratory Technician,17-2051,40550,66187
+NOW,Finance,Medical Services,IT Support Specialist,17-2112,44323,79721
+NEXT,Information Technology,IT Support,Cybersecurity Analyst,17-2051,42985,55395
+NOW,Engineering,Supply Chain Management,Pharmacy Assistant,29-1141,39243,48229
+NOW,Healthcare,Automotive Engineering,Registered Nurse,15-1152,34520,53367
+NEXT,Information Technology,IT Support,Cybersecurity Analyst,13-2051,41102,69670
+NEXT,Finance,Automotive Engineering,Warehouse Operations Manager,29-1141,42089,75979
+NOW,Engineering,Supply Chain Management,Registered Nurse,13-2051,42911,75982
+NOW,Engineering,IT Support,Clinical Laboratory Technician,13-2051,39200,55607
+NEXT,Healthcare,Medical Services,Registered Nurse,17-2141,41845,57440
+NEXT,Healthcare,Medical Services,Junior Software Developer,15-1152,32960,60404
+NOW,Logistics,Supply Chain Management,Logistics Planner,15-1152,38211,58015
+NOW,Information Technology,Medical Services,Mechanical Design Engineer,17-2112,34899,76782
+NOW,Finance,Medical Services,Pharmacy Assistant,43-5081,36303,63864
+NOW,Healthcare,Software Development,Mechanical Design Engineer,17-2051,35505,48936
+NOW,Engineering,Finance & Accounting,Clinical Laboratory Technician,15-1121,41148,76758
+NEXT,Engineering,Finance & Accounting,Registered Nurse,15-1132,41227,59058
+NEXT,Healthcare,Automotive Engineering,Civil Project Engineer,15-1152,40733,50676
+NEXT,Engineering,Automotive Engineering,Senior Software Developer,17-2051,35237,67543
+NEXT,Finance,Medical Services,Risk Compliance Officer,17-2051,36793,67923
+NOW,Healthcare,Supply Chain Management,Warehouse Operations Manager,15-1256,32313,67212
+NEXT,Information Technology,IT Support,Logistics Planner,15-1132,33980,47126
+NOW,Finance,Finance & Accounting,Civil Project Engineer,15-1256,44086,70735
+NEXT,Engineering,Supply Chain Management,Logistics Planner,15-1121,41567,54174
+NEXT,Finance,Medical Services,Warehouse Operations Manager,15-1121,42302,66416
+NOW,Finance,IT Support,Supply Chain Analyst,29-1141,40941,69136
+NOW,Logistics,IT Support,Tax Consultant,13-2051,41953,59533
+NEXT,Engineering,Finance & Accounting,Tax Consultant,17-2051,44584,61872
+NOW,Logistics,Medical Services,Logistics Planner,15-1121,34393,69048
+NEXT,Healthcare,Finance & Accounting,Civil Project Engineer,17-2071,30241,67919
+NEXT,Logistics,Software Development,Senior Software Developer,15-1132,42473,76843
+NEXT,Engineering,IT Support,Junior Software Developer,17-2112,43308,49569
+NOW,Logistics,IT Support,IT Support Specialist,29-1141,36188,61438
+NOW,Logistics,Finance & Accounting,Registered Nurse,29-1141,36962,72458
+NOW,Logistics,Supply Chain Management,Mechanical Design Engineer,17-2051,38173,75359
+NOW,Information Technology,Automotive Engineering,Automotive Quality Engineer,17-2051,38354,58302
+NEXT,Healthcare,IT Support,Warehouse Operations Manager,11-3071,41444,53389
+NOW,Healthcare,Finance & Accounting,Risk Compliance Officer,17-2051,31970,70068
+NEXT,Information Technology,Software Development,Logistics Planner,15-1132,44108,49562
+NEXT,Healthcare,Supply Chain Management,Tax Consultant,15-1121,34811,60860
+NOW,Healthcare,Automotive Engineering,Risk Compliance Officer,17-2051,30191,72353
+NOW,Finance,Software Development,Senior Software Developer,15-1152,32775,67356
+NEXT,Information Technology,Supply Chain Management,Registered Nurse,15-1256,32159,58908
+NOW,Logistics,IT Support,Logistics Planner,15-1121,43592,71803
+NEXT,Finance,Supply Chain Management,Supply Chain Analyst,11-3071,39728,54325
+NOW,Information Technology,Medical Services,Network Administrator,15-1132,38704,59164
+NEXT,Engineering,Supply Chain Management,Senior Software Developer,17-2071,41824,47961
+NOW,Logistics,Medical Services,Senior Software Developer,15-1132,31840,72851
+NOW,Finance,Automotive Engineering,Clinical Laboratory Technician,15-1121,42729,62441
+NEXT,Finance,Medical Services,Mechanical Design Engineer,17-2051,44617,56336
+NEXT,Logistics,Finance & Accounting,Network Administrator,15-1152,42783,56114
+NEXT,Information Technology,Finance & Accounting,Risk Compliance Officer,15-1121,41952,69679
+NEXT,Information Technology,Medical Services,Registered Nurse,15-1121,34829,65611
+NEXT,Healthcare,Medical Services,IT Support Specialist,29-1141,30650,52141
+NOW,Finance,Finance & Accounting,Civil Project Engineer,29-1141,33515,60721
+NOW,Finance,Automotive Engineering,Supply Chain Analyst,43-5081,37562,46175
+NEXT,Finance,Automotive Engineering,Junior Software Developer,17-2071,39101,53289
+NEXT,Finance,IT Support,Supply Chain Analyst,17-2071,35787,78382
+NEXT,Logistics,IT Support,Warehouse Operations Manager,15-1121,32636,72420
+NOW,Engineering,IT Support,Senior Software Developer,15-1256,43223,47521
+NEXT,Engineering,Finance & Accounting,Financial Auditor,11-3071,30279,49326
+NEXT,Finance,IT Support,Cybersecurity Analyst,13-2051,43176,47125
+NEXT,Healthcare,Automotive Engineering,Automotive Quality Engineer,15-1152,38863,77327
+NOW,Logistics,Automotive Engineering,Warehouse Operations Manager,17-2112,33132,77717
+NOW,Healthcare,Finance & Accounting,Junior Software Developer,15-1256,33654,70025
+NEXT,Engineering,Medical Services,Civil Project Engineer,15-1256,30889,71288
+NOW,Engineering,Software Development,Network Administrator,17-2141,31389,64972
+NOW,Information Technology,Finance & Accounting,Mechanical Design Engineer,43-5081,32767,46363
+NEXT,Engineering,Software Development,Clinical Laboratory Technician,17-2112,36768,57243
+NEXT,Information Technology,Software Development,Electrical Systems Engineer,15-1152,36338,73809
+NOW,Healthcare,Medical Services,Risk Compliance Officer,17-2112,36771,56777
+NEXT,Finance,IT Support,Registered Nurse,43-5081,38982,62202
+NEXT,Logistics,Automotive Engineering,Tax Consultant,17-2071,30313,61164
+NEXT,Healthcare,Medical Services,Senior Software Developer,17-2071,38023,71978
+NEXT,Finance,Finance & Accounting,Mechanical Design Engineer,17-2141,39082,64554
+NEXT,Logistics,Supply Chain Management,Logistics Planner,29-1141,35654,75646
+NEXT,Engineering,Medical Services,Automotive Quality Engineer,11-3071,30503,62106
+NOW,Finance,Supply Chain Management,Senior Software Developer,17-2071,30204,52497
+NOW,Healthcare,IT Support,Junior Software Developer,17-2112,41333,57517
+NOW,Logistics,IT Support,Clinical Laboratory Technician,15-1132,41387,47254
+NOW,Logistics,Finance & Accounting,Civil Project Engineer,15-1256,38196,57525
+NOW,Healthcare,Software Development,Mechanical Design Engineer,17-2141,39707,60463
+NOW,Engineering,Software Development,Network Administrator,17-2071,42174,51072
+NEXT,Information Technology,Medical Services,Civil Project Engineer,15-1152,37138,72446
+NEXT,Healthcare,Automotive Engineering,Clinical Laboratory Technician,43-5081,38308,73529
+NOW,Finance,Software Development,Cybersecurity Analyst,15-1256,44917,58156
+NOW,Healthcare,Medical Services,IT Support Specialist,29-1141,41328,46660
+NOW,Logistics,Automotive Engineering,Civil Project Engineer,17-2141,35108,77371
+NOW,Engineering,IT Support,Junior Software Developer,15-1132,44281,54555
+NEXT,Finance,Finance & Accounting,Cybersecurity Analyst,13-2051,40524,49956
+NOW,Engineering,IT Support,Mechanical Design Engineer,43-5081,36402,69007
+NOW,Logistics,Medical Services,Warehouse Operations Manager,15-1152,36048,46277
+NEXT,Logistics,Software Development,Registered Nurse,17-2112,44409,47639
+NEXT,Healthcare,Medical Services,Senior Software Developer,29-1141,44908,66939
+NOW,Healthcare,Medical Services,Financial Auditor,11-3071,43915,52031
+NEXT,Engineering,Supply Chain Management,Clinical Laboratory Technician,15-1152,36119,78021
+NOW,Healthcare,Supply Chain Management,Warehouse Operations Manager,17-2112,39810,70272
+NOW,Logistics,Software Development,Pharmacy Assistant,17-2141,42501,78534
+NEXT,Logistics,IT Support,Junior Software Developer,43-5081,41129,61324
+NEXT,Engineering,Software Development,Warehouse Operations Manager,15-1132,35343,78514
+NOW,Information Technology,Software Development,Clinical Laboratory Technician,15-1152,37788,70725
+NOW,Engineering,Automotive Engineering,Junior Software Developer,15-1121,35325,76885
+NOW,Engineering,Automotive Engineering,Junior Software Developer,43-5081,42057,46318
+NOW,Logistics,IT Support,Pharmacy Assistant,17-2071,41529,69641
+NOW,Information Technology,IT Support,Junior Software Developer,15-1256,38618,45993
+NOW,Information Technology,Software Development,Junior Software Developer,43-5081,32330,77167
+NEXT,Information Technology,Medical Services,Financial Auditor,11-3071,39913,57238
+NOW,Engineering,Software Development,Automotive Quality Engineer,17-2141,34448,74804
+NEXT,Logistics,Software Development,Tax Consultant,15-1132,41839,75740
+NOW,Information Technology,IT Support,Network Administrator,17-2112,39175,68224
+NOW,Information Technology,Automotive Engineering,Mechanical Design Engineer,17-2141,39639,78526
+NOW,Logistics,Automotive Engineering,Cybersecurity Analyst,11-3071,31003,58799
+NEXT,Engineering,Supply Chain Management,Registered Nurse,11-3071,30853,79184
+NOW,Engineering,Software Development,Automotive Quality Engineer,17-2141,34074,45851
+NEXT,Healthcare,Medical Services,IT Support Specialist,17-2051,38826,78629
+NEXT,Engineering,Automotive Engineering,Civil Project Engineer,15-1132,34283,69193
+NOW,Engineering,Medical Services,Registered Nurse,29-1141,41971,68126
+NOW,Logistics,Software Development,Supply Chain Analyst,15-1132,38746,50910
+NEXT,Information Technology,Automotive Engineering,Warehouse Operations Manager,15-1152,42805,63889
+NOW,Healthcare,Supply Chain Management,Tax Consultant,17-2051,34232,45812
+NEXT,Engineering,Supply Chain Management,Pharmacy Assistant,11-3071,42361,78873
+NOW,Finance,Supply Chain Management,Civil Project Engineer,43-5081,35256,62904
+NEXT,Healthcare,Finance & Accounting,Automotive Quality Engineer,17-2141,39865,66105
+NEXT,Engineering,Medical Services,Financial Auditor,15-1132,33991,75912
+NEXT,Information Technology,Medical Services,Electrical Systems Engineer,17-2051,32195,58301
+NOW,Logistics,Medical Services,Registered Nurse,15-1256,34741,56919
+NEXT,Information Technology,Medical Services,Risk Compliance Officer,17-2071,31392,67062
+NOW,Information Technology,Software Development,Risk Compliance Officer,17-2071,44058,78731
+NOW,Healthcare,Supply Chain Management,Supply Chain Analyst,13-2051,34087,76588
+NEXT,Finance,Software Development,Supply Chain Analyst,43-5081,44211,61902
+NOW,Logistics,Supply Chain Management,Senior Software Developer,15-1121,32474,67285
+NOW,Information Technology,Finance & Accounting,Pharmacy Assistant,17-2071,35031,70288
+NEXT,Finance,IT Support,Logistics Planner,17-2112,40357,70781
+NOW,Engineering,IT Support,Junior Software Developer,17-2071,36126,76493
+NEXT,Information Technology,Automotive Engineering,Registered Nurse,17-2141,33657,45050
+NEXT,Healthcare,Supply Chain Management,Registered Nurse,15-1121,30127,56205
+NEXT,Engineering,Medical Services,Mechanical Design Engineer,11-3071,38323,52704
+NOW,Engineering,Finance & Accounting,Tax Consultant,17-2071,36925,72356
+NOW,Information Technology,IT Support,Electrical Systems Engineer,17-2071,30971,63178
+NEXT,Engineering,Software Development,Mechanical Design Engineer,11-3071,38521,52694
+NEXT,Engineering,Medical Services,Pharmacy Assistant,43-5081,36395,61756
+NEXT,Healthcare,IT Support,Mechanical Design Engineer,29-1141,43061,53761
+NOW,Information Technology,Software Development,Tax Consultant,17-2071,39555,53187
+NOW,Healthcare,Automotive Engineering,Junior Software Developer,11-3071,35728,56096
+NEXT,Information Technology,Medical Services,Supply Chain Analyst,15-1152,41055,57157
+NEXT,Finance,Supply Chain Management,Pharmacy Assistant,11-3071,42569,47344
+NOW,Finance,Software Development,Financial Auditor,17-2051,39217,66958
+NOW,Finance,IT Support,Pharmacy Assistant,17-2141,36368,48173
+NEXT,Engineering,Automotive Engineering,Automotive Quality Engineer,17-2112,44686,50283
+NOW,Engineering,IT Support,Logistics Planner,43-5081,43915,65510
+NEXT,Information Technology,Automotive Engineering,Cybersecurity Analyst,17-2051,41095,64692
+NEXT,Logistics,Software Development,Civil Project Engineer,15-1121,39706,70405
+NEXT,Healthcare,Automotive Engineering,Tax Consultant,15-1121,35491,71915
+NOW,Healthcare,Supply Chain Management,Electrical Systems Engineer,15-1256,40042,62685
+NOW,Healthcare,Supply Chain Management,Cybersecurity Analyst,17-2051,37290,63947
+NOW,Healthcare,Automotive Engineering,Pharmacy Assistant,15-1152,32791,73689
+NOW,Healthcare,IT Support,Network Administrator,17-2071,41480,57586
+NOW,Finance,Software Development,Financial Auditor,13-2051,41944,76925
+NEXT,Healthcare,Medical Services,Senior Software Developer,17-2112,37276,75153
+NEXT,Healthcare,IT Support,Mechanical Design Engineer,15-1132,42358,79065
+NOW,Healthcare,Software Development,Senior Software Developer,15-1121,44908,74814
+NOW,Healthcare,IT Support,Automotive Quality Engineer,11-3071,41971,54110
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,13-2051,36831,58609
+NEXT,Healthcare,Finance & Accounting,Logistics Planner,17-2071,44242,68542
+NEXT,Information Technology,IT Support,Senior Software Developer,15-1152,39742,79086
+NEXT,Logistics,IT Support,Clinical Laboratory Technician,13-2051,35856,61615
+NEXT,Finance,IT Support,Senior Software Developer,17-2141,34631,45822
+NOW,Engineering,Medical Services,Risk Compliance Officer,15-1152,30246,75151
+NEXT,Healthcare,Software Development,Cybersecurity Analyst,17-2071,32093,54607
+NOW,Information Technology,Supply Chain Management,Tax Consultant,13-2051,35485,79544
+NOW,Healthcare,Finance & Accounting,Senior Software Developer,43-5081,40274,45049
+NOW,Information Technology,IT Support,Civil Project Engineer,13-2051,40790,70988
+NEXT,Finance,Supply Chain Management,Senior Software Developer,17-2112,32278,64134
+NEXT,Engineering,IT Support,Automotive Quality Engineer,29-1141,41143,71318
+NOW,Finance,IT Support,Automotive Quality Engineer,15-1152,43207,70444
+NEXT,Finance,Finance & Accounting,Supply Chain Analyst,15-1152,41637,57555
+NOW,Logistics,Supply Chain Management,Senior Software Developer,13-2051,33107,71756
+NOW,Logistics,Software Development,IT Support Specialist,11-3071,35857,62117
+NEXT,Engineering,Supply Chain Management,Tax Consultant,17-2112,40633,76285
+NOW,Healthcare,Supply Chain Management,Automotive Quality Engineer,11-3071,44783,45963
+NEXT,Logistics,Medical Services,Clinical Laboratory Technician,43-5081,36769,46192
+NOW,Finance,Automotive Engineering,IT Support Specialist,15-1121,38612,70177
+NEXT,Information Technology,Automotive Engineering,Tax Consultant,15-1132,31583,50328
+NOW,Healthcare,IT Support,Clinical Laboratory Technician,17-2051,31639,60530
+NEXT,Healthcare,Software Development,Risk Compliance Officer,43-5081,41298,48091
+NEXT,Engineering,Finance & Accounting,Junior Software Developer,15-1152,38030,57406
+NEXT,Healthcare,IT Support,Clinical Laboratory Technician,15-1132,35855,65057
+NEXT,Finance,Supply Chain Management,Automotive Quality Engineer,15-1132,39006,77336
+NEXT,Logistics,Medical Services,IT Support Specialist,11-3071,41717,57530
+NEXT,Engineering,Medical Services,Automotive Quality Engineer,13-2051,33676,49336
+NOW,Logistics,IT Support,Mechanical Design Engineer,15-1152,39054,60955
+NEXT,Logistics,Supply Chain Management,Logistics Planner,17-2112,34149,78243
+NEXT,Healthcare,Automotive Engineering,Cybersecurity Analyst,15-1132,40115,75528
+NOW,Finance,Software Development,Cybersecurity Analyst,17-2071,32774,51066
+NOW,Logistics,Supply Chain Management,Tax Consultant,29-1141,32203,45829
+NOW,Information Technology,Software Development,Senior Software Developer,17-2051,33703,46223
+NOW,Finance,IT Support,Network Administrator,43-5081,39333,59084
+NEXT,Engineering,Finance & Accounting,Senior Software Developer,15-1152,31728,70705
+NEXT,Healthcare,Medical Services,Automotive Quality Engineer,17-2112,41905,61037
+NEXT,Engineering,Software Development,Civil Project Engineer,17-2071,35319,79989
+NEXT,Information Technology,Automotive Engineering,Supply Chain Analyst,17-2141,33324,58451
+NOW,Information Technology,IT Support,Civil Project Engineer,15-1132,44835,62942
+NOW,Engineering,Supply Chain Management,Warehouse Operations Manager,43-5081,39527,51210
+NEXT,Logistics,IT Support,Tax Consultant,11-3071,35951,48835
+NEXT,Information Technology,Medical Services,Automotive Quality Engineer,17-2071,41888,54199
+NOW,Information Technology,IT Support,Senior Software Developer,29-1141,37377,76991
+NOW,Logistics,Software Development,Supply Chain Analyst,43-5081,30174,75708
+NEXT,Engineering,IT Support,Cybersecurity Analyst,17-2112,42088,61477
+NEXT,Information Technology,Automotive Engineering,Warehouse Operations Manager,15-1132,41350,79229
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2051,36246,69827
+NOW,Information Technology,IT Support,Tax Consultant,29-1141,41930,66666
+NEXT,Logistics,Supply Chain Management,Junior Software Developer,17-2051,37380,62204
+NOW,Information Technology,Supply Chain Management,Risk Compliance Officer,15-1132,40730,78410
+NEXT,Finance,Finance & Accounting,Electrical Systems Engineer,15-1121,34860,48893
+NEXT,Engineering,IT Support,Electrical Systems Engineer,11-3071,44432,63880
+NOW,Finance,Automotive Engineering,Logistics Planner,17-2112,30149,68688
+NOW,Engineering,Medical Services,Junior Software Developer,17-2141,34728,72011
+NEXT,Engineering,Supply Chain Management,Civil Project Engineer,17-2141,42920,55204
+NEXT,Logistics,Automotive Engineering,Logistics Planner,17-2051,41421,73579
+NEXT,Engineering,Supply Chain Management,Civil Project Engineer,11-3071,36525,68236
+NEXT,Engineering,Finance & Accounting,Network Administrator,15-1256,42675,77121
+NEXT,Healthcare,Finance & Accounting,Registered Nurse,15-1132,42257,55777
+NOW,Finance,Software Development,Junior Software Developer,17-2112,33948,74170
+NEXT,Healthcare,Medical Services,Logistics Planner,17-2051,42859,51704
+NOW,Engineering,Automotive Engineering,Supply Chain Analyst,15-1121,40845,76065
+NOW,Engineering,Software Development,Registered Nurse,43-5081,38323,58309
+NOW,Engineering,Supply Chain Management,Registered Nurse,17-2141,40652,51225
+NEXT,Healthcare,IT Support,Supply Chain Analyst,17-2141,41976,71234
+NOW,Healthcare,Supply Chain Management,Supply Chain Analyst,17-2051,34951,47753
+NOW,Engineering,IT Support,Pharmacy Assistant,13-2051,43380,63284
+NOW,Information Technology,IT Support,Tax Consultant,29-1141,31721,64038
+NOW,Logistics,Automotive Engineering,Risk Compliance Officer,13-2051,32106,62322
+NOW,Engineering,IT Support,Senior Software Developer,11-3071,43604,46260
+NOW,Healthcare,IT Support,Electrical Systems Engineer,13-2051,43171,61500
+NEXT,Healthcare,IT Support,Tax Consultant,15-1152,38694,76948
+NEXT,Logistics,Software Development,Junior Software Developer,43-5081,39200,76838
+NOW,Finance,Finance & Accounting,Risk Compliance Officer,29-1141,35956,60043
+NEXT,Healthcare,IT Support,Pharmacy Assistant,29-1141,42450,49805
+NEXT,Logistics,Finance & Accounting,Network Administrator,17-2071,31762,58531
+NEXT,Healthcare,Software Development,IT Support Specialist,17-2141,43754,75362
+NOW,Information Technology,Automotive Engineering,Automotive Quality Engineer,17-2141,40606,60577
+NOW,Healthcare,Medical Services,Registered Nurse,17-2112,44401,73282
+NOW,Engineering,Finance & Accounting,Tax Consultant,15-1121,40480,76807
+NOW,Healthcare,IT Support,IT Support Specialist,17-2141,39516,62988
+NEXT,Information Technology,Finance & Accounting,Mechanical Design Engineer,17-2051,30528,51403
+NOW,Healthcare,Medical Services,Registered Nurse,17-2051,40403,54186
+NEXT,Information Technology,Supply Chain Management,IT Support Specialist,43-5081,40148,50379
+NEXT,Information Technology,Supply Chain Management,Junior Software Developer,29-1141,33043,79682
+NEXT,Information Technology,Finance & Accounting,Pharmacy Assistant,43-5081,36886,57405
+NOW,Engineering,Supply Chain Management,Risk Compliance Officer,17-2051,41499,74969
+NEXT,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2141,40473,76387
+NOW,Logistics,Automotive Engineering,Risk Compliance Officer,15-1132,34272,72624
+NEXT,Logistics,Automotive Engineering,Registered Nurse,17-2141,43835,66769
+NOW,Finance,Automotive Engineering,Logistics Planner,17-2141,38294,45864
+NEXT,Engineering,Software Development,Tax Consultant,17-2071,37292,61680
+NOW,Healthcare,Supply Chain Management,Supply Chain Analyst,11-3071,40376,70574
+NOW,Finance,Automotive Engineering,IT Support Specialist,17-2141,44331,51604
+NOW,Healthcare,Supply Chain Management,Supply Chain Analyst,17-2141,36083,72203
+NEXT,Logistics,Software Development,Risk Compliance Officer,15-1121,31642,48262
+NEXT,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2112,36829,51587
+NEXT,Engineering,IT Support,Junior Software Developer,15-1132,44864,74874
+NOW,Healthcare,Automotive Engineering,Risk Compliance Officer,15-1121,34961,78139
+NOW,Healthcare,Finance & Accounting,Financial Auditor,17-2112,41978,64679
+NEXT,Finance,Software Development,Clinical Laboratory Technician,17-2071,42966,52420
+NEXT,Logistics,Automotive Engineering,Supply Chain Analyst,17-2051,32797,61866
+NEXT,Logistics,Finance & Accounting,Cybersecurity Analyst,17-2141,36838,48492
+NEXT,Logistics,Supply Chain Management,Risk Compliance Officer,13-2051,40899,46649
+NOW,Finance,Automotive Engineering,Registered Nurse,15-1152,37091,73520
+NEXT,Logistics,Software Development,Automotive Quality Engineer,15-1152,32867,46604
+NEXT,Healthcare,Supply Chain Management,Logistics Planner,17-2112,30947,62235
+NOW,Healthcare,IT Support,Supply Chain Analyst,15-1152,35589,61638
+NEXT,Logistics,Supply Chain Management,Logistics Planner,17-2112,37074,45259
+NOW,Engineering,Medical Services,Pharmacy Assistant,17-2141,41372,72215
+NOW,Engineering,Supply Chain Management,Cybersecurity Analyst,17-2051,32960,74803
+NOW,Information Technology,Supply Chain Management,Pharmacy Assistant,29-1141,33805,53826
+NEXT,Information Technology,Software Development,IT Support Specialist,15-1121,36056,56753
+NEXT,Finance,Finance & Accounting,Warehouse Operations Manager,17-2071,35210,74124
+NOW,Information Technology,Software Development,Electrical Systems Engineer,17-2141,39454,74406
+NOW,Healthcare,Automotive Engineering,Clinical Laboratory Technician,17-2071,40954,64356
+NEXT,Logistics,Software Development,Mechanical Design Engineer,17-2141,38245,45538
+NOW,Engineering,Automotive Engineering,Automotive Quality Engineer,43-5081,35334,77576
+NEXT,Finance,Automotive Engineering,Civil Project Engineer,17-2141,36108,70507
+NEXT,Information Technology,Finance & Accounting,Warehouse Operations Manager,29-1141,44780,71921
+NEXT,Information Technology,Finance & Accounting,Registered Nurse,29-1141,34983,76965
+NOW,Engineering,IT Support,Logistics Planner,11-3071,32786,62621
+NEXT,Engineering,Finance & Accounting,Tax Consultant,11-3071,42743,59355
+NOW,Healthcare,IT Support,Supply Chain Analyst,17-2051,35458,73210
+NEXT,Logistics,Medical Services,Risk Compliance Officer,17-2071,38787,49750
+NOW,Logistics,Supply Chain Management,IT Support Specialist,17-2141,31566,65634
+NEXT,Information Technology,IT Support,Registered Nurse,11-3071,44924,46842
+NOW,Finance,Medical Services,Risk Compliance Officer,17-2071,32594,71381
+NOW,Finance,IT Support,Junior Software Developer,29-1141,30125,55296
+NOW,Finance,Software Development,Senior Software Developer,43-5081,41244,67126
+NEXT,Healthcare,Supply Chain Management,Risk Compliance Officer,15-1256,32990,67428
+NEXT,Healthcare,Finance & Accounting,Warehouse Operations Manager,43-5081,36685,56420
+NEXT,Logistics,Supply Chain Management,Network Administrator,17-2071,34771,50866
+NEXT,Logistics,Medical Services,Junior Software Developer,17-2141,41459,52499
+NEXT,Information Technology,Finance & Accounting,Mechanical Design Engineer,15-1132,42266,75046
+NOW,Engineering,IT Support,Network Administrator,11-3071,37214,55588
+NOW,Engineering,Automotive Engineering,Clinical Laboratory Technician,43-5081,36785,58540
+NOW,Engineering,Automotive Engineering,Electrical Systems Engineer,15-1132,39443,65064
+NOW,Healthcare,Supply Chain Management,Risk Compliance Officer,15-1132,36770,67570
+NEXT,Information Technology,IT Support,Network Administrator,29-1141,39462,54362
+NOW,Healthcare,IT Support,Supply Chain Analyst,15-1152,37373,48723
+NEXT,Finance,Finance & Accounting,Registered Nurse,43-5081,42406,60268
+NEXT,Healthcare,IT Support,Tax Consultant,13-2051,30878,67857
+NEXT,Healthcare,IT Support,Pharmacy Assistant,15-1152,42193,52013
+NOW,Logistics,Supply Chain Management,Tax Consultant,17-2051,34391,62887
+NEXT,Logistics,Supply Chain Management,Network Administrator,17-2071,40970,58773
+NEXT,Finance,Automotive Engineering,Automotive Quality Engineer,17-2141,31851,51856
+NOW,Engineering,Software Development,Civil Project Engineer,17-2141,43559,50617
+NEXT,Engineering,Automotive Engineering,Warehouse Operations Manager,29-1141,42016,47134
+NEXT,Information Technology,Software Development,Supply Chain Analyst,11-3071,40969,66752
+NEXT,Logistics,Automotive Engineering,Tax Consultant,13-2051,36033,77449
+NEXT,Engineering,Finance & Accounting,Network Administrator,17-2141,34971,56382
+NEXT,Information Technology,Automotive Engineering,IT Support Specialist,15-1152,44405,54732
+NEXT,Finance,Medical Services,Financial Auditor,15-1132,33867,53410
+NEXT,Information Technology,Medical Services,Tax Consultant,43-5081,34693,52959
+NEXT,Finance,Software Development,Registered Nurse,13-2051,35121,63754
+NEXT,Logistics,Automotive Engineering,Supply Chain Analyst,15-1132,35575,66054
+NEXT,Finance,Automotive Engineering,Civil Project Engineer,11-3071,44952,74035
+NOW,Finance,Software Development,Network Administrator,17-2141,39606,76281
+NOW,Logistics,Medical Services,Junior Software Developer,15-1152,38386,79284
+NEXT,Information Technology,Automotive Engineering,Risk Compliance Officer,15-1121,32485,59281
+NOW,Engineering,Automotive Engineering,Senior Software Developer,43-5081,36890,57923
+NEXT,Logistics,Automotive Engineering,Civil Project Engineer,15-1152,35367,58114
+NEXT,Information Technology,Medical Services,Civil Project Engineer,11-3071,31549,63007
+NOW,Finance,IT Support,Registered Nurse,17-2141,41356,67018
+NOW,Finance,Medical Services,Mechanical Design Engineer,15-1132,34552,48395
+NEXT,Finance,Medical Services,Cybersecurity Analyst,15-1256,32017,64799
+NOW,Information Technology,IT Support,Electrical Systems Engineer,17-2051,33125,52208
+NOW,Finance,IT Support,Pharmacy Assistant,17-2112,34757,64295
+NEXT,Engineering,Medical Services,Logistics Planner,15-1121,39815,47218
+NOW,Logistics,Automotive Engineering,Pharmacy Assistant,15-1132,41686,73554
+NEXT,Logistics,IT Support,Pharmacy Assistant,15-1152,38237,56703
+NEXT,Information Technology,Finance & Accounting,Registered Nurse,43-5081,38744,59863
+NEXT,Finance,IT Support,Electrical Systems Engineer,17-2112,40374,58488
+NEXT,Logistics,Medical Services,Clinical Laboratory Technician,17-2112,43098,69075
+NOW,Healthcare,Medical Services,IT Support Specialist,15-1256,35554,77920
+NOW,Information Technology,IT Support,Senior Software Developer,17-2051,32109,76956
+NEXT,Engineering,Software Development,Tax Consultant,15-1132,37034,54500
+NEXT,Logistics,Supply Chain Management,Senior Software Developer,17-2112,30299,66394
+NEXT,Information Technology,IT Support,Electrical Systems Engineer,17-2051,33069,65840
+NEXT,Healthcare,Finance & Accounting,IT Support Specialist,17-2112,35144,77933
+NOW,Healthcare,Automotive Engineering,Pharmacy Assistant,15-1132,43095,76208
+NOW,Logistics,Medical Services,Electrical Systems Engineer,11-3071,42347,47858
+NEXT,Finance,Automotive Engineering,Supply Chain Analyst,15-1152,40386,54269
+NOW,Information Technology,Software Development,Tax Consultant,17-2051,35706,47045
+NOW,Healthcare,Finance & Accounting,Tax Consultant,15-1256,37300,50937
+NEXT,Finance,Finance & Accounting,Registered Nurse,15-1132,33515,67209
+NOW,Healthcare,Software Development,Clinical Laboratory Technician,43-5081,34032,48981
+NOW,Healthcare,Finance & Accounting,Tax Consultant,17-2071,34996,79731
+NOW,Finance,Automotive Engineering,Logistics Planner,15-1121,43632,72319
+NEXT,Information Technology,Medical Services,Pharmacy Assistant,15-1121,44417,49067
+NOW,Information Technology,Automotive Engineering,Network Administrator,11-3071,35093,51099
+NOW,Engineering,Software Development,Automotive Quality Engineer,11-3071,30931,61036
+NEXT,Logistics,Medical Services,Senior Software Developer,11-3071,36412,47080
+NOW,Finance,Supply Chain Management,Financial Auditor,29-1141,42402,69062
+NOW,Finance,IT Support,Network Administrator,13-2051,36426,47611
+NEXT,Information Technology,Software Development,Registered Nurse,15-1121,34552,69758
+NEXT,Healthcare,IT Support,Network Administrator,15-1121,33882,66832
+NEXT,Information Technology,IT Support,Mechanical Design Engineer,43-5081,35233,69276
+NOW,Engineering,Finance & Accounting,Registered Nurse,29-1141,38164,69453
+NEXT,Logistics,Software Development,Mechanical Design Engineer,17-2112,33699,68057
+NOW,Logistics,IT Support,IT Support Specialist,15-1132,42576,67746

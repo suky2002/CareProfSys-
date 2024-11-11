@@ -1,0 +1,211 @@
+CareerStage,IndustryCluster,CareerPath,JobTitle,JobSOCCode,EntryLevelWage,AverageWage
+NEXT,Information Technology,Information Support Services,Computer User Support Specialists,15-1151,34390.0,46570.0
+NEXT,Information Technology,Information Support Services,Computer Network Support Specialists,15-1152,40750.0,55100.0
+LATER,Information Technology,Information Support Services,Computer and Information Systems Managers,nov.21,97360.0,130240.0
+LATER,Information Technology,Information Support Services,Computer Systems Analysts,15-1121,65550.0,88110.0
+LATER,Information Technology,Information Support Services,Information Security Analysts,15-1122,64060.0,91630.0
+LATER,Information Technology,Information Support Services,Network and Computer Systems Administrators,15-1142,60620.0,80280.0
+LATER,Information Technology,Information Support Services,Computer Network Architects,15-1143,77000.0,97120.0
+NEXT,Information Technology,Programming and Development,Web Developers,15-1134,40600.0,59210.0
+LATER,Information Technology,Programming and Development,Computer and Information Systems Managers,nov.21,97360.0,130240.0
+LATER,Information Technology,Programming and Development,Computer Programmers,15-1131,59760.0,80030.0
+LATER,Information Technology,Programming and Development,Graphic Designers,27-1024,34810.0,49410.0
+NOW,Information Technology,Software Development,Electrical Engineer,17-2112,69252.0,109573.0
+NOW,Information Technology,Cybersecurity,AI Engineer,15-1121,67789.0,87137.0
+NOW,Information Technology,Software Development,Mechanical Engineer,15-1121,66428.0,108090.0
+NOW,Information Technology,Cybersecurity,Mechanical Engineer,15-1121,68819.0,111786.0
+NOW,Information Technology,Software Development,Mechanical Engineer,17-2112,58656.0,115714.0
+NEXT,Information Technology,Data Science,Systems Analyst,15-1121,61246.0,119177.0
+NOW,Information Technology,Software Development,Cybersecurity Specialist,15-1152,69001.0,81733.0
+NEXT,Information Technology,Network Administration,Systems Analyst,17-2071,53052.0,116504.0
+NOW,Information Technology,Engineering Design,AI Engineer,17-2071,68367.0,100447.0
+NOW,Information Technology,Software Development,Electrical Engineer,15-1256,63109.0,92723.0
+NEXT,Information Technology,Software Development,Quality Assurance Engineer,15-1152,67635.0,76259.0
+NOW,Information Technology,Project Management,Quality Assurance Engineer,17-2112,57695.0,81958.0
+NEXT,Information Technology,Cybersecurity,Data Scientist,17-2051,64844.0,88077.0
+NEXT,Information Technology,Software Development,Systems Analyst,17-2112,68682.0,117471.0
+NEXT,Information Technology,Data Science,Mechanical Engineer,17-2141,55519.0,96775.0
+NEXT,Information Technology,Network Administration,DevOps Engineer,15-1121,68447.0,83951.0
+NOW,Information Technology,Project Management,Data Scientist,17-2141,62378.0,113049.0
+NEXT,Information Technology,Project Management,Systems Analyst,15-1132,54449.0,97349.0
+NOW,Information Technology,Cybersecurity,Cybersecurity Specialist,17-2141,68672.0,80195.0
+NOW,Information Technology,Engineering Design,Mechanical Engineer,17-2141,59718.0,102577.0
+NEXT,Information Technology,Software Development,Electrical Engineer,17-2071,66545.0,99806.0
+NEXT,Information Technology,Data Science,Software Developer,15-1256,69000.0,84902.0
+NOW,Information Technology,Software Development,Data Scientist,15-1152,68249.0,77172.0
+NOW,Information Technology,Cybersecurity,Electrical Engineer,17-2112,52171.0,91535.0
+NEXT,Information Technology,Project Management,Software Engineer,15-1152,57020.0,115083.0
+NOW,Information Technology,Software Development,Software Developer,17-2112,68592.0,88808.0
+NEXT,Information Technology,Data Science,Electrical Engineer,15-1132,53715.0,98186.0
+NOW,Information Technology,Engineering Design,Network Engineer,15-1121,62158.0,104401.0
+NOW,Information Technology,Data Science,Software Developer,17-2141,68480.0,110477.0
+NOW,Information Technology,Data Science,DevOps Engineer,17-2051,58521.0,107749.0
+NEXT,Information Technology,Engineering Design,AI Engineer,17-2051,57286.0,77866.0
+NEXT,Information Technology,Engineering Design,Cybersecurity Specialist,15-1256,67606.0,90980.0
+NEXT,Information Technology,Software Development,Electrical Engineer,15-1132,67303.0,117012.0
+NEXT,Information Technology,Project Management,Civil Engineer,15-1152,67210.0,82125.0
+NEXT,Information Technology,Network Administration,Electrical Engineer,15-1132,57908.0,102179.0
+NEXT,Information Technology,Data Science,Network Engineer,15-1152,50823.0,92771.0
+NEXT,Information Technology,Data Science,Software Engineer,17-2112,65175.0,84035.0
+NEXT,Information Technology,Network Administration,DevOps Engineer,15-1152,58843.0,81865.0
+NEXT,Information Technology,Cybersecurity,Software Engineer,17-2141,59114.0,70519.0
+NEXT,Information Technology,Project Management,Quality Assurance Engineer,15-1256,68092.0,87142.0
+NEXT,Information Technology,Project Management,Mechanical Engineer,17-2141,61376.0,73853.0
+NOW,Information Technology,Software Development,Software Engineer,17-2112,68556.0,76282.0
+NEXT,Information Technology,Data Science,Cybersecurity Specialist,15-1132,58965.0,91100.0
+NOW,Information Technology,Software Development,Systems Analyst,17-2051,67033.0,116358.0
+NEXT,Information Technology,Project Management,Data Scientist,15-1132,57020.0,82552.0
+NOW,Information Technology,Cybersecurity,Data Scientist,15-1121,62372.0,83172.0
+NEXT,Information Technology,Network Administration,Electrical Engineer,15-1256,57408.0,91939.0
+NEXT,Information Technology,Data Science,Network Engineer,17-2141,56078.0,113158.0
+NEXT,Information Technology,Engineering Design,DevOps Engineer,17-2141,67503.0,113509.0
+NEXT,Information Technology,Engineering Design,Quality Assurance Engineer,15-1121,52114.0,116601.0
+NEXT,Information Technology,Engineering Design,Electrical Engineer,17-2112,54118.0,84937.0
+NEXT,Information Technology,Data Science,Electrical Engineer,15-1152,67272.0,104224.0
+NEXT,Information Technology,Cybersecurity,Electrical Engineer,17-2112,56631.0,118618.0
+NEXT,Information Technology,Network Administration,Electrical Engineer,17-2051,63366.0,94253.0
+NEXT,Information Technology,Project Management,AI Engineer,17-2071,65411.0,82285.0
+NOW,Information Technology,Data Science,Cybersecurity Specialist,17-2141,55105.0,70287.0
+NOW,Information Technology,Network Administration,DevOps Engineer,15-1256,58308.0,101099.0
+NOW,Information Technology,Network Administration,Civil Engineer,15-1152,53500.0,103910.0
+NOW,Information Technology,Cybersecurity,Software Developer,15-1121,60419.0,90035.0
+NOW,Information Technology,Data Science,Data Scientist,15-1121,60461.0,74197.0
+NEXT,Information Technology,Project Management,DevOps Engineer,17-2071,59510.0,90239.0
+NOW,Information Technology,Network Administration,Network Engineer,17-2112,63577.0,100696.0
+NEXT,Information Technology,Data Science,Network Engineer,15-1132,68319.0,108830.0
+NEXT,Information Technology,Software Development,Cybersecurity Specialist,17-2051,65261.0,111285.0
+NEXT,Information Technology,Data Science,DevOps Engineer,15-1256,61874.0,103239.0
+NOW,Information Technology,Data Science,DevOps Engineer,17-2051,59354.0,113944.0
+NOW,Information Technology,Cybersecurity,Systems Analyst,15-1132,68479.0,86207.0
+NOW,Information Technology,Project Management,Cybersecurity Specialist,17-2112,69233.0,77958.0
+NOW,Information Technology,Cybersecurity,DevOps Engineer,17-2112,55950.0,114175.0
+NOW,Information Technology,Data Science,Data Scientist,15-1256,50835.0,100114.0
+NOW,Information Technology,Project Management,Mechanical Engineer,15-1121,67565.0,71763.0
+NOW,Information Technology,Engineering Design,Software Engineer,15-1132,55955.0,75846.0
+NEXT,Information Technology,Network Administration,Mechanical Engineer,17-2112,52813.0,82114.0
+NOW,Information Technology,Cybersecurity,DevOps Engineer,15-1121,53213.0,114628.0
+NEXT,Information Technology,Software Development,Civil Engineer,17-2051,57800.0,114432.0
+NOW,Information Technology,Cybersecurity,Systems Analyst,17-2051,63723.0,83339.0
+NEXT,Information Technology,Software Development,DevOps Engineer,15-1256,59009.0,98530.0
+NEXT,Information Technology,Software Development,Quality Assurance Engineer,15-1256,68692.0,89860.0
+NEXT,Information Technology,Project Management,Quality Assurance Engineer,15-1256,54354.0,116991.0
+NEXT,Information Technology,Network Administration,Quality Assurance Engineer,17-2071,50409.0,95701.0
+NEXT,Information Technology,Engineering Design,Electrical Engineer,17-2141,54396.0,83971.0
+NEXT,Information Technology,Network Administration,Quality Assurance Engineer,17-2051,54729.0,83763.0
+NEXT,Information Technology,Data Science,Software Engineer,17-2051,60582.0,73569.0
+NOW,Information Technology,Network Administration,Civil Engineer,15-1121,56658.0,97589.0
+NOW,Information Technology,Data Science,Civil Engineer,15-1121,66866.0,95339.0
+NEXT,Information Technology,Software Development,Cybersecurity Specialist,17-2112,68330.0,76532.0
+NOW,Information Technology,Data Science,AI Engineer,17-2051,61493.0,106371.0
+NEXT,Information Technology,Project Management,Systems Analyst,15-1152,60212.0,110010.0
+NEXT,Information Technology,Cybersecurity,Quality Assurance Engineer,15-1256,50850.0,72215.0
+NEXT,Information Technology,Data Science,Software Engineer,15-1121,55728.0,78281.0
+NOW,Information Technology,Software Development,Quality Assurance Engineer,17-2051,68960.0,96747.0
+NOW,Information Technology,Software Development,AI Engineer,17-2051,52249.0,74491.0
+NEXT,Information Technology,Cybersecurity,Quality Assurance Engineer,15-1256,52140.0,95503.0
+NEXT,Information Technology,Network Administration,Network Engineer,17-2141,60011.0,94902.0
+NEXT,Information Technology,Network Administration,DevOps Engineer,17-2141,66408.0,111940.0
+NOW,Information Technology,Engineering Design,Electrical Engineer,17-2051,53923.0,119090.0
+NEXT,Information Technology,Cybersecurity,DevOps Engineer,17-2051,56599.0,100230.0
+NOW,Information Technology,Cybersecurity,Systems Analyst,15-1152,52767.0,84683.0
+NOW,Information Technology,Data Science,Mechanical Engineer,15-1132,66751.0,79471.0
+NOW,Information Technology,Software Development,Cybersecurity Specialist,15-1121,56706.0,100555.0
+NEXT,Information Technology,Cybersecurity,Cybersecurity Specialist,17-2071,69577.0,74953.0
+NEXT,Information Technology,Software Development,Electrical Engineer,17-2141,51800.0,76167.0
+NEXT,Information Technology,Engineering Design,Cybersecurity Specialist,15-1152,68627.0,84775.0
+NOW,Information Technology,Engineering Design,Software Developer,17-2071,63775.0,119503.0
+NOW,Information Technology,Project Management,Network Engineer,15-1121,57877.0,100328.0
+NEXT,Information Technology,Cybersecurity,AI Engineer,17-2141,64720.0,112264.0
+NEXT,Information Technology,Data Science,Software Developer,15-1132,60118.0,82612.0
+NEXT,Information Technology,Finance & Accounting,Civil Project Engineer,43-5081,44218.0,54939.0
+NEXT,Information Technology,Medical Services,Civil Project Engineer,29-1141,36140.0,63773.0
+NOW,Information Technology,Automotive Engineering,Cybersecurity Analyst,15-1121,32161.0,79270.0
+NEXT,Information Technology,Software Development,Network Administrator,17-2112,37097.0,53722.0
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2071,30343.0,73052.0
+NOW,Information Technology,Automotive Engineering,Network Administrator,15-1152,44712.0,53168.0
+NOW,Information Technology,IT Support,Senior Software Developer,15-1132,37158.0,50148.0
+NEXT,Information Technology,Finance & Accounting,Logistics Planner,11-3071,31833.0,53163.0
+NEXT,Information Technology,Software Development,Network Administrator,13-2051,43159.0,47097.0
+NEXT,Information Technology,Software Development,Senior Software Developer,17-2141,42713.0,55349.0
+NOW,Information Technology,Software Development,Registered Nurse,29-1141,35855.0,60908.0
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,17-2051,36732.0,68139.0
+NEXT,Information Technology,Finance & Accounting,Warehouse Operations Manager,15-1121,39338.0,77132.0
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,17-2051,36443.0,60858.0
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,43-5081,35657.0,50893.0
+NOW,Information Technology,IT Support,Clinical Laboratory Technician,15-1256,35669.0,60570.0
+NOW,Information Technology,IT Support,Clinical Laboratory Technician,17-2071,36720.0,66707.0
+NEXT,Information Technology,Software Development,Logistics Planner,17-2071,35916.0,52713.0
+NEXT,Information Technology,Automotive Engineering,Cybersecurity Analyst,17-2071,35801.0,76975.0
+NEXT,Information Technology,IT Support,Cybersecurity Analyst,17-2051,42985.0,55395.0
+NEXT,Information Technology,IT Support,Cybersecurity Analyst,13-2051,41102.0,69670.0
+NOW,Information Technology,Medical Services,Mechanical Design Engineer,17-2112,34899.0,76782.0
+NEXT,Information Technology,IT Support,Logistics Planner,15-1132,33980.0,47126.0
+NOW,Information Technology,Automotive Engineering,Automotive Quality Engineer,17-2051,38354.0,58302.0
+NEXT,Information Technology,Software Development,Logistics Planner,15-1132,44108.0,49562.0
+NEXT,Information Technology,Supply Chain Management,Registered Nurse,15-1256,32159.0,58908.0
+NOW,Information Technology,Medical Services,Network Administrator,15-1132,38704.0,59164.0
+NEXT,Information Technology,Finance & Accounting,Risk Compliance Officer,15-1121,41952.0,69679.0
+NEXT,Information Technology,Medical Services,Registered Nurse,15-1121,34829.0,65611.0
+NOW,Information Technology,Finance & Accounting,Mechanical Design Engineer,43-5081,32767.0,46363.0
+NEXT,Information Technology,Software Development,Electrical Systems Engineer,15-1152,36338.0,73809.0
+NEXT,Information Technology,Medical Services,Civil Project Engineer,15-1152,37138.0,72446.0
+NOW,Information Technology,Software Development,Clinical Laboratory Technician,15-1152,37788.0,70725.0
+NOW,Information Technology,IT Support,Junior Software Developer,15-1256,38618.0,45993.0
+NOW,Information Technology,Software Development,Junior Software Developer,43-5081,32330.0,77167.0
+NEXT,Information Technology,Medical Services,Financial Auditor,11-3071,39913.0,57238.0
+NOW,Information Technology,IT Support,Network Administrator,17-2112,39175.0,68224.0
+NOW,Information Technology,Automotive Engineering,Mechanical Design Engineer,17-2141,39639.0,78526.0
+NEXT,Information Technology,Automotive Engineering,Warehouse Operations Manager,15-1152,42805.0,63889.0
+NEXT,Information Technology,Medical Services,Electrical Systems Engineer,17-2051,32195.0,58301.0
+NEXT,Information Technology,Medical Services,Risk Compliance Officer,17-2071,31392.0,67062.0
+NOW,Information Technology,Software Development,Risk Compliance Officer,17-2071,44058.0,78731.0
+NOW,Information Technology,Finance & Accounting,Pharmacy Assistant,17-2071,35031.0,70288.0
+NEXT,Information Technology,Automotive Engineering,Registered Nurse,17-2141,33657.0,45050.0
+NOW,Information Technology,IT Support,Electrical Systems Engineer,17-2071,30971.0,63178.0
+NOW,Information Technology,Software Development,Tax Consultant,17-2071,39555.0,53187.0
+NEXT,Information Technology,Medical Services,Supply Chain Analyst,15-1152,41055.0,57157.0
+NEXT,Information Technology,Automotive Engineering,Cybersecurity Analyst,17-2051,41095.0,64692.0
+NEXT,Information Technology,Supply Chain Management,Mechanical Design Engineer,13-2051,36831.0,58609.0
+NEXT,Information Technology,IT Support,Senior Software Developer,15-1152,39742.0,79086.0
+NOW,Information Technology,Supply Chain Management,Tax Consultant,13-2051,35485.0,79544.0
+NOW,Information Technology,IT Support,Civil Project Engineer,13-2051,40790.0,70988.0
+NEXT,Information Technology,Automotive Engineering,Tax Consultant,15-1132,31583.0,50328.0
+NOW,Information Technology,Software Development,Senior Software Developer,17-2051,33703.0,46223.0
+NEXT,Information Technology,Automotive Engineering,Supply Chain Analyst,17-2141,33324.0,58451.0
+NOW,Information Technology,IT Support,Civil Project Engineer,15-1132,44835.0,62942.0
+NEXT,Information Technology,Medical Services,Automotive Quality Engineer,17-2071,41888.0,54199.0
+NOW,Information Technology,IT Support,Senior Software Developer,29-1141,37377.0,76991.0
+NEXT,Information Technology,Automotive Engineering,Warehouse Operations Manager,15-1132,41350.0,79229.0
+NOW,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2051,36246.0,69827.0
+NOW,Information Technology,IT Support,Tax Consultant,29-1141,41930.0,66666.0
+NOW,Information Technology,Supply Chain Management,Risk Compliance Officer,15-1132,40730.0,78410.0
+NOW,Information Technology,IT Support,Tax Consultant,29-1141,31721.0,64038.0
+NOW,Information Technology,Automotive Engineering,Automotive Quality Engineer,17-2141,40606.0,60577.0
+NEXT,Information Technology,Finance & Accounting,Mechanical Design Engineer,17-2051,30528.0,51403.0
+NEXT,Information Technology,Supply Chain Management,IT Support Specialist,43-5081,40148.0,50379.0
+NEXT,Information Technology,Supply Chain Management,Junior Software Developer,29-1141,33043.0,79682.0
+NEXT,Information Technology,Finance & Accounting,Pharmacy Assistant,43-5081,36886.0,57405.0
+NEXT,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2141,40473.0,76387.0
+NEXT,Information Technology,Finance & Accounting,Electrical Systems Engineer,17-2112,36829.0,51587.0
+NOW,Information Technology,Supply Chain Management,Pharmacy Assistant,29-1141,33805.0,53826.0
+NEXT,Information Technology,Software Development,IT Support Specialist,15-1121,36056.0,56753.0
+NOW,Information Technology,Software Development,Electrical Systems Engineer,17-2141,39454.0,74406.0
+NEXT,Information Technology,Finance & Accounting,Warehouse Operations Manager,29-1141,44780.0,71921.0
+NEXT,Information Technology,Finance & Accounting,Registered Nurse,29-1141,34983.0,76965.0
+NEXT,Information Technology,IT Support,Registered Nurse,11-3071,44924.0,46842.0
+NEXT,Information Technology,Finance & Accounting,Mechanical Design Engineer,15-1132,42266.0,75046.0
+NEXT,Information Technology,IT Support,Network Administrator,29-1141,39462.0,54362.0
+NEXT,Information Technology,Software Development,Supply Chain Analyst,11-3071,40969.0,66752.0
+NEXT,Information Technology,Automotive Engineering,IT Support Specialist,15-1152,44405.0,54732.0
+NEXT,Information Technology,Medical Services,Tax Consultant,43-5081,34693.0,52959.0
+NEXT,Information Technology,Automotive Engineering,Risk Compliance Officer,15-1121,32485.0,59281.0
+NEXT,Information Technology,Medical Services,Civil Project Engineer,11-3071,31549.0,63007.0
+NOW,Information Technology,IT Support,Electrical Systems Engineer,17-2051,33125.0,52208.0
+NEXT,Information Technology,Finance & Accounting,Registered Nurse,43-5081,38744.0,59863.0
+NOW,Information Technology,IT Support,Senior Software Developer,17-2051,32109.0,76956.0
+NEXT,Information Technology,IT Support,Electrical Systems Engineer,17-2051,33069.0,65840.0
+NOW,Information Technology,Software Development,Tax Consultant,17-2051,35706.0,47045.0
+NEXT,Information Technology,Medical Services,Pharmacy Assistant,15-1121,44417.0,49067.0
+NOW,Information Technology,Automotive Engineering,Network Administrator,11-3071,35093.0,51099.0
+NEXT,Information Technology,Software Development,Registered Nurse,15-1121,34552.0,69758.0
+NEXT,Information Technology,IT Support,Mechanical Design Engineer,43-5081,35233.0,69276.0
