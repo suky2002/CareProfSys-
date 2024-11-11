@@ -1,46 +1,47 @@
+// SkillForm.jsx
 import React, { useEffect, useState } from 'react';
 
-import { fetchSkills } from './skills';
+import { fetchSkills } from '../utils/skills'; // Asigură-te că ai actualizat calea
 
 function SkillForm({ onRecommend }) {
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
   useEffect(() => {
-    fetchSkills((data) => setSkills(data));
+    // Fetch skills and set them in state
+    fetchSkills().then((skillList) => {
+      setSkills(skillList);
+    });
   }, []);
 
-  const toggleSkill = (skill) => {
-    if (selectedSkills.includes(skill)) {
-      setSelectedSkills(selectedSkills.filter((s) => s !== skill));
-    } else if (selectedSkills.length < 5) {
-      setSelectedSkills([...selectedSkills, skill]);
-    }
+  const handleSkillChange = (event) => {
+    const value = event.target.value;
+    setSelectedSkills((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((skill) => skill !== value);
+      } else if (prev.length < 5) {
+        return [...prev, value];
+      }
+      return prev;
+    });
   };
 
-  const handleSubmit = () => {
+  const handleRecommendation = () => {
     onRecommend(selectedSkills);
   };
 
   return (
     <div>
       <h2>Selectează până la 5 skill-uri</h2>
-      <div>
-        {skills.map((skill) => (
-          <button
-            key={skill.name}
-            onClick={() => toggleSkill(skill.name)}
-            style={{
-              background: selectedSkills.includes(skill.name) ? 'lightgreen' : 'white',
-            }}
-          >
-            {skill.name}
-          </button>
+      <select onChange={handleSkillChange} value="">
+        <option value="" disabled>Selectează un skill</option>
+        {skills.map((skill, index) => (
+          <option key={index} value={skill}>
+            {skill}
+          </option>
         ))}
-      </div>
-      <button onClick={handleSubmit} disabled={selectedSkills.length === 0}>
-        Recomandă Experiențe VR
-      </button>
+      </select>
+      <button onClick={handleRecommendation}>Recomandă Experiențe VR</button>
     </div>
   );
 }
