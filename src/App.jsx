@@ -1,37 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import SkillForm from './components/SkillForm';
+import SkillForm from "./components/SkillForm";
+import { fetchSkills } from "./utils/skills";
 
-const predefinedJobs = [
-  { title: 'Software Developer', skills: ['JavaScript', 'React', 'Problem Solving', 'Git'] },
-  { title: 'Data Analyst', skills: ['SQL', 'Data Analysis', 'Python', 'Excel'] },
-];
-
-function App() {
+const App = () => {
+  const [skills, setSkills] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
 
+  // Meserii prestabilite cu skilluri asociate
+  const predefinedJobs = [
+    {
+      title: "Software Developer",
+      skills: ["Problem Solving", "Java", "SQL", "Data Analysis", "Communication"],
+    },
+    {
+      title: "Data Analyst",
+      skills: ["Data Analysis", "SQL", "Communication", "Forecasting Demand", "Financial Reporting"],
+    },
+  ];
+
+  useEffect(() => {
+    // Încarcă skillurile din CSV la montarea componentului
+    fetchSkills().then((data) => setSkills(data));
+  }, []);
+
   const handleRecommendation = (selectedSkills) => {
-    console.log("Skilluri selectate:", selectedSkills);
+    // Curățare pentru a elimina caracterele suplimentare
+    const cleanedSelectedSkills = selectedSkills.map(skill => skill.replace(/['"]/g, "").trim());
 
-    const matchingJobs = predefinedJobs.filter(job => {
-      const matchingSkills = job.skills.filter(skill => selectedSkills.includes(skill));
-      console.log(`Verificare pentru ${job.title}:`, matchingSkills);
-      return matchingSkills.length >= 3;
-    });
+    const matchingJobs = predefinedJobs
+      .map(job => {
+        // Calculăm scorul pe baza numărului de skilluri comune
+        const matchingSkills = job.skills.filter(skill => cleanedSelectedSkills.includes(skill));
+        const score = matchingSkills.length;
+        
+        return { ...job, score };
+      })
+      // Filtrăm meseriile care au cel puțin 3 skilluri potrivite
+      .filter(job => job.score >= 3)
+      // Sortăm descrescător după scor
+      .sort((a, b) => b.score - a.score);
 
-    console.log("Meserii recomandate:", matchingJobs);
     setRecommendedJobs(matchingJobs);
   };
 
   return (
     <div>
-      <h1>Recomandări VR</h1>
-      <SkillForm onRecommend={handleRecommendation} />
+      <h1>Selectează până la 5 skill-uri</h1>
+      <SkillForm skills={skills} onRecommend={handleRecommendation} />
       <h2>Recomandări VR</h2>
       {recommendedJobs.length > 0 ? (
         <ul>
           {recommendedJobs.map((job, index) => (
-            <li key={index}>{job.title}</li>
+            <li key={index}>
+              {job.title} - Scor: {job.score}
+            </li>
           ))}
         </ul>
       ) : (
@@ -39,6 +62,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;
