@@ -2,25 +2,41 @@ import React, { useState } from 'react';
 
 import SkillForm from './components/SkillForm';
 
-function App() {
-  const [recommendations, setRecommendations] = useState([]);
+const predefinedJobs = [
+  { title: 'Software Developer', skills: ['JavaScript', 'React', 'Problem Solving', 'Git'] },
+  { title: 'Data Analyst', skills: ['SQL', 'Data Analysis', 'Python', 'Excel'] },
+];
 
-  const handleRecommend = (skills) => {
-    // Funcția de recomandare a experiențelor în VR
-    console.log('Skills selectate:', skills);
-    setRecommendations(skills); // Aici adaugi logica de recomandare
+function App() {
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
+
+  const handleRecommendation = (selectedSkills) => {
+    console.log("Skilluri selectate:", selectedSkills);
+
+    const matchingJobs = predefinedJobs.filter(job => {
+      const matchingSkills = job.skills.filter(skill => selectedSkills.includes(skill));
+      console.log(`Verificare pentru ${job.title}:`, matchingSkills);
+      return matchingSkills.length >= 3;
+    });
+
+    console.log("Meserii recomandate:", matchingJobs);
+    setRecommendedJobs(matchingJobs);
   };
 
   return (
     <div>
-      <SkillForm onRecommend={handleRecommend} />
+      <h1>Recomandări VR</h1>
+      <SkillForm onRecommend={handleRecommendation} />
       <h2>Recomandări VR</h2>
-      <ul>
-        {recommendations.length > 0
-          ? recommendations.map((exp, index) => <li key={index}>{exp}</li>)
-          : <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
-        }
-      </ul>
+      {recommendedJobs.length > 0 ? (
+        <ul>
+          {recommendedJobs.map((job, index) => (
+            <li key={index}>{job.title}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
+      )}
     </div>
   );
 }
