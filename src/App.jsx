@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import SkillForm from "./components/SkillForm";
-import { fetchSkills } from "./utils/skills.jsx";
+import { fetchSkills } from "./utils/skills";
 
 const App = () => {
   const [skills, setSkills] = useState([]);
@@ -20,25 +20,17 @@ const App = () => {
   ];
 
   useEffect(() => {
-    // Încarcă skillurile din CSV la montarea componentului
     fetchSkills().then((data) => setSkills(data));
   }, []);
 
   const handleRecommendation = (selectedSkills) => {
-    // Curățare pentru a elimina caracterele suplimentare
-    const cleanedSelectedSkills = selectedSkills.map(skill => skill.replace(/['"]/g, "").trim());
-
     const matchingJobs = predefinedJobs
       .map(job => {
-        // Calculăm scorul pe baza numărului de skilluri comune
-        const matchingSkills = job.skills.filter(skill => cleanedSelectedSkills.includes(skill));
-        const score = matchingSkills.length;
-        
+        const matchingSkills = job.skills.filter(skill => selectedSkills.includes(skill));
+        const score = matchingSkills.length / selectedSkills.length;
         return { ...job, score };
       })
-      // Filtrăm meseriile care au cel puțin 3 skilluri potrivite
-      .filter(job => job.score >= 3)
-      // Sortăm descrescător după scor
+      .filter(job => job.score >= 0.6) // Recomandă joburile cu scor peste 60%
       .sort((a, b) => b.score - a.score);
 
     setRecommendedJobs(matchingJobs);
@@ -53,12 +45,12 @@ const App = () => {
         <ul>
           {recommendedJobs.map((job, index) => (
             <li key={index}>
-              {job.title} - Scor: {job.score}
+              {job.title} - Scor: {(job.score * 100).toFixed(0)}%
             </li>
           ))}
         </ul>
       ) : (
-        <p>Nici-o experiență disponibilă pentru skill-urile selectate.</p>
+        <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
       )}
     </div>
   );

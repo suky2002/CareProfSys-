@@ -1,7 +1,7 @@
 import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { fetchSkills } from '../utils/skills.jsx';
+import { fetchSkills } from '../utils/skills';
 
 export default function SkillForm({ onRecommend }) {
   const [skills, setSkills] = useState([]);
@@ -17,9 +17,11 @@ export default function SkillForm({ onRecommend }) {
   }, []);
 
   const handleSkillChange = (event) => {
-    const value = event.target.value;
-    if (value.length <= maxSkills) {
-      setSelectedSkills(value);
+    const selected = event.target.value;
+    if (selected.length <= maxSkills) {
+      setSelectedSkills(selected);
+    } else {
+      alert(`Puteți selecta maximum ${maxSkills} skilluri.`);
     }
   };
 
@@ -28,9 +30,9 @@ export default function SkillForm({ onRecommend }) {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', textAlign: 'center' }}>
+    <div>
       <h2>Selectează până la {maxSkills} skill-uri</h2>
-      <FormControl fullWidth variant="outlined" style={{ marginBottom: '20px' }}>
+      <FormControl fullWidth style={{ width: '400px' }}>
         <InputLabel id="multiple-checkbox-label">Selectează un skill</InputLabel>
         <Select
           labelId="multiple-checkbox-label"
@@ -38,14 +40,7 @@ export default function SkillForm({ onRecommend }) {
           value={selectedSkills}
           onChange={handleSkillChange}
           renderValue={(selected) => selected.join(', ')}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: 48 * 4.5 + 8,
-                width: 250,
-              },
-            },
-          }}
+          style={{ width: '100%' }}
         >
           {skills.map((skill) => (
             <MenuItem key={skill} value={skill}>
@@ -55,9 +50,7 @@ export default function SkillForm({ onRecommend }) {
           ))}
         </Select>
       </FormControl>
-      <button onClick={handleRecommendClick} style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
-        Recomandă Experiențe VR
-      </button>
+      <button onClick={handleRecommendClick}>Recomandă Experiențe VR</button>
     </div>
   );
 }
