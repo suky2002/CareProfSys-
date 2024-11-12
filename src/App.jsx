@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import SkillForm from "./components/SkillForm";
-import { fetchSkills } from "./utils/skills";
+import { fetchSkills } from "./utils/skills.jsx";
 
 const App = () => {
   const [skills, setSkills] = useState([]);

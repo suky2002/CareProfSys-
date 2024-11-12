@@ -9,6 +9,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.6",
     "@react-three/drei": "^9.115.0",
     "@react-three/fiber": "^8.17.10",
     "@react-three/xr": "^2.0.0",
