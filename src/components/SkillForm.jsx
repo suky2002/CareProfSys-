@@ -1,38 +1,36 @@
-import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
+import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { fetchSkills } from '../utils/skills';
+import { fetchSkillsAndJobs } from '../utils/skills.jsx';
 
 export default function SkillForm({ onRecommend }) {
   const [skills, setSkills] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const maxSkills = 5;
 
   useEffect(() => {
-    async function getSkills() {
-      const skillsList = await fetchSkills();
-      setSkills(skillsList);
+    async function getSkillsAndJobs() {
+      const { skills, jobs } = await fetchSkillsAndJobs();
+      setSkills(skills);
+      setJobs(jobs);
     }
-    getSkills();
+    getSkillsAndJobs();
   }, []);
 
   const handleSkillChange = (event) => {
-    const selected = event.target.value;
-    if (selected.length <= maxSkills) {
-      setSelectedSkills(selected);
-    } else {
-      alert(`Puteți selecta maximum ${maxSkills} skilluri.`);
-    }
+    const value = event.target.value;
+    setSelectedSkills(typeof value === 'string' ? value.split(',') : value);
   };
 
   const handleRecommendClick = () => {
-    onRecommend(selectedSkills);
+    onRecommend(selectedSkills, jobs);
   };
 
   return (
     <div>
       <h2>Selectează până la {maxSkills} skill-uri</h2>
-      <FormControl fullWidth style={{ width: '400px' }}>
+      <FormControl fullWidth>
         <InputLabel id="multiple-checkbox-label">Selectează un skill</InputLabel>
         <Select
           labelId="multiple-checkbox-label"
@@ -40,7 +38,6 @@ export default function SkillForm({ onRecommend }) {
           value={selectedSkills}
           onChange={handleSkillChange}
           renderValue={(selected) => selected.join(', ')}
-          style={{ width: '100%' }}
         >
           {skills.map((skill) => (
             <MenuItem key={skill} value={skill}>
@@ -50,7 +47,9 @@ export default function SkillForm({ onRecommend }) {
           ))}
         </Select>
       </FormControl>
-      <button onClick={handleRecommendClick}>Recomandă Experiențe VR</button>
+      <Button variant="contained" color="primary" onClick={handleRecommendClick}>
+        Recomandă Experiențe VR
+      </Button>
     </div>
   );
 }
