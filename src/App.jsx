@@ -19,23 +19,28 @@ const App = () => {
   }, []);
 
   const handleRecommendation = (selectedSkills) => {
-    // Transformăm toate skill-urile în litere mici pentru comparație
-    const normalizedSelectedSkills = selectedSkills.map(skill => skill.toLowerCase());
+    if (selectedSkills.length < 2 || selectedSkills.length > 10) {
+      alert("Te rugăm să selectezi între 2 și 10 skill-uri.");
+      return;
+    }
+  
+    // Transformăm toate skill-urile în litere mici și eliminăm spațiile pentru comparație
+    const normalizedSelectedSkills = selectedSkills.map(skill => skill.toLowerCase().trim());
     console.log("Skill-uri selectate (normalizate):", normalizedSelectedSkills);
-
+  
     const matchingJobs = jobs
       .map((job) => {
-        const jobSkills = job.skills.map(skill => skill.toLowerCase());
+        const jobSkills = job.skills.map(skill => skill.toLowerCase().trim());
         const matchingSkills = jobSkills.filter((skill) => normalizedSelectedSkills.includes(skill));
         const score = matchingSkills.length / normalizedSelectedSkills.length;
         
         console.log(`Job: ${job.title}, Domeniu: ${job.industry}, Matching Skills:`, matchingSkills, `Score: ${score}`);
-
+  
         return { ...job, score };
       })
       .filter((job) => job.score >= 0.4) // Setăm un prag de 40% pentru afișare
       .sort((a, b) => b.score - a.score);
-
+  
     const groupedJobs = matchingJobs.reduce((acc, job) => {
       const industry = job.industry;
       if (industry === "Altele") return acc; // Omitem categoria "Altele"
@@ -43,15 +48,18 @@ const App = () => {
       acc[industry].push(job);
       return acc;
     }, {});
-
+  
     console.log("Joburi recomandate grupate:", groupedJobs);
-
+  
     setRecommendedJobs(groupedJobs);
   };
+  
+  
+  
 
   return (
     <div>
-      <h1>Selectează până la 5 skill-uri</h1>
+      <h1>Selectează între 2 și 10 skill-uri</h1>
       <SkillForm skills={skills} onRecommend={handleRecommendation} />
       <h2>Recomandări VR</h2>
       {Object.keys(recommendedJobs).length > 0 ? (

@@ -6,7 +6,8 @@ import { fetchSkills } from '../utils/skills';
 export default function SkillForm({ onRecommend }) {
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
-  const maxSkills = 5;
+  const minSkills = 2;
+  const maxSkills = 10;
 
   useEffect(() => {
     async function getSkills() {
@@ -21,17 +22,21 @@ export default function SkillForm({ onRecommend }) {
     if (selected.length <= maxSkills) {
       setSelectedSkills(selected);
     } else {
-      alert(`Puteți selecta maximum ${maxSkills} skilluri.`);
+      alert(`Puteți selecta maximum ${maxSkills} skill-uri.`);
     }
   };
 
   const handleRecommendClick = () => {
-    onRecommend(selectedSkills);
+    if (selectedSkills.length < minSkills) {
+      alert(`Te rugăm să selectezi cel puțin ${minSkills} skill-uri.`);
+    } else {
+      onRecommend(selectedSkills);
+    }
   };
 
   return (
     <div>
-      <h2>Selectează până la {maxSkills} skill-uri</h2>
+      <h2>Selectează între {minSkills} și {maxSkills} skill-uri</h2>
       <FormControl fullWidth style={{ width: '400px' }}>
         <InputLabel id="multiple-checkbox-label">Selectează un skill</InputLabel>
         <Select
