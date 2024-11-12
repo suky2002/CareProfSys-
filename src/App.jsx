@@ -15,6 +15,7 @@ const App = () => {
     },
     {
       title: "Data Analyst",
+      
       skills: ["Data Analysis", "SQL", "Communication", "Forecasting Demand", "Financial Reporting"],
     },
   ];
