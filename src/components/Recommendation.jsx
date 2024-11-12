@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { fetchSkillsAndExperiences } from "../utils/skills";
+import { fetchSkillsAndExperiences } from "../utils/skills.jsx";
 
 function Recommendation({ selectedSkills }) {
   const [recommendations, setRecommendations] = useState([]);
