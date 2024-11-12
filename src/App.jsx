@@ -58,7 +58,7 @@ const App = () => {
           ))}
         </ul>
       ) : (
-        <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
+        <p>Nici-o experiență disponibilă pentru skill-urile selectate.</p>
       )}
     </div>
   );
