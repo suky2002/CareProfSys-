@@ -12,24 +12,18 @@ export async function fetchSkills() {
   const parsedData = Papa.parse(text, {
     header: true,
     skipEmptyLines: true,
-    complete: (result) => {
-      console.log("Date CSV:", result); // Verifică datele parcurse
-    },
-    error: (error) => {
-      console.log("Eroare la încărcarea CSV-ului:", error);
-    }
   });
 
   const skills = new Set();
 
-  // Iterează prin fiecare rând și adaugă valorile din coloana "Skills" în set
+  // Iterăm prin fiecare rând și curățăm valorile din coloana "Skills"
   parsedData.data.forEach((row) => {
     if (row.Skills) {
-      const skillList = row.Skills.split(',').map(skill => skill.trim());
+      const skillList = row.Skills.split(',')
+        .map(skill => skill.replace(/['"\[\]]/g, '').trim()); // Eliminăm caracterele necorespunzătoare și spațiile
       skillList.forEach(skill => skills.add(skill));
     }
   });
 
-  console.log("Skill-uri extrase:", Array.from(skills)); // Verifică skillurile extrase
-  return Array.from(skills);
+  return Array.from(skills); // Returnăm skill-urile unice
 }
