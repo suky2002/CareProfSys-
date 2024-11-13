@@ -42,7 +42,7 @@ const Character = ({ keys }) => {
   const { scene, animations } = useGLTF('/models/humanoid.glb');
   const mixer = useRef();
   const actions = useRef({});
-  const [isMoving, setIsMoving] = useState(false);
+  const [isWalking, setIsWalking] = useState(false);
 
   useEffect(() => {
     if (scene && animations.length > 0 && characterRef.current) {
@@ -52,7 +52,9 @@ const Character = ({ keys }) => {
       actions.current.idle = mixer.current.clipAction(animations[0]); // Idle animation
       actions.current.walk = animations.length > 1 ? mixer.current.clipAction(animations[1]) : null; // Walking animation
 
-      actions.current.idle.play(); // Start with idle animation
+      // Start with idle animation playing in a loop
+      actions.current.idle.play();
+      actions.current.idle.setLoop(THREE.LoopRepeat);
     }
   }, [scene, animations]);
 
@@ -65,24 +67,32 @@ const Character = ({ keys }) => {
     if (keys.left) direction.x -= 0.05;
     if (keys.right) direction.x += 0.05;
 
-    // Determine if we should be moving
-    const shouldMove = direction.length() > 0;
-    if (shouldMove !== isMoving) {
-      setIsMoving(shouldMove);
+    const shouldWalk = direction.length() > 0;
 
-      // Switch to walking animation if moving
-      if (shouldMove) {
+    if (shouldWalk && !isWalking) {
+      setIsWalking(true);
+      if (actions.current.idle && actions.current.idle.isRunning()) {
         actions.current.idle.stop();
-        actions.current.walk.reset().play();
-      } else {
-        // Switch to idle animation if stopped
-        actions.current.walk.stop();
-        actions.current.idle.play();
       }
+      if (actions.current.walk && !actions.current.walk.isRunning()) {
+        actions.current.walk.reset().play();
+        actions.current.walk.setLoop(THREE.LoopRepeat); // Ensure the walk animation loops
+      }
+      console.log("Walking animation started");
+    } else if (!shouldWalk && isWalking) {
+      setIsWalking(false);
+      if (actions.current.walk && actions.current.walk.isRunning()) {
+        actions.current.walk.stop();
+      }
+      if (actions.current.idle && !actions.current.idle.isRunning()) {
+        actions.current.idle.reset().play();
+        actions.current.idle.setLoop(THREE.LoopRepeat); // Ensure the idle animation loops
+      }
+      console.log("Idle animation started");
     }
 
     // Apply movement to character if keys are pressed
-    if (shouldMove && characterRef.current) {
+    if (shouldWalk && characterRef.current) {
       direction.normalize().multiplyScalar(0.05);
       characterRef.current.position.add(direction);
       characterRef.current.rotation.y = Math.atan2(direction.x, direction.z);
