@@ -12,12 +12,13 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.6",
-    "@react-three/drei": "^9.115.0",
+    "@react-three/drei": "^9.116.0",
     "@react-three/fiber": "^8.17.10",
-    "@react-three/xr": "^2.0.0",
+    "@react-three/xr": "^2.1.0",
     "@vitejs/plugin-react": "^4.3.3",
     "papaparse": "^5.4.1",
-    "three": "^0.139.0"
+    "react-router-dom": "^6.28.0",
+    "three": "^0.139.2"
   },
   "devDependencies": {
     "vite": "^5.4.11"
