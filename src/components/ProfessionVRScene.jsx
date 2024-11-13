@@ -36,7 +36,7 @@ const useKeyControls = () => {
   return keys.current;
 };
 
-// Character Component with Animation and Movement
+// Character Component with Walking and Idle Animations
 const Character = ({ keys }) => {
   const characterRef = useRef();
   const { scene, animations } = useGLTF('/models/humanoid.glb'); // Adjust path if necessary
@@ -47,11 +47,11 @@ const Character = ({ keys }) => {
     if (scene && animations.length > 0 && characterRef.current) {
       mixer.current = new THREE.AnimationMixer(characterRef.current);
 
-      // Check if animations are available
-      actions.current.idle = mixer.current.clipAction(animations[0]);
+      // Setup animations
+      actions.current.idle = mixer.current.clipAction(animations[0]); // Assume idle is the first animation
+      actions.current.walk = animations.length > 1 ? mixer.current.clipAction(animations[1]) : null; // Assume walk is the second animation, if available
 
-      // Play idle animation by default
-      actions.current.idle?.play();
+      actions.current.idle.play();
     } else {
       console.warn("Model or animations are not available. Check model path or animation structure.");
     }
@@ -67,19 +67,21 @@ const Character = ({ keys }) => {
     if (keys.right) direction.x += 0.05;
 
     if (direction.length() > 0 && characterRef.current) {
-      direction.normalize().multiplyScalar(0.1);
+      direction.normalize().multiplyScalar(0.05); // Adjust speed for natural walking
       characterRef.current.position.add(direction);
       characterRef.current.rotation.y = Math.atan2(direction.x, direction.z);
 
-      // Switch to walking animation if available and if not already playing
-      if (actions.current.walk && !actions.current.walk.isRunning()) {
-        actions.current.idle?.stop();
-        actions.current.walk.play();
+      // Smooth transition to walking animation if moving
+      if (actions.current.walk) {
+        actions.current.idle.fadeOut(0.2);
+        actions.current.walk.reset().fadeIn(0.2).play();
       }
-    } else if (actions.current.walk && actions.current.walk.isRunning()) {
-      // Switch back to idle animation if no movement
-      actions.current.walk.stop();
-      actions.current.idle?.play();
+    } else {
+      // Smooth transition back to idle if not moving
+      if (actions.current.walk && actions.current.walk.isRunning()) {
+        actions.current.walk.fadeOut(0.2);
+        actions.current.idle.reset().fadeIn(0.2).play();
+      }
     }
   });
 
