@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { OrbitControls, Plane, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { XR } from '@react-three/xr';
 
@@ -39,21 +39,20 @@ const useKeyControls = () => {
 // Character Component with Walking and Idle Animations
 const Character = ({ keys }) => {
   const characterRef = useRef();
-  const { scene, animations } = useGLTF('/models/humanoid.glb'); // Adjust path if necessary
+  const { scene, animations } = useGLTF('/models/humanoid.glb');
   const mixer = useRef();
   const actions = useRef({});
+  const [isMoving, setIsMoving] = useState(false);
 
   useEffect(() => {
     if (scene && animations.length > 0 && characterRef.current) {
       mixer.current = new THREE.AnimationMixer(characterRef.current);
 
       // Setup animations
-      actions.current.idle = mixer.current.clipAction(animations[0]); // Assume idle is the first animation
-      actions.current.walk = animations.length > 1 ? mixer.current.clipAction(animations[1]) : null; // Assume walk is the second animation, if available
+      actions.current.idle = mixer.current.clipAction(animations[0]); // Idle animation
+      actions.current.walk = animations.length > 1 ? mixer.current.clipAction(animations[1]) : null; // Walking animation
 
-      actions.current.idle.play();
-    } else {
-      console.warn("Model or animations are not available. Check model path or animation structure.");
+      actions.current.idle.play(); // Start with idle animation
     }
   }, [scene, animations]);
 
@@ -66,22 +65,27 @@ const Character = ({ keys }) => {
     if (keys.left) direction.x -= 0.05;
     if (keys.right) direction.x += 0.05;
 
-    if (direction.length() > 0 && characterRef.current) {
-      direction.normalize().multiplyScalar(0.05); // Adjust speed for natural walking
+    // Determine if we should be moving
+    const shouldMove = direction.length() > 0;
+    if (shouldMove !== isMoving) {
+      setIsMoving(shouldMove);
+
+      // Switch to walking animation if moving
+      if (shouldMove) {
+        actions.current.idle.stop();
+        actions.current.walk.reset().play();
+      } else {
+        // Switch to idle animation if stopped
+        actions.current.walk.stop();
+        actions.current.idle.play();
+      }
+    }
+
+    // Apply movement to character if keys are pressed
+    if (shouldMove && characterRef.current) {
+      direction.normalize().multiplyScalar(0.05);
       characterRef.current.position.add(direction);
       characterRef.current.rotation.y = Math.atan2(direction.x, direction.z);
-
-      // Smooth transition to walking animation if moving
-      if (actions.current.walk) {
-        actions.current.idle.fadeOut(0.2);
-        actions.current.walk.reset().fadeIn(0.2).play();
-      }
-    } else {
-      // Smooth transition back to idle if not moving
-      if (actions.current.walk && actions.current.walk.isRunning()) {
-        actions.current.walk.fadeOut(0.2);
-        actions.current.idle.reset().fadeIn(0.2).play();
-      }
     }
   });
 
