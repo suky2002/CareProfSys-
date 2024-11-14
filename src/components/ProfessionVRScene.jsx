@@ -6,13 +6,14 @@ import { XR } from '@react-three/xr';
 
 // Key Controls Hook
 const useKeyControls = () => {
-  const keys = useRef({ forward: false, backward: false, left: false, right: false });
+  const keys = useRef({ forward: false, backward: false, left: false, right: false, lookDown: false });
 
   const onKeyDown = (e) => {
     if (e.key === 'w') keys.current.forward = true;
     if (e.key === 's') keys.current.backward = true;
     if (e.key === 'a') keys.current.left = true;
     if (e.key === 'd') keys.current.right = true;
+    if (e.key === 'q') keys.current.lookDown = true;
   };
 
   const onKeyUp = (e) => {
@@ -20,6 +21,7 @@ const useKeyControls = () => {
     if (e.key === 's') keys.current.backward = false;
     if (e.key === 'a') keys.current.left = false;
     if (e.key === 'd') keys.current.right = false;
+    if (e.key === 'q') keys.current.lookDown = false;
   };
 
   useEffect(() => {
@@ -81,24 +83,62 @@ const Character = React.forwardRef(({ keys }, ref) => {
   return <primitive ref={ref} object={scene} scale={[1, 1, 1]} />;
 });
 
-// Camera Control Component
+// Camera Control Component with Corrected Mouse Look Direction
 const CharacterCamera = ({ characterRef, isFirstPerson }) => {
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
+  const [pitch, setPitch] = useState(0); // Up and down rotation
+  const [yaw, setYaw] = useState(0); // Left and right rotation
+  const isPointerLocked = useRef(false);
+
+  const keys = useKeyControls(); // Access key states, including Q key
+
+  // Activate pointer lock for mouse look on click
+  useEffect(() => {
+    const handlePointerLock = () => {
+      gl.domElement.requestPointerLock();
+    };
+
+    const onPointerLockChange = () => {
+      isPointerLocked.current = document.pointerLockElement === gl.domElement;
+    };
+
+    gl.domElement.addEventListener('click', handlePointerLock);
+    document.addEventListener('pointerlockchange', onPointerLockChange);
+
+    return () => {
+      gl.domElement.removeEventListener('click', handlePointerLock);
+      document.removeEventListener('pointerlockchange', onPointerLockChange);
+    };
+  }, [gl.domElement]);
+
+  const handleMouseMove = (e) => {
+    if (!isPointerLocked.current || keys.lookDown) return;
+    setYaw((prev) => prev + e.movementX * 0.002); // Positive movementX to turn right
+    setPitch((prev) => Math.max(-Math.PI / 4, Math.min(Math.PI / 4, prev - e.movementY * 0.002))); // Inverted for natural up/down
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   useFrame(() => {
     if (characterRef.current) {
       if (isFirstPerson) {
-        // First-person camera: Position near the character's chest and match character's rotation
+        // First-person camera position
         const firstPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 1.5, 0.2));
         camera.position.lerp(firstPersonPosition, 0.1);
 
-        // Set the camera rotation to match the character's rotation
-        camera.quaternion.copy(characterRef.current.quaternion);
+        // If Q is pressed, force pitch down; otherwise, apply normal pitch and yaw
+        const adjustedPitch = keys.lookDown ? -Math.PI / 4 : pitch; // 45-degree downward angle when Q is pressed
+        camera.rotation.set(adjustedPitch, yaw + characterRef.current.rotation.y, 0);
       } else {
-        // Third-person camera: Position behind the character
+        // Third-person camera
         const thirdPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 2, 5));
         camera.position.lerp(thirdPersonPosition, 0.1);
-        camera.lookAt(characterRef.current.position); // Look at character
+        camera.lookAt(characterRef.current.position);
       }
     }
   });
