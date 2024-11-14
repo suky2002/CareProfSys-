@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { fetchJobs, fetchSkills } from "./utils/skills";
 
+import EnvironmentTwoScene from './components/EnvironmentTwoScene'; // New environment
 import ProfessionVRScene from "./components/ProfessionVRScene";
 import SkillForm from "./components/SkillForm";
 
@@ -69,6 +70,8 @@ const App = () => {
                           <li key={idx}>
                             {job.title} - Scor: {(job.score * 100).toFixed(0)}%
                             <Link to="/vr" style={{ marginLeft: "10px" }}>Explorează în VR</Link>
+                            <Link to="/">Profession VR Scene</Link>
+                            <Link to="/environment-two">Environment Two</Link>
                           </li>
                         ))}
                       </ul>
@@ -80,7 +83,8 @@ const App = () => {
               </>
             }
           />
-          <Route path="/vr" element={<ProfessionVRScene />} />
+          <Route path="/vr" element={<ProfessionVRScene />}/>
+          <Route path="/environment-two" element={<EnvironmentTwoScene />} /> {/* New Route */}
         </Routes>
       </div>
     </Router>
