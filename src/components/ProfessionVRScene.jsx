@@ -83,14 +83,14 @@ const Character = React.forwardRef(({ keys }, ref) => {
   return <primitive ref={ref} object={scene} scale={[1, 1, 1]} />;
 });
 
-// Camera Control Component with Corrected Mouse Look Direction
+// Camera Control Component
 const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   const { camera, gl } = useThree();
   const [pitch, setPitch] = useState(0); // Up and down rotation
   const [yaw, setYaw] = useState(0); // Left and right rotation
   const isPointerLocked = useRef(false);
 
-  const keys = useKeyControls(); // Access key states, including Q key
+  const keys = useKeyControls();
 
   // Activate pointer lock for mouse look on click
   useEffect(() => {
@@ -113,8 +113,8 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
 
   const handleMouseMove = (e) => {
     if (!isPointerLocked.current || keys.lookDown) return;
-    setYaw((prev) => prev + e.movementX * 0.002); // Positive movementX to turn right
-    setPitch((prev) => Math.max(-Math.PI / 4, Math.min(Math.PI / 4, prev - e.movementY * 0.002))); // Inverted for natural up/down
+    setYaw((prev) => prev + e.movementX * 0.002);
+    setPitch((prev) => Math.max(-Math.PI / 4, Math.min(Math.PI / 4, prev - e.movementY * 0.002)));
   };
 
   useEffect(() => {
@@ -127,15 +127,12 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   useFrame(() => {
     if (characterRef.current) {
       if (isFirstPerson) {
-        // First-person camera position
         const firstPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 1.5, 0.2));
         camera.position.lerp(firstPersonPosition, 0.1);
 
-        // If Q is pressed, force pitch down; otherwise, apply normal pitch and yaw
-        const adjustedPitch = keys.lookDown ? -Math.PI / 4 : pitch; // 45-degree downward angle when Q is pressed
+        const adjustedPitch = keys.lookDown ? -Math.PI / 4 : pitch;
         camera.rotation.set(adjustedPitch, yaw + characterRef.current.rotation.y, 0);
       } else {
-        // Third-person camera
         const thirdPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 2, 5));
         camera.position.lerp(thirdPersonPosition, 0.1);
         camera.lookAt(characterRef.current.position);
@@ -146,10 +143,35 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   return null;
 };
 
+// Walls Component
+const Walls = () => {
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
+  const wallHeight = 3;
+  const wallWidth = 20;
+
+  return (
+    <>
+      {/* Four walls positioned to form boundaries around the map */}
+      <mesh position={[-wallWidth / 2, wallHeight / 2, 0]} material={wallMaterial}>
+        <boxGeometry args={[1, wallHeight, wallWidth]} />
+      </mesh>
+      <mesh position={[wallWidth / 2, wallHeight / 2, 0]} material={wallMaterial}>
+        <boxGeometry args={[1, wallHeight, wallWidth]} />
+      </mesh>
+      <mesh position={[0, wallHeight / 2, -wallWidth / 2]} material={wallMaterial}>
+        <boxGeometry args={[wallWidth, wallHeight, 1]} />
+      </mesh>
+      <mesh position={[0, wallHeight / 2, wallWidth / 2]} material={wallMaterial}>
+        <boxGeometry args={[wallWidth, wallHeight, 1]} />
+      </mesh>
+    </>
+  );
+};
+
 const ProfessionVRScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
-  const [isFirstPerson, setIsFirstPerson] = useState(true); // Toggle between first and third person
+  const [isFirstPerson, setIsFirstPerson] = useState(true);
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -167,6 +189,9 @@ const ProfessionVRScene = () => {
 
           {/* Camera Control */}
           <CharacterCamera characterRef={characterRef} isFirstPerson={isFirstPerson} />
+
+          {/* Walls */}
+          <Walls />
         </XR>
       </Canvas>
 
