@@ -1,7 +1,9 @@
 import * as THREE from 'three';
-import { OrbitControls, Plane, Sky, useGLTF } from '@react-three/drei';
+
+import { Plane, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef, useState } from 'react';
+
 import { XR } from '@react-three/xr';
 
 // Key Controls Hook
@@ -38,35 +40,41 @@ const useKeyControls = () => {
 
 // Character Component
 const Character = React.forwardRef(({ keys }, ref) => {
-  const { scene, animations } = useGLTF('/models/humanoid.glb');
+  const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
+  const walkingModel = useGLTF('/models/Deadwalking.glb');
+
   const mixer = useRef();
   const actions = useRef({});
   const [isWalking, setIsWalking] = useState(false);
 
   useEffect(() => {
-    if (scene && animations.length > 0 && ref.current) {
-      mixer.current = new THREE.AnimationMixer(ref.current);
-      actions.current.idle = mixer.current.clipAction(animations[0]);
-      actions.current.walk = animations.length > 1 ? mixer.current.clipAction(animations[1]) : null;
+    if (standingModel && walkingModel) {
+      mixer.current = new THREE.AnimationMixer(standingModel.scene);
+
+      actions.current.idle = mixer.current.clipAction(standingModel.animations[0]);
+      actions.current.walk = mixer.current.clipAction(walkingModel.animations[0]);
+
       actions.current.idle.play();
-      actions.current.idle.setLoop(THREE.LoopRepeat);
     }
-  }, [scene, animations]);
+  }, [standingModel, walkingModel]);
 
   useFrame((_, delta) => {
     if (mixer.current) mixer.current.update(delta);
 
     const shouldWalk = keys.forward || keys.backward || keys.left || keys.right;
+
+    // Toggle between idle and walk based on key inputs
     if (shouldWalk && !isWalking) {
       setIsWalking(true);
-      if (actions.current.idle) actions.current.idle.stop();
-      if (actions.current.walk) actions.current.walk.reset().play();
+      actions.current.idle.stop();
+      actions.current.walk.reset().play();
     } else if (!shouldWalk && isWalking) {
       setIsWalking(false);
-      if (actions.current.walk) actions.current.walk.stop();
-      if (actions.current.idle) actions.current.idle.reset().play();
+      actions.current.walk.stop();
+      actions.current.idle.reset().play();
     }
 
+    // Move the character
     if (shouldWalk && ref.current) {
       const direction = new THREE.Vector3();
       if (keys.forward) direction.z -= 0.05;
@@ -80,7 +88,7 @@ const Character = React.forwardRef(({ keys }, ref) => {
     }
   });
 
-  return <primitive ref={ref} object={scene} scale={[1, 1, 1]} />;
+  return <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />;
 });
 
 // Camera Control Component
