@@ -8,7 +8,7 @@ import { XR } from '@react-three/xr';
 
 // Key Controls Hook
 const useKeyControls = () => {
-  const keys = useRef({ forward: false, backward: false, left: false, right: false, lookDown: false });
+  const keys = useRef({ forward: false, backward: false, left: false, right: false, lookDown: false, openDoor: false });
 
   const onKeyDown = (e) => {
     if (e.key === 'w') keys.current.forward = true;
@@ -16,6 +16,7 @@ const useKeyControls = () => {
     if (e.key === 'a') keys.current.left = true;
     if (e.key === 'd') keys.current.right = true;
     if (e.key === 'q') keys.current.lookDown = true;
+    if (e.key === 'e') keys.current.openDoor = true;
   };
 
   const onKeyUp = (e) => {
@@ -24,6 +25,7 @@ const useKeyControls = () => {
     if (e.key === 'a') keys.current.left = false;
     if (e.key === 'd') keys.current.right = false;
     if (e.key === 'q') keys.current.lookDown = false;
+    if (e.key === 'e') keys.current.openDoor = false;
   };
 
   useEffect(() => {
@@ -164,13 +166,16 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   return null;
 };
 
-// Walls Component with Bounding Boxes
-const Walls = ({ wallColliders }) => {
+// Walls, Floor, Ceiling, and Door Component
+const WallsWithExtras = ({ wallColliders }) => {
   const wallMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: 'white' });
+  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 'gray' });
+  const doorMaterial = new THREE.MeshStandardMaterial({ color: 'brown' });
+
   const wallHeight = 3;
   const wallWidth = 20;
 
-  // Create bounding boxes for each wall
   const walls = [
     { position: [-wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
     { position: [wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
@@ -190,11 +195,27 @@ const Walls = ({ wallColliders }) => {
 
   return (
     <>
+      {/* Walls */}
       {walls.map((wall, index) => (
         <mesh key={index} position={wall.position} material={wallMaterial}>
           <boxGeometry args={wall.size} />
         </mesh>
       ))}
+
+      {/* Floor */}
+      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[wallWidth, wallWidth]} />
+      </mesh>
+
+      {/* Ceiling */}
+      <mesh position={[0, wallHeight, 0]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
+        <planeGeometry args={[wallWidth, wallWidth]} />
+      </mesh>
+
+      {/* Door */}
+      <mesh position={[0, 1, -10]} material={doorMaterial}>
+        <boxGeometry args={[1, 2, 0.2]} />
+      </mesh>
     </>
   );
 };
@@ -212,18 +233,15 @@ const ProfessionVRScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
-          <Plane rotation={[-Math.PI / 2, 0, 0]} args={[100, 100]} receiveShadow>
-            <meshStandardMaterial color="#a0a0a0" />
-          </Plane>
 
-          {/* Character Model with collision detection */}
+          {/* Walls, Floor, Ceiling, and Door */}
+          <WallsWithExtras wallColliders={wallColliders.current} />
+
+          {/* Character */}
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders.current} />
 
-          {/* Camera Control */}
+          {/* Camera */}
           <CharacterCamera characterRef={characterRef} isFirstPerson={isFirstPerson} />
-
-          {/* Walls */}
-          <Walls wallColliders={wallColliders.current} />
         </XR>
       </Canvas>
 
