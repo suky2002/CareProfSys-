@@ -38,8 +38,8 @@ const useKeyControls = () => {
   return keys.current;
 };
 
-// Character Component
-const Character = React.forwardRef(({ keys }, ref) => {
+// Character Component with Collision Detection
+const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
   const walkingModel = useGLTF('/models/Deadwalking.glb');
 
@@ -57,6 +57,15 @@ const Character = React.forwardRef(({ keys }, ref) => {
       actions.current.idle.play();
     }
   }, [standingModel, walkingModel]);
+
+  const checkCollision = (newPosition) => {
+    for (const collider of wallColliders) {
+      if (collider.containsPoint(newPosition)) {
+        return true; // Collision detected
+      }
+    }
+    return false; // No collision
+  };
 
   useFrame((_, delta) => {
     if (mixer.current) mixer.current.update(delta);
@@ -83,8 +92,13 @@ const Character = React.forwardRef(({ keys }, ref) => {
       if (keys.right) direction.x += 0.05;
 
       direction.normalize().multiplyScalar(0.05);
-      ref.current.position.add(direction);
-      ref.current.rotation.y = Math.atan2(direction.x, direction.z);
+      const newPosition = ref.current.position.clone().add(direction);
+
+      // Check collision before updating position
+      if (!checkCollision(newPosition)) {
+        ref.current.position.copy(newPosition);
+        ref.current.rotation.y = Math.atan2(direction.x, direction.z);
+      }
     }
   });
 
@@ -100,7 +114,6 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
 
   const keys = useKeyControls();
 
-  // Activate pointer lock for mouse look on click
   useEffect(() => {
     const handlePointerLock = () => {
       gl.domElement.requestPointerLock();
@@ -151,27 +164,37 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   return null;
 };
 
-// Walls Component
-const Walls = () => {
+// Walls Component with Bounding Boxes
+const Walls = ({ wallColliders }) => {
   const wallMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
   const wallHeight = 3;
   const wallWidth = 20;
 
+  // Create bounding boxes for each wall
+  const walls = [
+    { position: [-wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
+    { position: [wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
+    { position: [0, wallHeight / 2, -wallWidth / 2], size: [wallWidth, wallHeight, 1] },
+    { position: [0, wallHeight / 2, wallWidth / 2], size: [wallWidth, wallHeight, 1] },
+  ];
+
+  useEffect(() => {
+    walls.forEach(({ position, size }) => {
+      const box = new THREE.Box3().setFromCenterAndSize(
+        new THREE.Vector3(...position),
+        new THREE.Vector3(...size)
+      );
+      wallColliders.push(box);
+    });
+  }, [wallColliders]);
+
   return (
     <>
-      {/* Four walls positioned to form boundaries around the map */}
-      <mesh position={[-wallWidth / 2, wallHeight / 2, 0]} material={wallMaterial}>
-        <boxGeometry args={[1, wallHeight, wallWidth]} />
-      </mesh>
-      <mesh position={[wallWidth / 2, wallHeight / 2, 0]} material={wallMaterial}>
-        <boxGeometry args={[1, wallHeight, wallWidth]} />
-      </mesh>
-      <mesh position={[0, wallHeight / 2, -wallWidth / 2]} material={wallMaterial}>
-        <boxGeometry args={[wallWidth, wallHeight, 1]} />
-      </mesh>
-      <mesh position={[0, wallHeight / 2, wallWidth / 2]} material={wallMaterial}>
-        <boxGeometry args={[wallWidth, wallHeight, 1]} />
-      </mesh>
+      {walls.map((wall, index) => (
+        <mesh key={index} position={wall.position} material={wallMaterial}>
+          <boxGeometry args={wall.size} />
+        </mesh>
+      ))}
     </>
   );
 };
@@ -179,6 +202,7 @@ const Walls = () => {
 const ProfessionVRScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
+  const wallColliders = useRef([]); // Store all wall bounding boxes
   const [isFirstPerson, setIsFirstPerson] = useState(true);
 
   return (
@@ -192,14 +216,14 @@ const ProfessionVRScene = () => {
             <meshStandardMaterial color="#a0a0a0" />
           </Plane>
 
-          {/* Character Model */}
-          <Character ref={characterRef} keys={keys} />
+          {/* Character Model with collision detection */}
+          <Character ref={characterRef} keys={keys} wallColliders={wallColliders.current} />
 
           {/* Camera Control */}
           <CharacterCamera characterRef={characterRef} isFirstPerson={isFirstPerson} />
 
           {/* Walls */}
-          <Walls />
+          <Walls wallColliders={wallColliders.current} />
         </XR>
       </Canvas>
 
