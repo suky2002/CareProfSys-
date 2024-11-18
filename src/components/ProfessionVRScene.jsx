@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Plane, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef, useState } from 'react';
-
+import { Html } from '@react-three/drei';
 import { XR } from '@react-three/xr';
 
 // Key Controls Hook
@@ -40,7 +40,7 @@ const useKeyControls = () => {
   return keys.current;
 };
 
-// Character Component with Collision Detection
+// Character Component
 const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
   const walkingModel = useGLTF('/models/Deadwalking.glb');
@@ -166,21 +166,93 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
   return null;
 };
 
-// Walls, Floor, Ceiling, and Door Component
-const WallsWithExtras = ({ wallColliders }) => {
+// Door Component
+const Door = ({ position, rotation, characterRef, keys }) => {
+  const doorRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const doorCollider = useRef(new THREE.Box3());
+  const interactionZone = useRef(new THREE.Box3());
+
+  const doorMaterial = new THREE.MeshStandardMaterial({ color: 'black' });
+  const handleMaterial = new THREE.MeshStandardMaterial({ color: 'brown' });
+
+  useEffect(() => {
+    if (doorRef.current) {
+      doorCollider.current.setFromObject(doorRef.current);
+      interactionZone.current.setFromCenterAndSize(
+        doorRef.current.position.clone(),
+        new THREE.Vector3(2, 2, 1) // Interaction zone size
+      );
+    }
+  }, []);
+
+  useFrame(() => {
+    if (characterRef.current && doorCollider.current) {
+      const characterPosition = new THREE.Vector3().copy(characterRef.current.position);
+
+      if (interactionZone.current.containsPoint(characterPosition)) {
+        setShowPrompt(true);
+
+        if (keys.openDoor) {
+          setIsOpen((prev) => !prev);
+        }
+      } else {
+        setShowPrompt(false);
+      }
+    }
+
+    if (doorRef.current) {
+      const openRotation = rotation[1] + Math.PI / 2; // Rotate 90 degrees when open
+      doorRef.current.rotation.y = isOpen ? openRotation : rotation[1];
+    }
+  });
+
+  return (
+    <>
+      {showPrompt && (
+        <Html position={position}>
+          <div
+            style={{
+              padding: '10px 20px',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              borderRadius: '5px',
+              textAlign: 'center',
+            }}
+          >
+            Apasă SPACE să deschizi ușa
+          </div>
+        </Html>
+      )}
+      <group ref={doorRef} position={position} rotation={rotation}>
+        <mesh material={doorMaterial}>
+          <boxGeometry args={[1, 2, 0.2]} />
+        </mesh>
+        <mesh position={[0.4, 0, 0.15]} material={handleMaterial}>
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+        </mesh>
+      </group>
+    </>
+  );
+};
+
+// WallsWithDoors Component
+const WallsWithDoors = ({ wallColliders, characterRef, keys }) => {
   const wallMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
   const floorMaterial = new THREE.MeshStandardMaterial({ color: 'white' });
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 'gray' });
-  const doorMaterial = new THREE.MeshStandardMaterial({ color: 'brown' });
 
   const wallHeight = 3;
   const wallWidth = 20;
 
   const walls = [
-    { position: [-wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
-    { position: [wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] },
-    { position: [0, wallHeight / 2, -wallWidth / 2], size: [wallWidth, wallHeight, 1] },
-    { position: [0, wallHeight / 2, wallWidth / 2], size: [wallWidth, wallHeight, 1] },
+    { position: [-5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Left side wall
+    { position: [5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Right side wall
+    { position: [-wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] }, // Left wall
+    { position: [wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] }, // Right wall
+    { position: [0, wallHeight / 2, -wallWidth / 2], size: [wallWidth, wallHeight, 1] }, // Back wall
   ];
 
   useEffect(() => {
@@ -195,35 +267,28 @@ const WallsWithExtras = ({ wallColliders }) => {
 
   return (
     <>
-      {/* Walls */}
       {walls.map((wall, index) => (
         <mesh key={index} position={wall.position} material={wallMaterial}>
           <boxGeometry args={wall.size} />
         </mesh>
       ))}
-
-      {/* Floor */}
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
         <planeGeometry args={[wallWidth, wallWidth]} />
       </mesh>
-
-      {/* Ceiling */}
       <mesh position={[0, wallHeight, 0]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
         <planeGeometry args={[wallWidth, wallWidth]} />
       </mesh>
-
-      {/* Door */}
-      <mesh position={[0, 1, -10]} material={doorMaterial}>
-        <boxGeometry args={[1, 2, 0.2]} />
-      </mesh>
+      <Door position={[-2, 1, wallWidth / 2]} rotation={[0, 0, 0]} characterRef={characterRef} keys={keys} />
+      <Door position={[2, 1, wallWidth / 2]} rotation={[0, 0, 0]} characterRef={characterRef} keys={keys} />
     </>
   );
 };
 
+// Main Scene Component
 const ProfessionVRScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
-  const wallColliders = useRef([]); // Store all wall bounding boxes
+  const wallColliders = useRef([]);
   const [isFirstPerson, setIsFirstPerson] = useState(true);
 
   return (
@@ -233,19 +298,11 @@ const ProfessionVRScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
-
-          {/* Walls, Floor, Ceiling, and Door */}
-          <WallsWithExtras wallColliders={wallColliders.current} />
-
-          {/* Character */}
+          <WallsWithDoors wallColliders={wallColliders.current} characterRef={characterRef} keys={keys} />
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders.current} />
-
-          {/* Camera */}
           <CharacterCamera characterRef={characterRef} isFirstPerson={isFirstPerson} />
         </XR>
       </Canvas>
-
-      {/* Toggle Button */}
       <button
         style={{
           position: 'absolute',
