@@ -63,40 +63,37 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   const checkCollision = (newPosition) => {
     for (const collider of wallColliders) {
       if (collider.containsPoint(newPosition)) {
-        return true; // Collision detected
+        return true; // Coliziune detectată
       }
     }
-    return false; // No collision
+    return false; // Nicio coliziune
   };
 
   useFrame((_, delta) => {
     if (mixer.current) mixer.current.update(delta);
 
-    const shouldWalk = keys.forward || keys.backward || keys.left || keys.right;
+    const isMoving = keys.forward || keys.backward || keys.left || keys.right;
 
-    // Toggle between idle and walk based on key inputs
-    if (shouldWalk && !isWalking) {
+    if (isMoving && !isWalking) {
       setIsWalking(true);
-      actions.current.idle.stop();
-      actions.current.walk.reset().play();
-    } else if (!shouldWalk && isWalking) {
+      if (actions.current.idle) actions.current.idle.fadeOut(0.2);
+      if (actions.current.walk) actions.current.walk.reset().fadeIn(0.2).play();
+    } else if (!isMoving && isWalking) {
       setIsWalking(false);
-      actions.current.walk.stop();
-      actions.current.idle.reset().play();
+      if (actions.current.walk) actions.current.walk.fadeOut(0.2);
+      if (actions.current.idle) actions.current.idle.reset().fadeIn(0.2).play();
     }
 
-    // Move the character
-    if (shouldWalk && ref.current) {
+    if (isMoving && ref.current) {
       const direction = new THREE.Vector3();
       if (keys.forward) direction.z -= 0.05;
       if (keys.backward) direction.z += 0.05;
       if (keys.left) direction.x -= 0.05;
       if (keys.right) direction.x += 0.05;
 
-      direction.normalize().multiplyScalar(0.05);
+      direction.normalize().multiplyScalar(0.025);
       const newPosition = ref.current.position.clone().add(direction);
 
-      // Check collision before updating position
       if (!checkCollision(newPosition)) {
         ref.current.position.copy(newPosition);
         ref.current.rotation.y = Math.atan2(direction.x, direction.z);
@@ -106,6 +103,7 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
 
   return <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />;
 });
+
 
 // Camera Control Component
 const CharacterCamera = ({ characterRef, isFirstPerson }) => {
