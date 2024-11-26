@@ -165,6 +165,19 @@ const CharacterCamera = ({ characterRef, isFirstPerson }) => {
 
   return null;
 };
+// Table Component
+const Table = ({ position, rotation, scale }) => {
+  const { scene } = useGLTF('/models/table.glb'); // Înlocuiește cu calea corectă a fișierului tău table.glb
+
+  return (
+    <primitive
+      object={scene}
+      position={position}
+      rotation={rotation}
+      scale={scale || [1, 1, 1]} // Poți ajusta scala în funcție de mărimea modelului
+    />
+  );
+};
 
 // Door Component
 const Door = ({ position, rotation, characterRef, keys }) => {
@@ -248,8 +261,9 @@ const WallsWithDoors = ({ wallColliders, characterRef, keys }) => {
   const wallWidth = 20;
 
   const walls = [
-    { position: [-5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Left side wall
-    { position: [5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Right side wall
+    { position: [-5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Left side of front wall
+    { position: [5, wallHeight / 2, wallWidth / 2], size: [5, wallHeight, 1] }, // Right side of front wall
+    { position: [0, wallHeight / 2, wallWidth / 2], size: [1, wallHeight, 1] }, // Wall between doors
     { position: [-wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] }, // Left wall
     { position: [wallWidth / 2, wallHeight / 2, 0], size: [1, wallHeight, wallWidth] }, // Right wall
     { position: [0, wallHeight / 2, -wallWidth / 2], size: [wallWidth, wallHeight, 1] }, // Back wall
@@ -284,7 +298,7 @@ const WallsWithDoors = ({ wallColliders, characterRef, keys }) => {
   );
 };
 
-// Main Scene Component
+
 const ProfessionVRScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
@@ -298,9 +312,14 @@ const ProfessionVRScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
+          {/* Zidurile și ușile */}
           <WallsWithDoors wallColliders={wallColliders.current} characterRef={characterRef} keys={keys} />
+          {/* Personajul */}
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders.current} />
+          {/* Camera */}
           <CharacterCamera characterRef={characterRef} isFirstPerson={isFirstPerson} />
+          {/* Masa */}
+          <Table position={[0, 0.5, 2]} scale={[1.5, 1.5, 1.5]} rotation={[0, 0, 0]} />
         </XR>
       </Canvas>
       <button
