@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { fetchJobs, fetchSkills } from "./utils/skills";
 
+import EnvironmentThreeScene from './components/EnvironmentThreeScene';
 import EnvironmentTwoScene from './components/EnvironmentTwoScene'; // New environment
 import ProfessionVRScene from "./components/ProfessionVRScene";
 import SkillForm from "./components/SkillForm";
@@ -85,6 +86,7 @@ const App = () => {
           />
           <Route path="/vr" element={<ProfessionVRScene />}/>
           <Route path="/environment-two" element={<EnvironmentTwoScene />} /> {/* New Route */}
+          <Route path="/env3" element={<EnvironmentThreeScene />} />
         </Routes>
       </div>
     </Router>
