@@ -18,7 +18,8 @@
     "@vitejs/plugin-react": "^4.3.3",
     "papaparse": "^5.4.1",
     "react-router-dom": "^6.28.0",
-    "three": "^0.139.0"
+    "three": "^0.139.0",
+    "three-stdlib": "^2.35.2"
   },
   "devDependencies": {
     "vite": "^5.4.11"

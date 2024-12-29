@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Sky, useGLTF } from '@react-three/drei';
 
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
@@ -100,8 +102,8 @@ const Room = ({ wallColliders }) => {
   const wallTexture = useMemo(() => new THREE.TextureLoader().load('/Imagini/pexels-hieu-697259.jpg'), []);
   const texturedWallMaterial = useMemo(() => new THREE.MeshStandardMaterial({ map: wallTexture }), [wallTexture]);
 
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#555' });
-  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#222' });
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#fefefe' });
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: 'green' });
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444' });
 
   useEffect(() => {
@@ -142,6 +144,31 @@ const Room = ({ wallColliders }) => {
   );
 };
 
+
+const FBXModel = () => {
+  const fbx = useLoader(FBXLoader, '/models/Shure_565SD.fbx');
+
+  return (
+    <primitive
+      object={fbx}
+      position={[0, 0, -2]}
+      scale={[0.01, 0.01, 0.01]}
+    />
+  );
+};
+
+const Pulpit = () => {
+  const pulpitModel = useLoader(OBJLoader, '/models/studio-obj.obj');
+
+  return (
+    <primitive
+      object={pulpitModel}
+      position={[0, 0, 1]}
+      scale={[100 , 100, 100]}
+    />
+  );
+};
+
 const CameraSetup = ({ characterRef, isFirstPerson }) => {
   const { camera } = useThree();
 
@@ -175,12 +202,11 @@ const EnvironmentTwoScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
-          {/* Room */}
           <Room wallColliders={wallColliders} />
-          {/* Character */}
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
-          {/* Camera Setup */}
           <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} />
+          <Pulpit />
+          <FBXModel />
         </XR>
       </Canvas>
       <button
