@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TextureLoader } from 'three';
 import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
@@ -146,6 +147,19 @@ const Room = ({ wallColliders }) => {
 
 const FBXModel = () => {
   const fbx = useLoader(FBXLoader, '/models/Shure_565SD.fbx');
+  const texture = useLoader(TextureLoader, '/Imagini/black_wood.jpeg'); // Asigură-te că această cale este corectă
+
+  // Aplica textura asupra materialelor din model
+  useEffect(() => {
+    if (fbx) {
+      fbx.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture; // Setează textura
+          child.material.needsUpdate = true; // Forțează actualizarea materialului
+        }
+      });
+    }
+  }, [fbx, texture]);
 
   return (
     <primitive
@@ -156,16 +170,88 @@ const FBXModel = () => {
   );
 };
 
+// const FBXlights = () => { 
+//   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
+
+//   return (
+//     <primitive
+//       object={fbxlights}
+//       position={[-4.5, 1.4, -1]}
+//       rotation={[0, Math.PI / 1.5, 0]} // Rotate 45 degrees on the y-axis
+//       scale={[0.009, 0.009, 0.009]}
+//     />
+//   );
+// };
+
 const FBXlights = () => { 
   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
+  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png'); // Adjust the path as needed
+
+  useEffect(() => {
+    if (fbxlights) {
+      fbxlights.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture;
+          child.material.needsUpdate = true;
+        }
+      });
+    }
+  }, [fbxlights, texture]);
 
   return (
     <primitive
       object={fbxlights}
-      position={[-4.5, 1.5, -4.5]}
-      rotation={[0, Math.PI / 4, 0]} // Rotate 45 degrees on the y-axis
+      position={[-4.5, 1.4, -1]}
+      rotation={[0, Math.PI / 1.5, 0]} // Rotate 45 degrees on the y-axis
       scale={[0.009, 0.009, 0.009]}
     />
+  );
+};
+
+
+const FBXsecondlights = () => { 
+  const fbxsecondlights = useLoader(FBXLoader, '/models/Box_Panel_Spot_Light.fbx');
+
+  return (
+    <primitive
+      object={fbxsecondlights}
+      position={[4.5, 1.4, -1]}
+      rotation={[0, Math.PI / -1.5, 0]} // Rotate 45 degrees on the y-axis
+      scale={[0.009, 0.009, 0.009]}
+    />
+  );
+};
+
+
+const OBJwindow = () => { 
+  const objwindow = useLoader(OBJLoader, '/models/window.obj');
+
+  // Adăugare textură pentru oglindă - în acest caz, se folosește un fișier de textură existent.
+  const mirrorTexture = useLoader(THREE.TextureLoader, '/Imagini/palatul.jpeg'); 
+
+  return (
+    <group>
+      {/* Obiectul original pentru fereastră */}
+      <primitive
+        object={objwindow}
+        position={[-4.9, 0.5, 3]}
+        rotation={[0, Math.PI / 2, 0]} // Rotire la 90 de grade în jurul axei Y
+        scale={[0.3, 0.3, 0.3]}
+      />
+
+      {/* Panou pentru oglindă */}
+      <mesh position={[-4.7, 0.1, 3]} rotation={[0, Math.PI / 2, 0]}>
+        {/* Geometria plană folosită pentru a crea suprafața oglinzii */}
+        <planeGeometry args={[2, 2]} />
+        {/* Material standard cu textură pentru oglindă */}
+        <meshStandardMaterial map={mirrorTexture} metalness={0.8} roughness={0.2} />
+        {/* 
+          - `map={mirrorTexture}`: Aplică textură pe panou.
+          - `metalness={0.8}`: Face materialul să pară metalic (oglinda e reflectorizantă).
+          - `roughness={0.2}`: Face oglinda mai puțin mată, dar păstrează o oarecare textură realistă.
+        */}
+      </mesh>
+    </group>
   );
 };
 
@@ -181,18 +267,60 @@ const Pulpit = () => {
   );
 };
 
-const CameraSetup = ({ characterRef, isFirstPerson }) => {
+// const CameraSetup = ({ characterRef, isFirstPerson }) => {
+//   const { camera } = useThree();
+
+//   useFrame(() => {
+//     if (characterRef.current) {
+//       if (isFirstPerson) {
+//         const firstPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 1.5, 0.2));
+//         camera.position.lerp(firstPersonPosition, 0.1);
+//         camera.lookAt(characterRef.current.position.x, characterRef.current.position.y + 1.5, characterRef.current.position.z);
+//       } else {
+//         const thirdPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 2, 5));
+//         camera.position.lerp(thirdPersonPosition, 0.1);
+//         camera.lookAt(characterRef.current.position);
+//       }
+//     }
+//   });
+
+//   return null;
+// };
+
+const CameraSetup = ({ characterRef, keys }) => {
   const { camera } = useThree();
+  const targetOffset = new THREE.Vector3(0, 2, -5); // Offset behind the character
+  const smoothSpeed = 0.1; // Adjust smoothness of movement and rotation
 
   useFrame(() => {
     if (characterRef.current) {
-      if (isFirstPerson) {
-        const firstPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 1.5, 0.2));
-        camera.position.lerp(firstPersonPosition, 0.1);
-        camera.lookAt(characterRef.current.position.x, characterRef.current.position.y + 1.5, characterRef.current.position.z);
+      // Determine movement direction
+      const direction = new THREE.Vector3();
+      if (keys.forward) direction.z -= 1;
+      if (keys.backward) direction.z += 1;
+      if (keys.left) direction.x -= 1;
+      if (keys.right) direction.x += 1;
+
+      if (direction.length() > 0) {
+        direction.normalize();
+
+        // Calculate the rotation angle for the character
+        const targetRotationY = Math.atan2(direction.x, direction.z);
+        characterRef.current.rotation.y = THREE.MathUtils.lerp(
+          characterRef.current.rotation.y,
+          targetRotationY,
+          smoothSpeed
+        );
+
+        // Update camera position relative to character
+        const characterPosition = characterRef.current.position.clone();
+        const offset = targetOffset.clone().applyEuler(characterRef.current.rotation);
+        const newPosition = characterPosition.add(offset);
+
+        camera.position.lerp(newPosition, smoothSpeed);
+        camera.lookAt(characterRef.current.position);
       } else {
-        const thirdPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 2, 5));
-        camera.position.lerp(thirdPersonPosition, 0.1);
+        // When no movement, keep looking at the character
         camera.lookAt(characterRef.current.position);
       }
     }
@@ -200,6 +328,9 @@ const CameraSetup = ({ characterRef, isFirstPerson }) => {
 
   return null;
 };
+
+
+
 
 const EnvironmentTwoScene = () => {
   const keys = useKeyControls();
@@ -216,11 +347,22 @@ const EnvironmentTwoScene = () => {
           <Sky />
           <Room wallColliders={wallColliders} />
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
-          <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} />
+          <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} keys={keys}/>
           <Pulpit />
           <FBXModel />
           <FBXlights />
-          {!isFirstPerson && <OrbitControls enablePan={false} enableZoom={false} />}
+          <FBXsecondlights />
+          <OBJwindow />
+          <OrbitControls
+  enablePan={false} // Disable panning (optional)
+  enableZoom={true} // Enable zoom (optional)
+  maxPolarAngle={Math.PI * 2} // Allow 360° vertical rotation
+  minPolarAngle={0} // Allow full vertical range
+  maxAzimuthAngle={Infinity} // No horizontal rotation limits
+  minAzimuthAngle={-Infinity} // No horizontal rotation limits
+/>
+
+          
         </XR>
       </Canvas>
       <button
@@ -244,4 +386,4 @@ const EnvironmentTwoScene = () => {
   );
 };
 
-export default EnvironmentTwoScene;
+export default EnvironmentTwoScene;3
