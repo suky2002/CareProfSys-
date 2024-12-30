@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Sky, useGLTF } from '@react-three/drei';
 
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -99,7 +99,7 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
 });
 
 const Room = ({ wallColliders }) => {
-  const wallTexture = useMemo(() => new THREE.TextureLoader().load('/Imagini/pexels-hieu-697259.jpg'), []);
+  const wallTexture = useMemo(() => new THREE.TextureLoader().load('/Imagini/robert.jpeg'), []);
   const texturedWallMaterial = useMemo(() => new THREE.MeshStandardMaterial({ map: wallTexture }), [wallTexture]);
 
   const wallMaterial = new THREE.MeshStandardMaterial({ color: '#fefefe' });
@@ -144,27 +144,39 @@ const Room = ({ wallColliders }) => {
   );
 };
 
-
 const FBXModel = () => {
   const fbx = useLoader(FBXLoader, '/models/Shure_565SD.fbx');
 
   return (
     <primitive
       object={fbx}
-      position={[0, 0, -2]}
+      position={[1.1, 0.88, -1.9]}
       scale={[0.01, 0.01, 0.01]}
     />
   );
 };
 
+const FBXlights = () => { 
+  const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
+
+  return (
+    <primitive
+      object={fbxlights}
+      position={[-4.5, 1.5, -4.5]}
+      rotation={[0, Math.PI / 4, 0]} // Rotate 45 degrees on the y-axis
+      scale={[0.009, 0.009, 0.009]}
+    />
+  );
+};
+
 const Pulpit = () => {
-  const pulpitModel = useLoader(OBJLoader, '/models/studio-obj.obj');
+  const pulpitModel = useLoader(OBJLoader, '/models/studio.obj');
 
   return (
     <primitive
       object={pulpitModel}
-      position={[0, 0, 1]}
-      scale={[100 , 100, 100]}
+      position={[0, 0, -2]}
+      scale={[0.007, 0.007, 0.007]}
     />
   );
 };
@@ -207,6 +219,8 @@ const EnvironmentTwoScene = () => {
           <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} />
           <Pulpit />
           <FBXModel />
+          <FBXlights />
+          {!isFirstPerson && <OrbitControls enablePan={false} enableZoom={false} />}
         </XR>
       </Canvas>
       <button
