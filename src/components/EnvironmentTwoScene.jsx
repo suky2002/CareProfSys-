@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
-import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { XR } from '@react-three/xr';
+import { TextureLoader } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { TextureLoader } from 'three';
-import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
@@ -103,7 +103,7 @@ const Room = ({ wallColliders }) => {
   const wallTexture = useMemo(() => new THREE.TextureLoader().load('/Imagini/robert.jpeg'), []);
   const texturedWallMaterial = useMemo(() => new THREE.MeshStandardMaterial({ map: wallTexture }), [wallTexture]);
 
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#fefefe' });
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#000000' });
   const floorMaterial = new THREE.MeshStandardMaterial({ color: 'green' });
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444' });
 
@@ -147,15 +147,15 @@ const Room = ({ wallColliders }) => {
 
 const FBXModel = () => {
   const fbx = useLoader(FBXLoader, '/models/Shure_565SD.fbx');
-  const texture = useLoader(TextureLoader, '/Imagini/black_wood.jpeg'); // Asigură-te că această cale este corectă
+  const texture = useLoader(TextureLoader, '/Imagini/robert.jpeg'); // Ensure this path is correct
 
-  // Aplica textura asupra materialelor din model
   useEffect(() => {
     if (fbx) {
       fbx.traverse((child) => {
         if (child.isMesh) {
-          child.material.map = texture; // Setează textura
-          child.material.needsUpdate = true; // Forțează actualizarea materialului
+          console.log('Applying texture to:', child);
+          child.material.map = texture; // Set the texture
+          child.material.needsUpdate = true; // Force material update
         }
       });
     }
@@ -169,7 +169,6 @@ const FBXModel = () => {
     />
   );
 };
-
 // const FBXlights = () => { 
 //   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
 
@@ -185,7 +184,7 @@ const FBXModel = () => {
 
 const FBXlights = () => { 
   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
-  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png'); // Adjust the path as needed
+  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png');
 
   useEffect(() => {
     if (fbxlights) {
@@ -199,28 +198,69 @@ const FBXlights = () => {
   }, [fbxlights, texture]);
 
   return (
-    <primitive
-      object={fbxlights}
-      position={[-4.5, 1.4, -1]}
-      rotation={[0, Math.PI / 1.5, 0]} // Rotate 45 degrees on the y-axis
-      scale={[0.009, 0.009, 0.009]}
-    />
+    <group>
+      {/* Reflector */}
+      <primitive
+        object={fbxlights}
+        position={[-4.5, 1.4, -1]}
+        rotation={[0, Math.PI / 1.5, 0]} 
+        scale={[0.009, 0.009, 0.009]}
+      />
+      {/* Point Light */}
+      <pointLight
+        position={[-4.2, 2.4, -1.2]}
+        intensity={3}
+        color="#ffffff"
+        distance={5}
+        decay={2}
+        castShadow={true}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}ds
+      />
+      {/* Light Sphere */}
+      <mesh position={[-4.2, 2.4, -1.2]}>
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={2} />
+      </mesh>
+    </group>
   );
 };
+
 
 
 const FBXsecondlights = () => { 
   const fbxsecondlights = useLoader(FBXLoader, '/models/Box_Panel_Spot_Light.fbx');
+  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png');
 
   return (
-    <primitive
-      object={fbxsecondlights}
-      position={[4.5, 1.4, -1]}
-      rotation={[0, Math.PI / -1.5, 0]} // Rotate 45 degrees on the y-axis
-      scale={[0.009, 0.009, 0.009]}
-    />
+    <group>
+      {/* Reflector model */}
+      <primitive
+        object={fbxsecondlights}
+        position={[4.5, 1.4, -1]}
+        rotation={[0, Math.PI / -1.5, 0]} 
+        scale={[0.009, 0.009, 0.009]}
+      />
+      {/* Point light */}
+      <pointLight
+        position={[4.2, 2.4, -1.2]}
+        intensity={10}
+        color="#ffffff"
+        distance={5}
+        decay={2}
+        castShadow={true}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+      />
+        {/* Light Sphere */}
+        <mesh position={[4.3, 2.5, -1.4]}>
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={2} />
+      </mesh>
+    </group>
   );
 };
+
 
 
 const OBJwindow = () => { 
@@ -257,6 +297,24 @@ const OBJwindow = () => {
 
 const Pulpit = () => {
   const pulpitModel = useLoader(OBJLoader, '/models/studio.obj');
+  const texture = useLoader(TextureLoader, '/Imagini/istockphoto-2161705945-612x612.jpg'); // Ensure this path is correct
+
+  useEffect(() => {
+    if (texture) {
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.repeat.set(1, 1);
+    }
+
+    if (pulpitModel) {
+      pulpitModel.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture; // Set the texture
+          child.material.needsUpdate = true; // Force material update
+        }
+      });
+    }
+  }, [pulpitModel, texture]);
 
   return (
     <primitive
