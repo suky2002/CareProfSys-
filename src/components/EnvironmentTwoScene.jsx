@@ -99,13 +99,18 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   return <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />;
 });
 
-const Room = ({ wallColliders, position }) => {
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#ffffff' });
-  const floorMaterial = new THREE.MeshStandardMaterial({ color: 'green' });
-  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444' });
-
+const Room1 = ({ wallColliders, position }) => {
   const wallHeight = 3;
   const roomSize = 10;
+
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#00FF00' }); // Green
+  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444444' }); // Dark Gray
+  const wallMaterials = [
+    new THREE.MeshStandardMaterial({ color: '#FF0000' }), // Red
+    new THREE.MeshStandardMaterial({ color: '#00FF00' }), // Green
+    new THREE.MeshStandardMaterial({ color: '#0000FF' }), // Blue
+    new THREE.MeshStandardMaterial({ color: '#FFFF00' }), // Yellow
+  ];
 
   useEffect(() => {
     const x = position[0];
@@ -131,78 +136,112 @@ const Room = ({ wallColliders, position }) => {
       </mesh>
 
       {/* Walls */}
-      <mesh position={[position[0] - 5, 1.5, position[2]]} material={wallMaterial}>
+      <mesh position={[position[0] - 5, 1.5, position[2]]} material={wallMaterials[0]}>
         <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
-      <mesh position={[position[0] + 5, 1.5, position[2]]} material={wallMaterial}>
+      <mesh position={[position[0] + 5, 1.5, position[2]]} material={wallMaterials[1]}>
         <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
-      <mesh position={[position[0], 1.5, position[2] - 5]} material={wallMaterial}>
+      <mesh position={[position[0], 1.5, position[2] - 5]} material={wallMaterials[2]}>
         <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
-      <mesh position={[position[0], 1.5, position[2] + 5]} material={wallMaterial}>
+      <mesh position={[position[0], 1.5, position[2] + 5]} material={wallMaterials[3]}>
         <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
     </>
   );
 };
 
-const RoomWithHall = ({ wallColliders, position }) => {
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#0000FF' });
-  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#008000' });
-  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444444' });
-
+const Room2 = ({ wallColliders, position }) => {
   const wallHeight = 3;
-  const roomWidth = 10;
-  const hallWidth = 4;
+  const roomSize = 10;
 
-  // Definează colizoarele pentru noua cameră și hol
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#0000FF' }); // Blue
+  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#555555' }); // Darker Gray
+  const wallMaterials = [
+    new THREE.MeshStandardMaterial({ color: '#00FFFF' }), // Cyan
+    new THREE.MeshStandardMaterial({ color: '#FF00FF' }), // Magenta
+    new THREE.MeshStandardMaterial({ color: '#FFFFFF' }), // White
+    new THREE.MeshStandardMaterial({ color: '#000000' }), // Black
+  ];
+
   useEffect(() => {
     const x = position[0];
     const z = position[2];
     wallColliders.push(
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(15, 1.5, 0), new THREE.Vector3(0.1, wallHeight, roomWidth)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(25, 1.5, 0), new THREE.Vector3(0.1, wallHeight, roomWidth)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(20, 1.5, -5), new THREE.Vector3(roomWidth, wallHeight, 0.1)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(20, 1.5, 5), new THREE.Vector3(roomWidth, wallHeight, 0.1)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(12, 1.5, 0), new THREE.Vector3(hallWidth, wallHeight, 0.1))
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - 5), new THREE.Vector3(roomSize, wallHeight, 0.1)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + 5), new THREE.Vector3(roomSize, wallHeight, 0.1))
     );
-  }, [wallColliders]);
+  }, [wallColliders, position]);
 
   return (
     <>
-      {/* Podeaua */}
-      <mesh position={[20, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
-        <planeGeometry args={[roomWidth, roomWidth]} />
-      </mesh>
-      <mesh position={[14, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
-        <planeGeometry args={[hallWidth, roomWidth / 2]} />
+      {/* Floor */}
+      <mesh position={[position[0], 0, position[2]]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[roomSize, roomSize]} />
       </mesh>
 
-      {/* Tavanul */}
-      <mesh position={[20, 3, 0]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
-        <planeGeometry args={[roomWidth, roomWidth]} />
+      {/* Ceiling */}
+      <mesh position={[position[0], 3, position[2]]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
+        <planeGeometry args={[roomSize, roomSize]} />
       </mesh>
 
-      {/* Pereții */}
-      <mesh position={[15, 1.5, 0]} material={wallMaterial}>
-        <boxGeometry args={[0.1, wallHeight, roomWidth]} />
+      {/* Walls */}
+      <mesh position={[position[0] - 5, 1.5, position[2]]} material={wallMaterials[0]}>
+        <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
-      <mesh position={[25, 1.5, 0]} material={wallMaterial}>
-        <boxGeometry args={[0.1, wallHeight, roomWidth]} />
+      <mesh position={[position[0] + 5, 1.5, position[2]]} material={wallMaterials[1]}>
+        <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
-      <mesh position={[20, 1.5, -5]} material={wallMaterial}>
-        <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
+      <mesh position={[position[0], 1.5, position[2] - 5]} material={wallMaterials[2]}>
+        <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
-      <mesh position={[20, 1.5, 5]} material={wallMaterial}>
-        <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
-      </mesh>
-      <mesh position={[12, 1.5, 0]} material={wallMaterial}>
-        <boxGeometry args={[hallWidth, wallHeight, 0.1]} />
+      <mesh position={[position[0], 1.5, position[2] + 5]} material={wallMaterials[3]}>
+        <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
     </>
   );
 };
+
+const Hallway = ({ wallColliders, position }) => {
+  const wallMaterial1 = new THREE.MeshStandardMaterial({ color: '#FF00FF' }); // Magenta
+  const wallMaterial2 = new THREE.MeshStandardMaterial({ color: '#00FFFF' }); // Cyan
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#CCCCCC' }); // Gray
+
+  const wallHeight = 3;
+  const hallLength = 10;
+  const hallWidth = 4;
+
+  useEffect(() => {
+    const x = position[0];
+    const z = position[2];
+    wallColliders.push(
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - hallWidth / 2), new THREE.Vector3(hallLength, wallHeight, 0.1)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + hallWidth / 2), new THREE.Vector3(hallLength, wallHeight, 0.1))
+    );
+  }, [wallColliders, position]);
+
+  return (
+    <>
+      {/* Floor */}
+      <mesh position={[position[0], 0, position[2]]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[hallLength, hallWidth]} />
+      </mesh>
+
+      {/* Walls */}
+      <mesh position={[position[0], 1.5, position[2] - hallWidth / 2]} material={wallMaterial1}>
+        <boxGeometry args={[hallLength, wallHeight, 0.1]} />
+      </mesh>
+      <mesh position={[position[0], 1.5, position[2] + hallWidth / 2]} material={wallMaterial2}>
+        <boxGeometry args={[hallLength, wallHeight, 0.1]} />
+      </mesh>
+    </>
+  );
+};
+
+
 
 
 
@@ -461,8 +500,16 @@ const EnvironmentTwoScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
-          <Room wallColliders={wallColliders} position={[0, 0, 0]} />
-          <RoomWithHall wallColliders={wallColliders} position={[10, 0, 10]} /> 
+          {/* Prima cameră */}
+      <Room1 wallColliders={wallColliders} position={[0, 0, 0]} />
+
+{/* Hol */}
+<Hallway wallColliders={wallColliders} position={[10, 0, 0]} />
+
+{/* A doua cameră */}
+<Room2 wallColliders={wallColliders} position={[20, 0, 0]} />
+
+
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
           <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} keys={keys}/>
           <Door position={[0, 0, 0]} rotation={0}/>
