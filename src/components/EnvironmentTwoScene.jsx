@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
-import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { XR } from '@react-three/xr';
-import { TextureLoader } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TextureLoader } from 'three';
+import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
@@ -96,30 +96,42 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
     }
   });
 
-  return <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />;
+  return (
+    <>
+      <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />
+      <PointAndClickControls
+        characterRef={ref}
+        wallColliders={wallColliders}
+        mixer={mixer.current}
+        actions={actions.current}
+        setIsWalking={setIsWalking}
+      />
+    </>
+  );
   
 });
-
 const Room1 = ({ wallColliders, position }) => {
   const wallHeight = 3;
   const roomSize = 10;
 
   const floorMaterial = new THREE.MeshStandardMaterial({ color: '#00FF00' }); // Green
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444444' }); // Dark Gray
-  const wallMaterials = [
-    new THREE.MeshStandardMaterial({ color: '#FF0000' }), // Red
-    null, // Eliminăm peretele verde
-    new THREE.MeshStandardMaterial({ color: '#0000FF' }), // Blue
-    new THREE.MeshStandardMaterial({ color: '#FFFF00' }), // Yellow
-  ];
 
   useEffect(() => {
     const x = position[0];
     const z = position[2];
+
     wallColliders.push(
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)), // Left wall
-      // Eliminăm colizorul pentru peretele verde
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + 5), new THREE.Vector3(roomSize, wallHeight, 0.1)) // Back wall
+      // Left wall
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      // Back wall (yellow)
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + 5), new THREE.Vector3(roomSize, wallHeight, 0.1)),
+      // Blue wall (add collision here)
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - 5), new THREE.Vector3(roomSize, wallHeight, 0.1)),
+      // New Left Wall by Entrance
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z + 3.5), new THREE.Vector3(0.2, wallHeight, 3)),
+      // New Right Wall by Entrance
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z - 3.5), new THREE.Vector3(0.2, wallHeight, 3))
     );
   }, [wallColliders, position]);
 
@@ -136,39 +148,36 @@ const Room1 = ({ wallColliders, position }) => {
       </mesh>
 
       {/* Walls */}
-      <mesh position={[position[0] - 5, 1.5, position[2]]} material={wallMaterials[0]}>
+      <mesh position={[position[0] - 5, 1.5, position[2]]} material={new THREE.MeshStandardMaterial({ color: '#FF0000' })}>
         <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
-      <mesh position={[position[0], 1.5, position[2] - 5]} material={wallMaterials[2]}>
+      <mesh position={[position[0], 1.5, position[2] - 5]} material={new THREE.MeshStandardMaterial({ color: '#0000FF' })}>
         <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
-      <mesh position={[position[0], 1.5, position[2] + 5]} material={wallMaterials[3]}>
+      <mesh position={[position[0], 1.5, position[2] + 5]} material={new THREE.MeshStandardMaterial({ color: '#FFFF00' })}>
         <boxGeometry args={[roomSize, wallHeight, 0.1]} />
       </mesh>
 
       {/* New Left Wall by Entrance */}
       <mesh
-  position={[position[0] + 5, 1.5, position[2] +4]} // Ajustează poziția dacă peretele devine mai lat
-  material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
-  rotation={[0, Math.PI / 2, 0]} // Rotire 90 de grade pe axa Y
->
-  <boxGeometry args={[4.1, wallHeight, 0.2]} /> {/* Lățime 2, Grosime 0.2 */}
-</mesh>
+        position={[position[0] + 5, 1.5, position[2] + 3.5]}
+        material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <boxGeometry args={[3, wallHeight, 0.2]} />
+      </mesh>
 
-    {/* New Right Wall by Entrance */}
-
-<mesh
-  position={[position[0] + 5, 1.5, position[2] - 4]} // Ajustează poziția dacă peretele devine mai lat
-  material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
-  rotation={[0, Math.PI / 2, 0]} // Rotire 90 de grade pe axa Y
->
-  <boxGeometry args={[4.1, wallHeight, 0.2]} /> {/* Lățime 2, Grosime 0.2 */}
-</mesh>
-
+      {/* New Right Wall by Entrance */}
+      <mesh
+        position={[position[0] + 5, 1.5, position[2] - 3.5]}
+        material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <boxGeometry args={[3, wallHeight, 0.2]} />
+      </mesh>
     </>
   );
 };
-
 
 
 const Room2 = ({ wallColliders, position }) => {
@@ -188,9 +197,16 @@ const Room2 = ({ wallColliders, position }) => {
     const x = position[0];
     const z = position[2];
     wallColliders.push(
-      // Eliminăm colizorul pentru peretele cyan
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)), // Right wall
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - 5), new THREE.Vector3(roomSize, wallHeight, 0.1)) // Back wall
+      // Right wall
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      // Back wall (white)
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - 5), new THREE.Vector3(roomSize, wallHeight, 0.1)),
+      // New Left Wall by Entrance
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z + 3.5), new THREE.Vector3(0.2, wallHeight, 3)),
+      // New Right Wall by Entrance
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z - 3.5), new THREE.Vector3(0.2, wallHeight, 3)),
+      // Black wall (front)
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + 5), new THREE.Vector3(roomSize, wallHeight, 0.1))
     );
   }, [wallColliders, position]);
 
@@ -207,7 +223,6 @@ const Room2 = ({ wallColliders, position }) => {
       </mesh>
 
       {/* Walls */}
-      {/* Eliminăm peretele cyan */}
       <mesh position={[position[0] + 5, 1.5, position[2]]} material={wallMaterials[1]}>
         <boxGeometry args={[0.1, wallHeight, roomSize]} />
       </mesh>
@@ -220,26 +235,27 @@ const Room2 = ({ wallColliders, position }) => {
 
       {/* New Left Wall by Entrance */}
       <mesh
-  position={[position[0]  -5, 1.5, position[2] +4]} // Ajustează poziția dacă peretele devine mai lat
-  material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
-  rotation={[0, Math.PI / 2, 0]} // Rotire 90 de grade pe axa Y
->
-  <boxGeometry args={[4.1, wallHeight, 0.2]} /> {/* Lățime 2, Grosime 0.2 */}
-</mesh>
+        position={[position[0] - 5, 1.5, position[2] + 3.5]}
+        material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <boxGeometry args={[3, wallHeight, 0.2]} />
+      </mesh>
 
-    {/* New Right Wall by Entrance */}
-
-<mesh
-  position={[position[0] -5, 1.5, position[2] - 4]} // Ajustează poziția dacă peretele devine mai lat
-  material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
-  rotation={[0, Math.PI / 2, 0]} // Rotire 90 de grade pe axa Y
->
-  <boxGeometry args={[4.1, wallHeight, 0.2]} /> {/* Lățime 2, Grosime 0.2 */}
-</mesh>
-
+      {/* New Right Wall by Entrance */}
+      <mesh
+        position={[position[0] - 5, 1.5, position[2] - 3.5]}
+        material={new THREE.MeshStandardMaterial({ color: '#8A2BE2' })}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <boxGeometry args={[3, wallHeight, 0.2]} />
+      </mesh>
     </>
   );
 };
+
+
+
 
 
 
@@ -487,10 +503,10 @@ const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, se
   const raycaster = useRef(new THREE.Raycaster());
   const pointer = useRef(new THREE.Vector2());
   const targetPosition = useRef(null);
-  const maxDistance = 5; // Maximum movement distance
+  const maxDistance = 5; // Maximum distance for point-and-click movement
 
   const handlePointerDown = (event) => {
-    if (event.button !== 0) return; // Ignore right-click
+    if (event.button !== 0) return; // Ignore right-click or other mouse buttons
 
     // Convert screen coordinates to normalized device coordinates
     pointer.current.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -503,11 +519,11 @@ const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, se
     if (intersects.length > 0) {
       const point = intersects[0].point;
 
-      // Constrain movement to the horizontal plane
+      // Restrict movement to the horizontal plane
       const characterPosition = characterRef.current.position.clone();
       point.y = characterPosition.y;
 
-      // Ensure the target is within range and no collision with walls
+      // Ensure the target is within range and doesn't collide with walls
       if (
         characterPosition.distanceTo(point) <= maxDistance &&
         !wallColliders.some((collider) => collider.intersectsBox(new THREE.Box3().setFromCenterAndSize(point, new THREE.Vector3(1, 1, 1))))
@@ -515,6 +531,7 @@ const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, se
         targetPosition.current = point;
 
         // Trigger walking animation
+        if (!setIsWalking) return;
         setIsWalking(true);
         if (actions.idle) actions.idle.fadeOut(0.2);
         if (actions.walk) actions.walk.reset().fadeIn(0.2).play();
@@ -535,16 +552,17 @@ const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, se
       const direction = targetPosition.current.clone().sub(position).normalize();
 
       // Move the character towards the target position
-      const speed = 0.05;
+      const speed = 0.05; // Adjust speed as needed
       const distance = position.distanceTo(targetPosition.current);
 
       if (distance > 0.1) {
         characterRef.current.position.add(direction.multiplyScalar(speed));
         characterRef.current.rotation.y = Math.atan2(direction.x, direction.z);
       } else {
-        targetPosition.current = null; // Stop moving when close
+        // Stop moving and reset target position
+        targetPosition.current = null;
 
-        // Trigger idle animation
+        // Stop walking animation, return to idle
         setIsWalking(false);
         if (actions.walk) actions.walk.fadeOut(0.2);
         if (actions.idle) actions.idle.reset().fadeIn(0.2).play();
@@ -554,6 +572,7 @@ const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, se
 
   return null;
 };
+
 
 
 
