@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
-import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { XR } from '@react-three/xr';
-import { TextureLoader } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TextureLoader } from 'three';
+import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
@@ -99,51 +99,112 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   return <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />;
 });
 
-const Room = ({ wallColliders }) => {
-  const wallTexture = useMemo(() => new THREE.TextureLoader().load('/Imagini/robert.jpeg'), []);
-  const texturedWallMaterial = useMemo(() => new THREE.MeshStandardMaterial({ map: wallTexture }), [wallTexture]);
-
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#000000' });
+const Room = ({ wallColliders, position }) => {
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#ffffff' });
   const floorMaterial = new THREE.MeshStandardMaterial({ color: 'green' });
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444' });
 
+  const wallHeight = 3;
+  const roomSize = 10;
+
   useEffect(() => {
+    const x = position[0];
+    const z = position[2];
     wallColliders.push(
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(-5, 1.5, 0), new THREE.Vector3(0.1, 3, 10)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(5, 1.5, 0), new THREE.Vector3(0.1, 3, 10)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0, 1.5, -5), new THREE.Vector3(10, 3, 0.1)),
-      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0, 1.5, 5), new THREE.Vector3(10, 3, 0.1))
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x - 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x + 5, 1.5, z), new THREE.Vector3(0.1, wallHeight, roomSize)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z - 5), new THREE.Vector3(roomSize, wallHeight, 0.1)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + 5), new THREE.Vector3(roomSize, wallHeight, 0.1))
+    );
+  }, [wallColliders, position]);
+
+  return (
+    <>
+      {/* Floor */}
+      <mesh position={[position[0], 0, position[2]]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[roomSize, roomSize]} />
+      </mesh>
+
+      {/* Ceiling */}
+      <mesh position={[position[0], 3, position[2]]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
+        <planeGeometry args={[roomSize, roomSize]} />
+      </mesh>
+
+      {/* Walls */}
+      <mesh position={[position[0] - 5, 1.5, position[2]]} material={wallMaterial}>
+        <boxGeometry args={[0.1, wallHeight, roomSize]} />
+      </mesh>
+      <mesh position={[position[0] + 5, 1.5, position[2]]} material={wallMaterial}>
+        <boxGeometry args={[0.1, wallHeight, roomSize]} />
+      </mesh>
+      <mesh position={[position[0], 1.5, position[2] - 5]} material={wallMaterial}>
+        <boxGeometry args={[roomSize, wallHeight, 0.1]} />
+      </mesh>
+      <mesh position={[position[0], 1.5, position[2] + 5]} material={wallMaterial}>
+        <boxGeometry args={[roomSize, wallHeight, 0.1]} />
+      </mesh>
+    </>
+  );
+};
+
+const RoomWithHall = ({ wallColliders, position }) => {
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: '#0000FF' });
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: '#008000' });
+  const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#444444' });
+
+  const wallHeight = 3;
+  const roomWidth = 10;
+  const hallWidth = 4;
+
+  // Definează colizoarele pentru noua cameră și hol
+  useEffect(() => {
+    const x = position[0];
+    const z = position[2];
+    wallColliders.push(
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(15, 1.5, 0), new THREE.Vector3(0.1, wallHeight, roomWidth)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(25, 1.5, 0), new THREE.Vector3(0.1, wallHeight, roomWidth)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(20, 1.5, -5), new THREE.Vector3(roomWidth, wallHeight, 0.1)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(20, 1.5, 5), new THREE.Vector3(roomWidth, wallHeight, 0.1)),
+      new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(12, 1.5, 0), new THREE.Vector3(hallWidth, wallHeight, 0.1))
     );
   }, [wallColliders]);
 
   return (
     <>
-      {/* Floor */}
-      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
-        <planeGeometry args={[10, 10]} />
+      {/* Podeaua */}
+      <mesh position={[20, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[roomWidth, roomWidth]} />
+      </mesh>
+      <mesh position={[14, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} material={floorMaterial}>
+        <planeGeometry args={[hallWidth, roomWidth / 2]} />
       </mesh>
 
-      {/* Ceiling */}
-      <mesh position={[0, 3, 0]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
-        <planeGeometry args={[10, 10]} />
+      {/* Tavanul */}
+      <mesh position={[20, 3, 0]} rotation={[Math.PI / 2, 0, 0]} material={ceilingMaterial}>
+        <planeGeometry args={[roomWidth, roomWidth]} />
       </mesh>
 
-      {/* Walls */}
-      <mesh position={[-5, 1.5, 0]} material={wallMaterial}>
-        <boxGeometry args={[0.1, 3, 10]} />
+      {/* Pereții */}
+      <mesh position={[15, 1.5, 0]} material={wallMaterial}>
+        <boxGeometry args={[0.1, wallHeight, roomWidth]} />
       </mesh>
-      <mesh position={[5, 1.5, 0]} material={wallMaterial}>
-        <boxGeometry args={[0.1, 3, 10]} />
+      <mesh position={[25, 1.5, 0]} material={wallMaterial}>
+        <boxGeometry args={[0.1, wallHeight, roomWidth]} />
       </mesh>
-      <mesh position={[0, 1.5, -5]} material={texturedWallMaterial}>
-        <boxGeometry args={[10, 3, 0.1]} />
+      <mesh position={[20, 1.5, -5]} material={wallMaterial}>
+        <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
       </mesh>
-      <mesh position={[0, 1.5, 5]} material={wallMaterial}>
-        <boxGeometry args={[10, 3, 0.1]} />
+      <mesh position={[20, 1.5, 5]} material={wallMaterial}>
+        <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
+      </mesh>
+      <mesh position={[12, 1.5, 0]} material={wallMaterial}>
+        <boxGeometry args={[hallWidth, wallHeight, 0.1]} />
       </mesh>
     </>
   );
 };
+
+
 
 const FBXModel = () => {
   const fbx = useLoader(FBXLoader, '/models/Shure_565SD.fbx');
@@ -294,6 +355,25 @@ const OBJwindow = () => {
     </group>
   );
 };
+const Door = ({ position, rotation}) => {
+  const doorModel = useLoader(FBXLoader, 'models/door.fbx');
+  const doorRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (doorModel) {
+      doorModel.traverse((child) => {
+        if (child.isMesh) {
+          // child.material.map = texture; // Apply texture
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+      doorRef.current = doorModel;
+    }
+  }, [doorModel]);
+};
+
 
 const Pulpit = () => {
   const pulpitModel = useLoader(OBJLoader, '/models/studio.obj');
@@ -325,25 +405,6 @@ const Pulpit = () => {
   );
 };
 
-// const CameraSetup = ({ characterRef, isFirstPerson }) => {
-//   const { camera } = useThree();
-
-//   useFrame(() => {
-//     if (characterRef.current) {
-//       if (isFirstPerson) {
-//         const firstPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 1.5, 0.2));
-//         camera.position.lerp(firstPersonPosition, 0.1);
-//         camera.lookAt(characterRef.current.position.x, characterRef.current.position.y + 1.5, characterRef.current.position.z);
-//       } else {
-//         const thirdPersonPosition = characterRef.current.position.clone().add(new THREE.Vector3(0, 2, 5));
-//         camera.position.lerp(thirdPersonPosition, 0.1);
-//         camera.lookAt(characterRef.current.position);
-//       }
-//     }
-//   });
-
-//   return null;
-// };
 
 const CameraSetup = ({ characterRef, keys }) => {
   const { camera } = useThree();
@@ -387,9 +448,6 @@ const CameraSetup = ({ characterRef, keys }) => {
   return null;
 };
 
-
-
-
 const EnvironmentTwoScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
@@ -403,9 +461,11 @@ const EnvironmentTwoScene = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Sky />
-          <Room wallColliders={wallColliders} />
+          <Room wallColliders={wallColliders} position={[0, 0, 0]} />
+          <RoomWithHall wallColliders={wallColliders} position={[10, 0, 10]} /> 
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
           <CameraSetup characterRef={characterRef} isFirstPerson={isFirstPerson} keys={keys}/>
+          <Door position={[0, 0, 0]} rotation={0}/>
           <Pulpit />
           <FBXModel />
           <FBXlights />
@@ -419,7 +479,6 @@ const EnvironmentTwoScene = () => {
   maxAzimuthAngle={Infinity} // No horizontal rotation limits
   minAzimuthAngle={-Infinity} // No horizontal rotation limits
 />
-
           
         </XR>
       </Canvas>
@@ -444,4 +503,5 @@ const EnvironmentTwoScene = () => {
   );
 };
 
-export default EnvironmentTwoScene;3
+
+export default EnvironmentTwoScene;
