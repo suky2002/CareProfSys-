@@ -217,6 +217,17 @@ const Room1 = ({ wallColliders, position }) => {
       </mesh>
     </>
   );
+
+  useFrame(() => {
+    if (
+      characterRef.current &&
+      characterRef.current.position.x < 5 &&
+      characterRef.current.position.z < 5
+    ) {
+      completeTask(1); // Marchează Task 1 ca fiind complet
+    }
+  });
+  
 };
 
 
@@ -292,6 +303,17 @@ const Room2 = ({ wallColliders, position }) => {
       </mesh>
     </>
   );
+
+  useFrame(() => {
+    if (
+      characterRef.current &&
+      characterRef.current.position.x > 15 &&
+      characterRef.current.position.x < 25
+    ) {
+      completeTask(3); // Marchează Task 3 ca fiind complet
+    }
+  });
+  
 };
 
 const Hallway = ({ wallColliders, position, characterRef }) => {
@@ -355,6 +377,17 @@ const Hallway = ({ wallColliders, position, characterRef }) => {
   
       // Actualizează distanța rămasă în state
       setDistanceToSwitch(distance.toFixed(2)); // Rotunjim la 2 zecimale
+      
+      useFrame(() => {
+        if (
+          characterRef.current &&
+          characterRef.current.position.x > 5 &&
+          characterRef.current.position.x < 15
+        ) {
+          completeTask(2); // Marchează Task 2 ca fiind complet
+        }
+      });
+      
     }
   });
   
@@ -791,6 +824,30 @@ const CameraSetup = ({ characterRef, keys }) => {
   return null;
 };
 
+const TaskLogic = ({ characterRef, completeTask }) => {
+  useFrame(() => {
+    if (characterRef.current) {
+      const { x, z } = characterRef.current.position;
+
+      // Task 1: Explorează camera 1
+      if (x < 5 && z < 5) {
+        completeTask(1);
+      }
+
+      // Task 2: Treci prin hol
+      if (x > 5 && x < 15) {
+        completeTask(2);
+      }
+
+      // Task 3: Ajungi la camera 2
+      if (x > 15 && x < 25) {
+        completeTask(3);
+      }
+    }
+  });
+
+  return null; // Acest component nu are nevoie de un UI
+};
 
 
 const EnvironmentTwoScene = () => {
@@ -800,6 +857,19 @@ const EnvironmentTwoScene = () => {
   const [isFirstPerson, setIsFirstPerson] = useState(false);
   const [showEntryOverlay, setShowEntryOverlay] = useState(true); // Entry Overlay este vizibil inițial
 const [showTutorial, setShowTutorial] = useState(false); // Tutorialul este ascuns inițial
+
+const [tasks, setTasks] = useState([
+  { id: 1, description: "Explorează camera 1", completed: false },
+  { id: 2, description: "Treci prin hol", completed: false },
+  { id: 3, description: "Ajungi la camera 2", completed: false },
+]);
+const completeTask = (taskId) => {
+  setTasks((prevTasks) =>
+    prevTasks.map((task) =>
+      task.id === taskId ? { ...task, completed: true } : task
+    )
+  );
+};
 
 
 
@@ -821,48 +891,95 @@ const [showTutorial, setShowTutorial] = useState(false); // Tutorialul este ascu
   
   
   
-
+  const TaskList = ({ tasks }) => {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          color: "#fff",
+          padding: "10px",
+          borderRadius: "5px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+          maxWidth: "300px",
+          zIndex: 1000,
+          fontSize: "14px",
+        }}
+      >
+        <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", textAlign: "center" }}>
+          Task-uri
+        </h3>
+        <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+          {tasks.map((task) => (
+            <li
+              key={task.id}
+              style={{
+                marginBottom: "8px",
+                color: task.completed ? "green" : "red",
+                textDecoration: task.completed ? "line-through" : "none",
+              }}
+            >
+              {task.description}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+  
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       {showTutorial && <TutorialOverlay onClose={() => setShowTutorial(false)} />}
+      <TaskList tasks={tasks} /> {/* Aici se plasează TaskList */}
+      
+
+
       <Canvas shadows>
-        <XR>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <Sky />
-          {/* Prima cameră */}
-      <Room1 wallColliders={wallColliders} position={[0, 0, 0]} />
+  <XR>
+    <ambientLight intensity={0.5} />
+    <pointLight position={[10, 10, 10]} />
+    <Sky />
+    <TaskLogic characterRef={characterRef} completeTask={completeTask} />
+    {/* Prima cameră */}
+    <Room1 wallColliders={wallColliders} position={[0, 0, 0]} />
 
-{/* Hol */}
-<Hallway wallColliders={wallColliders} position={[10, 0, 0]} />
+    {/* Hol */}
+    <Hallway wallColliders={wallColliders} position={[10, 0, 0]} />
 
-{/* A doua cameră */}
-<Room2 wallColliders={wallColliders} position={[20, 0, 0]} />
+    {/* A doua cameră */}
+    <Room2 wallColliders={wallColliders} position={[20, 0, 0]} />
 
+    {/* Personaj */}
+    <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
 
-          <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
-          <CameraSetup characterRef={characterRef} keys={keys}/>
-          <Door position={[0, 0, 0]} rotation={0}/>
-          <Pulpit
-/>
-          <FBXModel />
-          <FBXlights />
-          <FBXsecondlights />
-          <OBJwindow />
-          <PointAndClickControls characterRef={characterRef} wallColliders={wallColliders} />
+    {/* Cameră */}
+    <CameraSetup characterRef={characterRef} keys={keys} />
 
-          <OrbitControls
-  enablePan={false} // Disable panning (optional)
-  enableZoom={true} // Enable zoom (optional)
-  maxPolarAngle={Math.PI * 2} // Allow 360° vertical rotation
-  minPolarAngle={0} // Allow full vertical range
-  maxAzimuthAngle={Infinity} // No horizontal rotation limits
-  minAzimuthAngle={-Infinity} // No horizontal rotation limits
-/>
-          
-        </XR>
-      </Canvas>
+    {/* Alte componente */}
+    <Door position={[0, 0, 0]} rotation={0} />
+    <Pulpit />
+    <FBXModel />
+    <FBXlights />
+    <FBXsecondlights />
+    <OBJwindow />
+    <PointAndClickControls characterRef={characterRef} wallColliders={wallColliders} />
+
+    {/* OrbitControls */}
+    <OrbitControls
+      enablePan={false}
+      enableZoom={true}
+      maxPolarAngle={Math.PI * 2}
+      minPolarAngle={0}
+      maxAzimuthAngle={Infinity}
+      minAzimuthAngle={-Infinity}
+    />
+    
+  </XR>
+</Canvas>
+
       
       {/* Overlay that appears when entering the scene */}
       {showEntryOverlay && (
