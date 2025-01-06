@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import "./css/TutorialOverlay.css"; // Creăm un fișier CSS pentru stiluri
+
+import React, { useState } from "react";
 
 const TutorialOverlay = ({ onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,6 +15,11 @@ const TutorialOverlay = ({ onClose }) => {
             Use the <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> keys to move
             around. Use the mouse to interact with objects by clicking on them.
           </p>
+          <img
+            src="https://png.pngtree.com/png-vector/20230414/ourmid/pngtree-keyboard-keys-vector-png-image_6705739.png" // Înlocuiește cu calea corectă către imaginea ta
+            alt="WASD keys"
+            className="tutorial-keys-image"
+          />
         </>
       ),
     },
@@ -57,37 +64,11 @@ const TutorialOverlay = ({ onClose }) => {
     }
   };
 
-  const overlayStyles = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    background: `rgba(0, 0, 0, ${0.8 - currentSlide * 0.2})`, // Decreasing opacity
-    color: '#fff',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  };
-
-  const buttonStyles = {
-    marginTop: '20px',
-    padding: '10px 20px',
-    background: '#FFAA00',
-    color: '#000',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  };
-
   return (
-    <div style={overlayStyles}>
+    <div className="tutorial-overlay">
       <h1>{slides[currentSlide].title}</h1>
       <div>{slides[currentSlide].content}</div>
-      <button style={buttonStyles} onClick={nextSlide}>
+      <button className="tutorial-button" onClick={nextSlide}>
         {currentSlide < slides.length - 1 ? "Next" : "Start Exploring"}
       </button>
     </div>

@@ -791,22 +791,37 @@ const CameraSetup = ({ characterRef, keys }) => {
   return null;
 };
 
+
+
 const EnvironmentTwoScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
   const wallColliders = useRef([]).current;
   const [isFirstPerson, setIsFirstPerson] = useState(false);
-  const [showEntryOverlay, setShowEntryOverlay] = useState(true); // New state for entry overlay
-  const [showTutorial, setShowTutorial] = useState(true); // Adaugă starea aici
+  const [showEntryOverlay, setShowEntryOverlay] = useState(true); // Entry Overlay este vizibil inițial
+const [showTutorial, setShowTutorial] = useState(false); // Tutorialul este ascuns inițial
+
+
+
 
   useEffect(() => {
-    // Automatically hide the overlay after a few seconds
-    const timer = setTimeout(() => {
-      setShowEntryOverlay(false);
-    }, 3000); // 3 seconds
-
-    return () => clearTimeout(timer); // Cleanup on component unmount
+    const timer1 = setTimeout(() => {
+      setShowEntryOverlay(false); // Ascunde primul overlay
+      
+      // Setează al doilea timer doar după ce primul overlay dispare
+      const timer2 = setTimeout(() => {
+        setShowTutorial(true); // Afișează tutorialul
+      }, 1); // Tutorialul apare la 1ms după ce primul overlay dispare
+      
+      return () => clearTimeout(timer2); // Cleanup pentru al doilea timer
+    }, 3000); // Primul overlay dispare după 3 secunde
+  
+    return () => clearTimeout(timer1); // Cleanup pentru primul timer
   }, []);
+  
+  
+  
+
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
