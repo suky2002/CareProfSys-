@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
-import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import React, { useEffect, useRef, useState } from 'react';
-import { Html } from '@react-three/drei';
-import { XR } from '@react-three/xr';
-import { TextureLoader } from 'three';
+
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TextureLoader } from 'three';
+import TutorialOverlay from './TutorialOverlay';
+import { XR } from '@react-three/xr';
 
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
@@ -796,6 +797,7 @@ const EnvironmentTwoScene = () => {
   const wallColliders = useRef([]).current;
   const [isFirstPerson, setIsFirstPerson] = useState(false);
   const [showEntryOverlay, setShowEntryOverlay] = useState(true); // New state for entry overlay
+  const [showTutorial, setShowTutorial] = useState(true); // Adaugă starea aici
 
   useEffect(() => {
     // Automatically hide the overlay after a few seconds
@@ -808,6 +810,7 @@ const EnvironmentTwoScene = () => {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      {showTutorial && <TutorialOverlay onClose={() => setShowTutorial(false)} />}
       <Canvas shadows>
         <XR>
           <ambientLight intensity={0.5} />
