@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef, useState } from 'react';
-
+import { Html } from '@react-three/drei';
 import { XR } from '@react-three/xr';
 import { TextureLoader } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
@@ -36,7 +36,8 @@ const useKeyControls = () => {
   }, []);
 
   return keys.current;
-};
+}; 
+
 
 const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
@@ -65,10 +66,38 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
   };
 
   useFrame((_, delta) => {
+  const useKeyControls = () => {
+  const keys = useRef({ forward: false, backward: false, left: false, right: false });
+
+  const onKeyDown = (e) => {
+    if (e.key === 'w') keys.current.forward = true;
+    if (e.key === 's') keys.current.backward = true;
+    if (e.key === 'a') keys.current.left = true;
+    if (e.key === 'd') keys.current.right = true;
+  };
+
+  const onKeyUp = (e) => {
+    if (e.key === 'w') keys.current.forward = false;
+    if (e.key === 's') keys.current.backward = false;
+    if (e.key === 'a') keys.current.left = false;
+    if (e.key === 'd') keys.current.right = false;
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
+
+  return keys.current;
+}; 
     if (mixer.current) mixer.current.update(delta);
-
+  
     const isMoving = keys.forward || keys.backward || keys.left || keys.right;
-
+  
     if (isMoving && !isWalking) {
       setIsWalking(true);
       if (actions.current.idle) actions.current.idle.fadeOut(0.2);
@@ -78,24 +107,34 @@ const Character = React.forwardRef(({ keys, wallColliders }, ref) => {
       if (actions.current.walk) actions.current.walk.fadeOut(0.2);
       if (actions.current.idle) actions.current.idle.reset().fadeIn(0.2).play();
     }
-
-    if (isMoving && ref.current) {
-      const direction = new THREE.Vector3();
-      if (keys.forward) direction.z -= 0.05;
-      if (keys.backward) direction.z += 0.05;
-      if (keys.left) direction.x -= 0.05;
-      if (keys.right) direction.x += 0.05;
-
-      direction.normalize().multiplyScalar(0.05);
-      const newPosition = ref.current.position.clone().add(direction);
-
-      if (!checkCollision(newPosition)) {
-        ref.current.position.copy(newPosition);
-        ref.current.rotation.y = Math.atan2(direction.x, direction.z);
+  
+    if (ref.current) {
+      const velocity = new THREE.Vector3();
+  
+      // Aplicați direcțiile în funcție de taste
+      if (keys.forward) velocity.z -= 1;
+      if (keys.backward) velocity.z += 1;
+      if (keys.left) velocity.x -= 1;
+      if (keys.right) velocity.x += 1;
+  
+      if (velocity.length() > 0) {
+        velocity.normalize().multiplyScalar(0.05); // Setăm viteza
+  
+        // Calculează noua poziție
+        const newPosition = ref.current.position.clone().add(velocity);
+  
+        // Verifică coliziunile
+        if (!checkCollision(newPosition)) {
+          ref.current.position.copy(newPosition);
+  
+          // Setează rotația în direcția mișcării
+          ref.current.rotation.y = Math.atan2(velocity.x, velocity.z);
+        }
       }
     }
   });
-
+  
+  
   return (
     <>
       <primitive ref={ref} object={standingModel.scene} scale={[1, 1, 1]} />
@@ -254,19 +293,28 @@ const Room2 = ({ wallColliders, position }) => {
   );
 };
 
-
-
-
-
-
-const Hallway = ({ wallColliders, position }) => {
+const Hallway = ({ wallColliders, position, characterRef }) => {
   const wallMaterial1 = new THREE.MeshStandardMaterial({ color: '#FF00FF' }); // Magenta
   const wallMaterial2 = new THREE.MeshStandardMaterial({ color: '#00FFFF' }); // Cyan
   const floorMaterial = new THREE.MeshStandardMaterial({ color: '#CCCCCC' }); // Gray
+  const switchMaterial = new THREE.MeshStandardMaterial({ color: '#FFAA00' }); // Orange for the switch
 
   const wallHeight = 3;
   const hallLength = 10;
   const hallWidth = 4;
+
+  // Switch position - manually placed on the magenta wall
+  const switchPosition = [
+    position[0] - hallLength / 2 + 2, // Centered horizontally with a slight offset
+    1.5, // Mid-height of the wall
+    position[2] - hallWidth / 2 + 0.05, // Slightly offset from the wall's surface
+  ];
+
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [screenPosition, setScreenPosition] = useState({ x: 0, y: 0 }); // Position for the pop-up
+  const switchRef = useRef();
+  const helperRef = useRef();
+  const { camera, size } = useThree(); // Access camera and screen size
 
   useEffect(() => {
     const x = position[0];
@@ -276,6 +324,41 @@ const Hallway = ({ wallColliders, position }) => {
       new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(x, 1.5, z + hallWidth / 2), new THREE.Vector3(hallLength, wallHeight, 0.1)) // Right wall
     );
   }, [wallColliders, position]);
+  useFrame(() => {
+    if (characterRef?.current && switchRef.current) {
+      // Calculăm distanța între caracter și switch
+      const characterPosition = characterRef.current.position;
+      const distance = characterPosition.distanceTo(new THREE.Vector3(...switchPosition));
+  
+      // Convertim poziția 3D a switch-ului în coordonate 2D pe ecran
+      const vector = new THREE.Vector3(...switchPosition);
+      vector.project(camera);
+  
+      // Coordonate 2D pe ecran (luând în calcul dimensiunea ferestrei)
+      const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+      const y = -(vector.y * 0.5 - 0.5) * window.innerHeight;
+  
+      setScreenPosition({ x, y });
+  
+      // Afișăm overlay-ul dacă distanța <= 2
+      if (distance <= 2) {
+        setShowOverlay(true);
+      } else {
+        setShowOverlay(false);
+      }
+  
+      // Adaugă console.log pentru debugging
+      console.log('Switch 3D Position:', switchPosition);
+      console.log('Projected 2D Position:', { x, y });
+      console.log('Distance to switch:', distance);
+  
+      // Actualizează distanța rămasă în state
+      setDistanceToSwitch(distance.toFixed(2)); // Rotunjim la 2 zecimale
+    }
+  });
+  
+  
+  
 
   return (
     <>
@@ -284,16 +367,62 @@ const Hallway = ({ wallColliders, position }) => {
         <planeGeometry args={[hallLength, hallWidth]} />
       </mesh>
 
-      {/* Walls */}
+      {/* Magenta Wall */}
       <mesh position={[position[0], 1.5, position[2] - hallWidth / 2]} material={wallMaterial1}>
         <boxGeometry args={[hallLength, wallHeight, 0.1]} />
       </mesh>
+
+      {/* Cyan Wall */}
       <mesh position={[position[0], 1.5, position[2] + hallWidth / 2]} material={wallMaterial2}>
         <boxGeometry args={[hallLength, wallHeight, 0.1]} />
       </mesh>
+
+      {/* Switch on the Correct Side of the Magenta Wall */}
+      <mesh ref={switchRef} position={switchPosition} material={switchMaterial}>
+        <boxGeometry args={[0.6, 0.6, 0.4]} />
+      </mesh>
+
+      {/* Small Pop-Up near the switch */}
+      {showOverlay && (
+        <div
+          style={{
+            position: 'absolute',
+            top: `${screenPosition.y}px`,
+            left: `${screenPosition.x}px`,
+            transform: 'translate(-50%, -100%)', // Center above the button
+            background: '#333',
+            color: '#fff',
+            padding: '10px',
+            borderRadius: '5px',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+            zIndex: 1000,
+          }}
+        >
+          <h4>Interacționează</h4>
+          <p>Apasă pe buton pentru a continua.</p>
+          <button
+            onClick={() => setShowOverlay(false)}
+            style={{
+              padding: '5px 10px',
+              background: '#FFAA00',
+              color: '#000',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer',
+            }}
+          >
+            OK
+          </button>
+        </div>
+      )}
     </>
   );
 };
+
+
+
+
+
 
 
 
@@ -467,10 +596,11 @@ const Door = ({ position, rotation}) => {
   }, [doorModel]);
 };
 
-
-const Pulpit = () => {
+const Pulpit = ({ onCollision }) => {
   const pulpitModel = useLoader(OBJLoader, '/models/studio.obj');
-  const texture = useLoader(TextureLoader, '/Imagini/istockphoto-2161705945-612x612.jpg'); // Ensure this path is correct
+  const texture = useLoader(TextureLoader, '/Imagini/istockphoto-2161705945-612x612.jpg');
+  const boundingBoxRef = useRef(new THREE.Box3());
+  const modelRef = useRef();
 
   useEffect(() => {
     if (texture) {
@@ -482,21 +612,43 @@ const Pulpit = () => {
     if (pulpitModel) {
       pulpitModel.traverse((child) => {
         if (child.isMesh) {
-          child.material.map = texture; // Set the texture
-          child.material.needsUpdate = true; // Force material update
+          child.material.map = texture; // Apply texture
+          child.material.needsUpdate = true;
+          child.castShadow = true;
+          child.receiveShadow = true;
         }
       });
     }
   }, [pulpitModel, texture]);
 
+  useFrame(() => {
+    if (modelRef.current) {
+      const boundingBox = boundingBoxRef.current;
+      boundingBox.setFromObject(modelRef.current);
+
+      // Example collision detection
+      if (onCollision) {
+        const otherBox = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0, 0, -2), new THREE.Vector3(1, 1, 1));
+        if (boundingBox.intersectsBox(otherBox)) {
+          onCollision();
+        }
+      }
+    }
+  });
+
   return (
     <primitive
+      ref={modelRef}
       object={pulpitModel}
       position={[0, 0, -2]}
       scale={[0.007, 0.007, 0.007]}
     />
   );
 };
+
+
+
+
 
 const PointAndClickControls = ({ characterRef, wallColliders, mixer, actions, setIsWalking }) => {
   const { scene, camera } = useThree();
@@ -613,7 +765,7 @@ const CameraSetup = ({ characterRef, keys }) => {
       if (direction.length() > 0) {
         direction.normalize();
 
-        // Calculate the rotation angle for the character
+        // Calculate the rotation angle for the characters
         const targetRotationY = Math.atan2(direction.x, direction.z);
         characterRef.current.rotation.y = THREE.MathUtils.lerp(
           characterRef.current.rotation.y,
@@ -641,8 +793,18 @@ const CameraSetup = ({ characterRef, keys }) => {
 const EnvironmentTwoScene = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
-  const [isFirstPerson, setIsFirstPerson] = useState(false);
   const wallColliders = useRef([]).current;
+  const [isFirstPerson, setIsFirstPerson] = useState(false);
+  const [showEntryOverlay, setShowEntryOverlay] = useState(true); // New state for entry overlay
+
+  useEffect(() => {
+    // Automatically hide the overlay after a few seconds
+    const timer = setTimeout(() => {
+      setShowEntryOverlay(false);
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -664,7 +826,8 @@ const EnvironmentTwoScene = () => {
           <Character ref={characterRef} keys={keys} wallColliders={wallColliders} />
           <CameraSetup characterRef={characterRef} keys={keys}/>
           <Door position={[0, 0, 0]} rotation={0}/>
-          <Pulpit />
+          <Pulpit
+/>
           <FBXModel />
           <FBXlights />
           <FBXsecondlights />
@@ -682,6 +845,44 @@ const EnvironmentTwoScene = () => {
           
         </XR>
       </Canvas>
+      
+      {/* Overlay that appears when entering the scene */}
+      {showEntryOverlay && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <h1>Bine ai venit!</h1>
+          <p>Explorează scena și interacționează cu obiectele din jurul tău.</p>
+          <button
+            onClick={() => setShowEntryOverlay(false)}
+            style={{
+              padding: '10px 20px',
+              background: '#FFAA00',
+              color: '#000',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px',
+            }}
+          >
+            OK
+          </button>
+        </div>
+      )}
+
       <button
         style={{
           position: 'absolute',
