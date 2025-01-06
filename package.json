@@ -13,14 +13,14 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.3.1",
     "@react-three/drei": "^9.120.5",
-    "@react-three/fiber": "^8.17.10",
+    "@react-three/fiber": "^8.0.27",
     "@react-three/xr": "^2.0.0",
     "@vitejs/plugin-react": "^4.3.3",
     "papaparse": "^5.4.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
     "react-router-dom": "^6.28.0",
-    "three": "^0.139.2",
+    "three": "^0.150.0",
     "three-stdlib": "^2.35.2"
   },
   "devDependencies": {
