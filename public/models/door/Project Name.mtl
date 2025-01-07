@@ -1,0 +1,24 @@
+newmtl Door 3
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Door_C.jpg
+newmtl Glossy
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Door_C_1.jpg
+newmtl Glossy_Reflexion.jpg 1
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Reflexion.jpg
+newmtl Door 2
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Door_C_1.jpg
+newmtl Glossy_Reflexion.jpg 2
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Reflexion_1.jpg
+newmtl Door
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd Door_C_1.jpg

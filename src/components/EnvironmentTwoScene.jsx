@@ -605,24 +605,6 @@ const OBJwindow = () => {
     </group>
   );
 };
-const Door = ({ position, rotation}) => {
-  const doorModel = useLoader(FBXLoader, 'models/door.fbx');
-  const doorRef = useRef();
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (doorModel) {
-      doorModel.traverse((child) => {
-        if (child.isMesh) {
-          // child.material.map = texture; // Apply texture
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-      doorRef.current = doorModel;
-    }
-  }, [doorModel]);
-};
 
 const Pulpit = ({ onCollision }) => {
   const pulpitModel = useLoader(OBJLoader, '/models/studio.obj');
@@ -848,6 +830,68 @@ const TaskLogic = ({ characterRef, completeTask, lightIntensity }) => {
   return null; // Acest component nu are nevoie de un UI
 };
 
+// const DoorWithAnimation = ({ position, rotation, scale = [1, 1, 1] }) => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [doorModel, setDoorModel] = useState();
+//   const doorRef = useRef();
+
+//   useEffect(() => {
+//     // Încarcă materialele (MTL)
+//     const mtlLoader = new MTLLoader();
+//     mtlLoader.load("/models/door/Project Name.mtl", (materials) => {
+//       materials.preload();
+//       const objLoader = new OBJLoader();
+//       objLoader.setMaterials(materials);
+//       objLoader.load("/models/door/Project Name.obj", (object) => {
+//         object.position.set(...position);
+//         object.rotation.set(...rotation);
+//         setDoorModel(object);
+//       });
+//     });
+//   }, [position, rotation]);
+
+//   useEffect(() => {
+//     if (doorModel) {
+//       doorModel.traverse((child) => {
+//         if (child.isMesh) {
+//           child.castShadow = true;
+//           child.receiveShadow = true;
+//         }
+//       });
+//     }
+//   }, [doorModel]);
+
+//   const toggleDoor = () => {
+//     if (!doorRef.current) return;
+
+//     const targetRotation = isOpen ? 0 : Math.PI / 2; // 90° pentru deschidere
+//     const doorAnimation = {
+//       duration: 1000,
+//       easing: "easeInOutSine",
+//     };
+
+//     // Animația rotației
+//     doorRef.current.rotation.y = THREE.MathUtils.lerp(
+//       doorRef.current.rotation.y,
+//       targetRotation,
+//       0.1
+//     );
+
+//     setIsOpen(!isOpen);
+//   };
+
+//   return (
+//     <group ref={doorRef} scale={scale}>
+//       {doorModel && <primitive object={doorModel} />}
+//       <mesh onClick={toggleDoor}>
+//         {/* Hitbox pentru interacțiune */}
+//         <boxGeometry args={[1, 2, 0.1]} />
+//         <meshBasicMaterial transparent opacity={0.0} />
+//       </mesh>
+//     </group>
+//   );
+// };
+
 
 
 const EnvironmentTwoScene = () => {
@@ -969,10 +1013,13 @@ const changeLightIntensity = () => {
     <CameraSetup characterRef={characterRef} keys={keys} />
 
     {/* Alte componente */}
-    <Door position={[0, 0, 0]} rotation={0} />
+
     <Pulpit />
     <FBXlights lightIntensity={lightIntensity} />
     <FBXsecondlights lightIntensity={lightIntensity} /> 
+    {/* <DoorWithAnimation position={[0, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={[0.001, 0.001, 0.001]} /> */}
+
+
     <OBJwindow />
     <PointAndClickControls characterRef={characterRef} wallColliders={wallColliders} />
 
