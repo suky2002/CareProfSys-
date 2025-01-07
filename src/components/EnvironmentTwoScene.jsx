@@ -499,7 +499,7 @@ const FBXModel = () => {
 //   );
 // };
 
-const FBXlights = () => { 
+const FBXlights = ({ lightIntensity }) => { 
   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
   const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png');
 
@@ -516,52 +516,15 @@ const FBXlights = () => {
 
   return (
     <group>
-      {/* Reflector */}
       <primitive
         object={fbxlights}
         position={[-4.5, 1.4, -1]}
         rotation={[0, Math.PI / 1.5, 0]} 
         scale={[0.009, 0.009, 0.009]}
       />
-      {/* Point Light */}
       <pointLight
         position={[-4.2, 2.4, -1.2]}
-        intensity={3}
-        color="#ffffff"
-        distance={5}
-        decay={2}
-        castShadow={true}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}ds
-      />
-      {/* Light Sphere */}
-      <mesh position={[-4.2, 2.4, -1.2]}>
-        <sphereGeometry args={[0.2, 16, 16]} />
-        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={2} />
-      </mesh>
-    </group>
-  );
-};
-
-
-
-const FBXsecondlights = () => { 
-  const fbxsecondlights = useLoader(FBXLoader, '/models/Box_Panel_Spot_Light.fbx');
-  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png');
-
-  return (
-    <group>
-      {/* Reflector model */}
-      <primitive
-        object={fbxsecondlights}
-        position={[4.5, 1.4, -1]}
-        rotation={[0, Math.PI / -1.5, 0]} 
-        scale={[0.009, 0.009, 0.009]}
-      />
-      {/* Point light */}
-      <pointLight
-        position={[4.2, 2.4, -1.2]}
-        intensity={10}
+        intensity={lightIntensity} // Actualizează cu valoarea din prop
         color="#ffffff"
         distance={5}
         decay={2}
@@ -569,14 +532,45 @@ const FBXsecondlights = () => {
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
       />
-        {/* Light Sphere */}
-        <mesh position={[4.3, 2.5, -1.4]}>
+      <mesh position={[-4.2, 2.4, -1.2]}>
         <sphereGeometry args={[0.2, 16, 16]} />
-        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={2} />
+        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={lightIntensity / 2} />
       </mesh>
     </group>
   );
 };
+
+
+const FBXsecondlights = ({ lightIntensity }) => { 
+  const fbxsecondlights = useLoader(FBXLoader, '/models/Box_Panel_Spot_Light.fbx');
+  const texture = useLoader(TextureLoader, '/models/Curve_Panel_Spot_Light_Texture/Curve_Panel_Light_Bulb_M_Base_color.png');
+
+  return (
+    <group>
+      <primitive
+        object={fbxsecondlights}
+        position={[4.5, 1.4, -1]}
+        rotation={[0, Math.PI / -1.5, 0]} 
+        scale={[0.009, 0.009, 0.009]}
+      />
+      <pointLight
+        position={[4.2, 2.4, -1.2]}
+        intensity={lightIntensity} // Actualizează cu valoarea din prop
+        color="#ffffff"
+        distance={5}
+        decay={2}
+        castShadow={true}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+      />
+      <mesh position={[4.3, 2.5, -1.4]}>
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={lightIntensity / 2} />
+      </mesh>
+    </group>
+  );
+};
+
 
 
 
@@ -824,7 +818,7 @@ const CameraSetup = ({ characterRef, keys }) => {
   return null;
 };
 
-const TaskLogic = ({ characterRef, completeTask }) => {
+const TaskLogic = ({ characterRef, completeTask, lightIntensity }) => {
   useFrame(() => {
     if (characterRef.current) {
       const { x, z } = characterRef.current.position;
@@ -843,11 +837,17 @@ const TaskLogic = ({ characterRef, completeTask }) => {
       if (x > 15 && x < 25) {
         completeTask(3);
       }
+
+      // Task 4: Schimbă intensitatea luminii
+      if (lightIntensity >= 5) {
+        completeTask(4);
+      }
     }
   });
 
   return null; // Acest component nu are nevoie de un UI
 };
+
 
 
 const EnvironmentTwoScene = () => {
@@ -857,11 +857,15 @@ const EnvironmentTwoScene = () => {
   const [isFirstPerson, setIsFirstPerson] = useState(false);
   const [showEntryOverlay, setShowEntryOverlay] = useState(true); // Entry Overlay este vizibil inițial
 const [showTutorial, setShowTutorial] = useState(false); // Tutorialul este ascuns inițial
+const [lightIntensity, setLightIntensity] = useState(3);
+
+
 
 const [tasks, setTasks] = useState([
   { id: 1, description: "Explorează camera 1", completed: false },
   { id: 2, description: "Treci prin hol", completed: false },
   { id: 3, description: "Ajungi la camera 2", completed: false },
+  { id: 4, description: "Schimbă intensitatea luminii", completed: false }, // Task nou
 ]);
 const completeTask = (taskId) => {
   setTasks((prevTasks) =>
@@ -870,6 +874,11 @@ const completeTask = (taskId) => {
     )
   );
 };
+const changeLightIntensity = () => {
+  setLightIntensity((prev) => (prev >= 5 ? 1 : prev + 1)); // Ciclu între 1 și 5
+  completeTask(4); // Marchează task-ul de schimbare a intensității ca complet
+};
+
 
 
 
@@ -942,7 +951,8 @@ const completeTask = (taskId) => {
     <ambientLight intensity={0.5} />
     <pointLight position={[10, 10, 10]} />
     <Sky />
-    <TaskLogic characterRef={characterRef} completeTask={completeTask} />
+    <TaskLogic characterRef={characterRef} completeTask={completeTask} lightIntensity={lightIntensity} />
+
     {/* Prima cameră */}
     <Room1 wallColliders={wallColliders} position={[0, 0, 0]} />
 
@@ -961,9 +971,8 @@ const completeTask = (taskId) => {
     {/* Alte componente */}
     <Door position={[0, 0, 0]} rotation={0} />
     <Pulpit />
-    <FBXModel />
-    <FBXlights />
-    <FBXsecondlights />
+    <FBXlights lightIntensity={lightIntensity} />
+    <FBXsecondlights lightIntensity={lightIntensity} /> 
     <OBJwindow />
     <PointAndClickControls characterRef={characterRef} wallColliders={wallColliders} />
 
@@ -1017,6 +1026,23 @@ const completeTask = (taskId) => {
           </button>
         </div>
       )}
+<button
+  style={{
+    position: 'absolute',
+    top: '60px',
+    left: '20px',
+    padding: '10px',
+    zIndex: 1,
+    backgroundColor: '#333',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  }}
+  onClick={changeLightIntensity}
+>
+  Schimbă Intensitatea Luminii
+</button>
 
       <button
         style={{

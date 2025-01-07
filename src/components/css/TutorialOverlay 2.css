@@ -1,0 +1,66 @@
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .tutorial-overlay h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tutorial-overlay p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tutorial-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ffaa00;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .tutorial-keys-image {
+    margin-top: 20px;
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .tutorial-overlay h1 {
+      font-size: 2rem;
+    }
+  
+    .tutorial-overlay p {
+      font-size: 1rem;
+    }
+  
+    .tutorial-keys-image {
+      max-width: 200px;
+    }
+  
+    .tutorial-button {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  }
+  
