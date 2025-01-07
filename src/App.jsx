@@ -132,7 +132,7 @@ const Recommendations = ({ recommendedJobs }) => {
             const isExpanded = expandedIndustries[industry];
             const jobsToShow = isExpanded
               ? recommendedJobs[industry]
-              : recommendedJobs[industry].slice(0, 4);
+              : recommendedJobs[industry].slice(0, 2);
 
             return (
               <div key={index} className={RecommendationStyles["industry-section"]}>
