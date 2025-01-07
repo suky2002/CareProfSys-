@@ -486,6 +486,103 @@ const FBXModel = () => {
     />
   );
 };
+
+
+const Obj1test = () => {
+  const obj1test = useLoader(OBJLoader, '/models/uploads_files_2774758_D&R+Electrical+Sockets+and+Switches+FREE+SAMPLE.obj');
+
+  return (
+    <primitive
+      object={obj1test}
+      position={[6.1, 1.5, -1.9]}
+      scale={[3, 3, 3]}
+      rotation={[0,0,0]}
+    />
+  );
+};
+const Obj2test = () => {
+  const obj2test = useLoader(OBJLoader, '/models/uploads_files_2423186_old+school+camera+nd+projector+obj+file 2.obj');
+
+  return (
+    <primitive
+      object={obj2test}
+      position={[0.3, 0, 2.2]}
+      scale={[0.13, 0.13, 0.15]}
+      rotation={[0, 1.5, 0]}
+    />
+  );
+};
+
+
+const Obj3test = () => {
+  const obj3test = useLoader(OBJLoader, '/models/Qled UHD TV - Q9F/Q9F.obj');
+  const texture = useLoader(TextureLoader, '/Imagini/logo-euronews-romania-horizontal-white-on-blue-rgb-01.png');
+
+  useEffect(() => {
+    if (texture) {
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.repeat.set(1, 1);
+    }
+
+    if (obj3test) {
+      obj3test.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture; // Apply texture
+          child.material.needsUpdate = true;
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    }
+  }, [obj3test, texture]);
+
+  return (
+    <primitive
+      object={obj3test}
+      position={[0, 0, -4.7]}
+      scale={[0.066, 0.035, 0.039]}
+      rotation={[0, 6.29, 0]}
+    />
+  );
+};
+
+const Obj1Interaction = ({ characterRef, changeLightIntensity }) => {
+  const obj1Ref = useRef();
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'e') {
+        // Verifică distanța dintre personaj și Ob1
+        const characterPosition = characterRef.current?.position;
+        const obj1Position = obj1Ref.current?.position;
+
+        if (characterPosition && obj1Position) {
+          const distance = characterPosition.distanceTo(obj1Position);
+          if (distance <= 2) { // Distanță maximă pentru interacțiune
+            changeLightIntensity();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [characterRef, changeLightIntensity]);
+
+  return (
+    <primitive
+      ref={obj1Ref}
+      object={useLoader(OBJLoader, '/models/uploads_files_2774758_D&R+Electrical+Sockets+and+Switches+FREE+SAMPLE.obj')}
+      position={[6.1, 1.5, -1.9]}
+      scale={[3, 3, 3]}
+      rotation={[0, 0, 0]}
+    />
+  );
+};
+
 // const FBXlights = () => { 
 //   const fbxlights = useLoader(FBXLoader, '/models/Curve_Panel_Spot_Light.fbx');
 
@@ -927,20 +1024,20 @@ const changeLightIntensity = () => {
 
 
 
-  useEffect(() => {
-    const timer1 = setTimeout(() => {
-      setShowEntryOverlay(false); // Ascunde primul overlay
+  // useEffect(() => {
+  //   const timer1 = setTimeout(() => {
+  //     setShowEntryOverlay(false); // Ascunde primul overlay
       
-      // Setează al doilea timer doar după ce primul overlay dispare
-      const timer2 = setTimeout(() => {
-        setShowTutorial(true); // Afișează tutorialul
-      }, 1); // Tutorialul apare la 1ms după ce primul overlay dispare
+  //     // Setează al doilea timer doar după ce primul overlay dispare
+  //     const timer2 = setTimeout(() => {
+  //       setShowTutorial(true); // Afișează tutorialul
+  //     }, 1); // Tutorialul apare la 1ms după ce primul overlay dispare
       
-      return () => clearTimeout(timer2); // Cleanup pentru al doilea timer
-    }, 3000); // Primul overlay dispare după 3 secunde
+  //     return () => clearTimeout(timer2); // Cleanup pentru al doilea timer
+  //   }, 3000); // Primul overlay dispare după 3 secunde
   
-    return () => clearTimeout(timer1); // Cleanup pentru primul timer
-  }, []);
+  //   return () => clearTimeout(timer1); // Cleanup pentru primul timer
+  // }, []);
   
   
   
@@ -1013,7 +1110,11 @@ const changeLightIntensity = () => {
     <CameraSetup characterRef={characterRef} keys={keys} />
 
     {/* Alte componente */}
-
+    <Obj1test />
+    <Obj1Interaction characterRef={characterRef} changeLightIntensity={changeLightIntensity} />
+d
+    <Obj2test />
+    <Obj3test />
     <Pulpit />
     <FBXlights lightIntensity={lightIntensity} />
     <FBXsecondlights lightIntensity={lightIntensity} /> 
@@ -1073,23 +1174,7 @@ const changeLightIntensity = () => {
           </button>
         </div>
       )}
-<button
-  style={{
-    position: 'absolute',
-    top: '60px',
-    left: '20px',
-    padding: '10px',
-    zIndex: 1,
-    backgroundColor: '#333',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  }}
-  onClick={changeLightIntensity}
->
-  Schimbă Intensitatea Luminii
-</button>
+
 
       <button
         style={{
