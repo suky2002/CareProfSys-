@@ -120,7 +120,7 @@ const CourseRecommendations = () => {
       <header style={headerStyle}>
         <h1>Explore Opportunities</h1>
       </header>
-      <main>
+      <main style={mainStyle}>
         <div style={sectionStyle}>
           <h2 style={sectionTitleStyle}>Universities</h2>
           <Slider items={recommendedCourses} />
@@ -131,26 +131,34 @@ const CourseRecommendations = () => {
         </div>
       </main>
       <footer style={footerStyle}>
-        <p>© 2025 Course Recommendations. All rights reserved.</p>
+        <p>© 2025 CareProfSys++. All rights reserved.</p>
       </footer>
     </div>
   );
-};
 
-const containerStyle = {
-  fontFamily: "Arial, sans-serif",
-  maxWidth: "1400px",
-  margin: "0 auto",
-  boxSizing: "border-box",
-  overflowX: "hidden", // Prevent horizontal scroll
-  padding: "20px", // Added padding for spacing
-};
+}
 
 const headerStyle = {
   backgroundColor: "#007BFF",
   color: "#fff",
-  padding: "20px",
+  padding: "10px", // Padding redus pentru un header mai scund
   textAlign: "center",
+  fontSize: "16px", // Font mai mic pentru un aspect compact
+  position: "fixed",
+  top: "0",
+  left: "0",
+  width: "100vw",
+  zIndex: 1000,
+};
+
+const containerStyle = {
+  fontFamily: "Arial, sans-serif",
+  height: "100vh", // Înălțimea completă a paginii
+  display: "flex",
+  flexDirection: "column",
+  margin: "0",
+  boxSizing: "border-box",
+  overflow: "hidden", // Previne scroll-ul vertical
 };
 
 const sectionStyle = {
@@ -183,15 +191,13 @@ const cardsContainerStyle = {
 const cardStyle = {
   backgroundColor: "#f9f9f9",
   borderRadius: "10px",
-  boxShadow: "0px 8px 10px rgba(2, 123, 254, 0.2)", // Umbra difuză și subtilă
+  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)", // Umbra difuză pe toate laturile
   padding: "15px",
   flex: "1 1 calc(33.33% - 70px)", // Dynamic width for three cards
   margin: "0 10px",
   textAlign: "left",
   overflow: "hidden",
 };
-
-
 
 const cardDescriptionStyle = {
   fontSize: "12px", // Adjust font size for better readability
@@ -248,10 +254,30 @@ const linkStyle = {
 };
 
 const footerStyle = {
-  backgroundColor: "#f5f5f5",
+  backgroundColor: "#007BFF",
   textAlign: "center",
-  padding: "20px",
-  color: "#666",
+  padding: "5px", // Padding minim pentru un footer scund
+  color: "#fff",
+  fontSize: "12px",
+  position: "fixed",
+  bottom: "0",
+  left: "0",
+  width: "100vw",
+  zIndex: 1000,
 };
+
+const mainStyle = {
+  flex: "1", // Se extinde între header și footer
+  overflowY: "auto", // Permite scroll doar în interiorul secțiunii
+  marginTop: "60px", // Compensează înălțimea headerului
+};
+
+const globalStyle = {
+  margin: "0",
+  padding: "0",
+  boxSizing: "border-box",
+  overflow: "hidden", // Previne scroll-ul
+};
+
 
 export default CourseRecommendations;
