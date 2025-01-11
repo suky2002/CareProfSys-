@@ -24,7 +24,7 @@
 //     });
 //   }, [selectedSkills]);
 
-import "./css/Recommendation.css"; // Fișier CSS pentru stiluri
+import "./css/Recommendation.module.css"; // Fișier CSS pentru stiluri
 
 //   return (
 //     <div>

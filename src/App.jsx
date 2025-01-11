@@ -18,28 +18,29 @@ const App = () => {
   useEffect(() => {
     fetchSkills()
       .then((data) => {
-        console.log("Skill-uri încărcate:", data);
+        console.log("Loaded Skills:", data);
         setSkills(data);
       })
-      .catch((error) => console.error("Eroare la încărcarea skill-urilor:", error));
+      .catch((error) => console.error("Error loading skills:", error));
 
     fetchJobs()
       .then((data) => {
-        console.log("Joburi încărcate din CSV:", data);
+        console.log("Loaded Jobs from CSV:", data);
         setJobs(data);
       })
-      .catch((error) => console.error("Eroare la încărcarea joburilor:", error));
+      .catch((error) => console.error("Error loading jobs:", error));
   }, []);
 
   const handleRecommendation = (selectedSkills, navigate) => {
     if (selectedSkills.length < 2 || selectedSkills.length > 10) {
-      alert("Te rugăm să selectezi între 2 și 10 skill-uri.");
+      alert("Please select between 2 and 10 skills.");
       return;
     }
 
     const normalizedSelectedSkills = selectedSkills.map((skill) =>
       skill.toLowerCase().trim()
     );
+
     const matchingJobs = jobs
       .map((job) => {
         const jobSkills = job.skills.map((skill) =>
@@ -52,7 +53,7 @@ const App = () => {
 
         let route = "/environment-two";
         if (job.industry === "Information Technology") route = "/environment-two";
-        if (job.industry === "Educație") route = "/env3";
+        if (job.industry === "Education") route = "/env3";
 
         return { ...job, score, route };
       })
@@ -61,7 +62,7 @@ const App = () => {
 
     const groupedJobs = matchingJobs.reduce((acc, job) => {
       const industry = job.industry;
-      if (industry === "Altele") return acc;
+      if (industry === "Others") return acc;
       if (!acc[industry]) acc[industry] = [];
       acc[industry].push(job);
       return acc;
@@ -93,25 +94,24 @@ const App = () => {
           <Route path="/vr" element={<ProfessionVRScene />} />
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
-        
-        
           <Route
-          path="/course-recommendations"
-          element={
-            <CourseRecommendations
-              recommendedCourses={[
-                {
-                  name: "Universitatea Politehnica București",
-                  description: "Cursuri de specializare în IT și Inginerie.",
-                  link: "https://www.upb.ro/",
-                },
-                {
-                  name: "Academia de Studii Economice București",
-                  description: "Cursuri în domeniul economiei și managementului.",
-                  link: "https://www.ase.ro/",
-                },
-              ]}
-            />}
+            path="/course-recommendations"
+            element={
+              <CourseRecommendations
+                recommendedCourses={[
+                  {
+                    name: "Politehnica University of Bucharest",
+                    description: "Specialization courses in IT and Engineering.",
+                    link: "https://www.upb.ro/",
+                  },
+                  {
+                    name: "Academy of Economic Studies Bucharest",
+                    description: "Courses in economics and management.",
+                    link: "https://www.ase.ro/",
+                  },
+                ]}
+              />
+            }
           />
         </Routes>
       </div>
@@ -123,7 +123,7 @@ const HomePage = ({ skills, onRecommend }) => {
   const navigate = useNavigate();
   return (
     <div className={styles["home-container"]}>
-      <h1 className={styles["app-title"]}>Selectează între 2 și 10 skill-uri</h1>
+      <h1 className={styles["app-title"]}>Select between 2 and 10 skills</h1>
       <div className={styles["skill-form-container"]}>
         <SkillForm
           skills={skills}
@@ -146,7 +146,7 @@ const Recommendations = ({ recommendedJobs }) => {
 
   return (
     <div className={RecommendationStyles["recommendations-page"]}>
-      <h1 className={RecommendationStyles["app-title"]}>Recomandările Tale</h1>
+      <h1 className={RecommendationStyles["app-title"]}>Your Recommendations</h1>
       {Object.keys(recommendedJobs).length > 0 ? (
         <div className={RecommendationStyles["recommendations-container"]}>
           {Object.keys(recommendedJobs).map((industry, index) => {
@@ -163,10 +163,10 @@ const Recommendations = ({ recommendedJobs }) => {
                     <div key={idx} className={RecommendationStyles["job-card"]}>
                       <div className={RecommendationStyles["job-card-title"]}>{job.title}</div>
                       <div className={RecommendationStyles["job-card-score"]}>
-                        Scor: {(job.score * 100).toFixed(0)}%
+                        Score: {(job.score * 100).toFixed(0)}%
                       </div>
                       <a href={job.route} className={RecommendationStyles["job-card-link"]}>
-                        Explorează în VR
+                        Explore in VR
                       </a>
                     </div>
                   ))}
@@ -184,11 +184,10 @@ const Recommendations = ({ recommendedJobs }) => {
           })}
         </div>
       ) : (
-        <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
+        <p>No experiences available for the selected skills.</p>
       )}
     </div>
   );
 };
-
 
 export default App;
