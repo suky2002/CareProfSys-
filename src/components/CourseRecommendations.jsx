@@ -284,12 +284,12 @@ const mainStyle = {
 const headerStyle = {
   backgroundColor: "#EC7015",
   color: "#fff",
-  padding: "15px 20px", // Ajustăm padding-ul pentru ecrane mai mici
+  padding: "15px 50px 15px", // Ajustăm padding-ul pentru ecrane mai mici
   fontSize: "16px",
   position: "fixed",
   top: "0",
   left: "0",
-  width: "100%", // Folosim toată lățimea ecranului
+  width: "95%", // Folosim toată lățimea ecranului
   zIndex: 1000,
   display: "flex",
   alignItems: "center",
