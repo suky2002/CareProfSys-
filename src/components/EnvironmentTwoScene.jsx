@@ -9,6 +9,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { TextureLoader } from 'three';
 import TutorialOverlay from './TutorialOverlay';
 import { XR } from '@react-three/xr';
+import { useNavigate } from "react-router-dom";
 
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
@@ -993,6 +994,7 @@ const TaskLogic = ({ characterRef, completeTask, lightIntensity }) => {
 
 const EnvironmentTwoScene = () => {
   const keys = useKeyControls();
+  const navigate = useNavigate();
   const characterRef = useRef();
   const wallColliders = useRef([]).current;
   const [isFirstPerson, setIsFirstPerson] = useState(false);
@@ -1008,6 +1010,7 @@ const [tasks, setTasks] = useState([
   { id: 3, description: "Ajungi la camera 2", completed: false },
   { id: 4, description: "Schimbă intensitatea luminii", completed: false }, // Task nou
 ]);
+
 const completeTask = (taskId) => {
   setTasks((prevTasks) =>
     prevTasks.map((task) =>
@@ -1015,6 +1018,15 @@ const completeTask = (taskId) => {
     )
   );
 };
+
+useEffect(() => {
+  if (tasks.every((task) => task.completed)) {
+    setTimeout(() => {
+      navigate("/course-recommendations");
+    }, 1000); // Așteaptă 2 secunde înainte de a redirecționa
+  }
+}, [tasks, navigate]);
+
 const changeLightIntensity = () => {
   setLightIntensity((prev) => (prev >= 5 ? 1 : prev + 1)); // Ciclu între 1 și 5
   completeTask(4); // Marchează task-ul de schimbare a intensității ca complet
@@ -1024,20 +1036,20 @@ const changeLightIntensity = () => {
 
 
 
-  // useEffect(() => {
-  //   const timer1 = setTimeout(() => {
-  //     setShowEntryOverlay(false); // Ascunde primul overlay
+  useEffect(() => {
+    const timer1 = setTimeout(() => {
+      setShowEntryOverlay(false); // Ascunde primul overlay
       
-  //     // Setează al doilea timer doar după ce primul overlay dispare
-  //     const timer2 = setTimeout(() => {
-  //       setShowTutorial(true); // Afișează tutorialul
-  //     }, 1); // Tutorialul apare la 1ms după ce primul overlay dispare
+      // Setează al doilea timer doar după ce primul overlay dispare
+      const timer2 = setTimeout(() => {
+        setShowTutorial(true); // Afișează tutorialul
+      }, 1); // Tutorialul apare la 1ms după ce primul overlay dispare
       
-  //     return () => clearTimeout(timer2); // Cleanup pentru al doilea timer
-  //   }, 3000); // Primul overlay dispare după 3 secunde
+      return () => clearTimeout(timer2); // Cleanup pentru al doilea timer
+    }, 3000); // Primul overlay dispare după 3 secunde
   
-  //   return () => clearTimeout(timer1); // Cleanup pentru primul timer
-  // }, []);
+    return () => clearTimeout(timer1); // Cleanup pentru primul timer
+  }, []);
   
   
   

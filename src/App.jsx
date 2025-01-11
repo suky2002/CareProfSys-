@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
 import { fetchJobs, fetchSkills } from "./utils/skills";
 
+import CourseRecommendations from "./components/CourseRecommendations";
 import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
 import EnvironmentTwoScene from "./components/EnvironmentTwoScene";
 import ProfessionVRScene from "./components/ProfessionVRScene";
@@ -92,6 +93,26 @@ const App = () => {
           <Route path="/vr" element={<ProfessionVRScene />} />
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
+        
+        
+          <Route
+          path="/course-recommendations"
+          element={
+            <CourseRecommendations
+              recommendedCourses={[
+                {
+                  name: "Universitatea Politehnica București",
+                  description: "Cursuri de specializare în IT și Inginerie.",
+                  link: "https://www.upb.ro/",
+                },
+                {
+                  name: "Academia de Studii Economice București",
+                  description: "Cursuri în domeniul economiei și managementului.",
+                  link: "https://www.ase.ro/",
+                },
+              ]}
+            />}
+          />
         </Routes>
       </div>
     </Router>
