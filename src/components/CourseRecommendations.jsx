@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 const CourseRecommendations = () => {
+
+  const navigateToRecommendations = () => {
+    // Navighează către pagina de recomandări
+    window.location.href = "/";
+  };
+
+  const navigateToPreviousVRExperience = () => {
+    // Navighează către experiența VR anterioară
+    window.location.href = "/environment-two";
+  };
+
+  
   const recommendedCourses = [
     {
       name: "Faculty of Engineering in Foreign Languages (FILS)",
@@ -11,8 +23,7 @@ const CourseRecommendations = () => {
     },
     {
       name: "Faculty of Electronics, Telecommunications and Information Technology",
-      description:
-        "Focus on telecommunications and signal processing.",
+      description: "Focus on telecommunications and signal processing.",
       link: "https://etti.upb.ro/en/",
       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Sigla_Facultate_ETTI.webp/530px-Sigla_Facultate_ETTI.webp.png",
     },
@@ -38,7 +49,7 @@ const CourseRecommendations = () => {
       description:
         "Globally recognized certification focusing on networking fundamentals, security, and automation.",
       link: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
-      image: "https://seeklogo.com/images/C/cisco-systems-logo-7F7AF0C154-seeklogo.com.png",
+      image: "https://lobbymap.org/site//data/001/361/1361662.png",
     },
     {
       name: "AWS Academy Graduate - AWS Academy Cloud Foundations",
@@ -118,7 +129,12 @@ const CourseRecommendations = () => {
   return (
     <div style={containerStyle}>
       <header style={headerStyle}>
-        <h1>Explore Opportunities</h1>
+        <h1 style={{ margin: "0", fontSize: "18px" }}>Explore Opportunities</h1>
+        <div>
+        <button style={headerButtonStyle} onClick={navigateToPreviousVRExperience}>Explore Previous VR Experience</button>
+        <button style={headerButtonStyle} onClick={navigateToRecommendations}>Explore Another Experience</button>
+          
+        </div>
       </header>
       <main style={mainStyle}>
         <div style={sectionStyle}>
@@ -135,34 +151,47 @@ const CourseRecommendations = () => {
       </footer>
     </div>
   );
+};
 
-}
+const headerButtonStyle = {
+  backgroundColor: "transparent", // Fără background
+  color: "#fff", // Text alb
+  border: "1px solid #fff", // Border alb subțire
+  borderRadius: "5px",
+  padding: "5px 15px",
+  cursor: "pointer",
+  fontSize: "14px",
+  marginLeft: "10px",
+};
+
 
 const headerStyle = {
   backgroundColor: "#007BFF",
   color: "#fff",
-  padding: "10px", // Padding redus pentru un header mai scund
-  textAlign: "center",
-  fontSize: "16px", // Font mai mic pentru un aspect compact
+  padding: "15px 50px", // Crește padding-ul pentru a face headerul mai înalt
+  fontSize: "16px",
   position: "fixed",
   top: "0",
   left: "0",
-  width: "100vw",
+  width: "95vw",
   zIndex: 1000,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 };
 
 const containerStyle = {
   fontFamily: "Arial, sans-serif",
-  height: "100vh", // Înălțimea completă a paginii
+  height: "100vh",
   display: "flex",
   flexDirection: "column",
   margin: "0",
   boxSizing: "border-box",
-  overflow: "hidden", // Previne scroll-ul vertical
+  overflow: "hidden",
 };
 
 const sectionStyle = {
-  margin: "40px 10px", // Add vertical padding
+  margin: "40px 10px",
 };
 
 const sectionTitleStyle = {
@@ -173,7 +202,7 @@ const sectionTitleStyle = {
 };
 
 const cardsWrapperStyle = {
-  overflow: "visible", // Allow shadows to be visible
+  overflow: "visible",
   width: "100%",
   display: "flex",
   justifyContent: "center",
@@ -183,27 +212,26 @@ const cardsContainerStyle = {
   display: "flex",
   transition: "transform 0.8s ease-in-out",
   width: "100%",
-  justifyContent: "space-between", // Ensure cards are evenly spaced
-  height: "100%", // Ensure dynamic height
+  justifyContent: "space-between",
+  height: "100%",
 };
-
 
 const cardStyle = {
   backgroundColor: "#f9f9f9",
   borderRadius: "10px",
-  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)", // Umbra difuză pe toate laturile
+  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)",
   padding: "15px",
-  flex: "1 1 calc(33.33% - 70px)", // Dynamic width for three cards
+  flex: "1 1 calc(33.33% - 70px)",
   margin: "0 10px",
   textAlign: "left",
   overflow: "hidden",
 };
 
 const cardDescriptionStyle = {
-  fontSize: "12px", // Adjust font size for better readability
+  fontSize: "12px",
   color: "#555",
   marginBottom: "5px",
-  lineHeight: "1.2", // Increase line height for better spacing
+  lineHeight: "1.2",
 };
 
 const sliderContainerStyle = {
@@ -238,7 +266,7 @@ const navButtonStyle = {
   cursor: "pointer",
   fontSize: "18px",
   margin: "0 10px",
-  position: "relative", // Ensure proper positioning
+  position: "relative",
   zIndex: 1,
 };
 
@@ -256,7 +284,6 @@ const linkStyle = {
 const footerStyle = {
   backgroundColor: "#007BFF",
   textAlign: "center",
-  padding: "5px", // Padding minim pentru un footer scund
   color: "#fff",
   fontSize: "12px",
   position: "fixed",
@@ -267,17 +294,9 @@ const footerStyle = {
 };
 
 const mainStyle = {
-  flex: "1", // Se extinde între header și footer
-  overflowY: "auto", // Permite scroll doar în interiorul secțiunii
-  marginTop: "60px", // Compensează înălțimea headerului
+  flex: "1",
+  overflowY: "auto",
+  marginTop: "50px",
 };
-
-const globalStyle = {
-  margin: "0",
-  padding: "0",
-  boxSizing: "border-box",
-  overflow: "hidden", // Previne scroll-ul
-};
-
 
 export default CourseRecommendations;
