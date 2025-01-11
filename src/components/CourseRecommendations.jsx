@@ -158,27 +158,16 @@ const headerButtonStyle = {
   color: "#fff", // Text alb
   border: "1px solid #fff", // Border alb subțire
   borderRadius: "5px",
-  padding: "5px 15px",
+  padding: "8px 15px", // Dimensiune ajustată pentru mobile
   cursor: "pointer",
   fontSize: "14px",
   marginLeft: "10px",
+  "@media (max-width: 768px)": {
+    marginLeft: "0", // Eliminăm spațiul lateral
+    width: "100%", // Butoanele ocupă întreaga lățime
+  },
 };
 
-
-const headerStyle = {
-  backgroundColor: "#007BFF",
-  color: "#fff",
-  padding: "15px 50px", // Crește padding-ul pentru a face headerul mai înalt
-  fontSize: "16px",
-  position: "fixed",
-  top: "0",
-  left: "0",
-  width: "95vw",
-  zIndex: 1000,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-};
 
 const containerStyle = {
   fontFamily: "Arial, sans-serif",
@@ -188,17 +177,13 @@ const containerStyle = {
   margin: "0",
   boxSizing: "border-box",
   overflow: "hidden",
+  "@media (max-width: 768px)": {
+    padding: "0 10px", // Micșorăm marginile pe tabletă și mobil
+  },
 };
 
 const sectionStyle = {
   margin: "40px 10px",
-};
-
-const sectionTitleStyle = {
-  textAlign: "left",
-  fontSize: "20px",
-  marginBottom: "10px",
-  padding: "0 20px",
 };
 
 const cardsWrapperStyle = {
@@ -210,43 +195,29 @@ const cardsWrapperStyle = {
 
 const cardsContainerStyle = {
   display: "flex",
-  transition: "transform 0.8s ease-in-out",
+  transition: "transform 0.8s ease-in-out", // Animație lină
   width: "100%",
-  justifyContent: "space-between",
   height: "100%",
+  gap: "20px", // Spațiu între carduri
+
+  "@media (max-width: 480px)": {
+    justifyContent: "flex-start", // Aliniere la stânga
+    overflowX: "scroll", // Activăm scroll-ul pe mobil
+    scrollSnapType: "x mandatory", // Scrolling fluid între carduri
+    scrollPadding: "10px", // Spațiere interioară
+    gap: "15px", // Reducem spațiul între carduri
+  },
 };
 
-const cardStyle = {
-  backgroundColor: "#f9f9f9",
-  borderRadius: "10px",
-  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)",
-  padding: "15px",
-  flex: "1 1 calc(33.33% - 70px)",
-  margin: "0 10px",
-  textAlign: "left",
-  overflow: "hidden",
-};
 
 const cardDescriptionStyle = {
   fontSize: "12px",
   color: "#555",
   marginBottom: "5px",
-  lineHeight: "1.2",
-};
-
-const sliderContainerStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  position: "relative",
-  margin: "0 auto",
-  maxWidth: "100%",
-};
-
-const cardTitleStyle = {
-  fontSize: "14px",
-  margin: "10px 0",
-  color: "#333",
+  lineHeight: "1.4",
+  "@media (max-width: 480px)": {
+    fontSize: "10px", // Text mai mic pentru descriere
+  },
 };
 
 const imageStyle = {
@@ -257,24 +228,30 @@ const imageStyle = {
 };
 
 const navButtonStyle = {
-  backgroundColor: "#007BFF",
+  backgroundColor: "#EC7015",
   color: "#fff",
   border: "none",
   borderRadius: "50%",
-  width: "40px",
-  height: "40px",
+  width: "30px",
+  height: "30px",
   cursor: "pointer",
-  fontSize: "18px",
+  fontSize: "14px",
   margin: "0 10px",
   position: "relative",
   zIndex: 1,
+  "@media (max-width: 480px)": {
+    width: "25px",
+    height: "25px",
+    fontSize: "12px", // Font mai mic
+  },
 };
+
 
 const linkStyle = {
   display: "inline-block",
   marginTop: "10px",
   padding: "8px 12px",
-  backgroundColor: "#007BFF",
+  backgroundColor: "#EC7015",
   color: "#fff",
   textDecoration: "none",
   borderRadius: "5px",
@@ -282,21 +259,103 @@ const linkStyle = {
 };
 
 const footerStyle = {
-  backgroundColor: "#007BFF",
+  backgroundColor: "#EC7015",
   textAlign: "center",
   color: "#fff",
   fontSize: "12px",
   position: "fixed",
   bottom: "0",
   left: "0",
-  width: "100vw",
+  width: "100%",
   zIndex: 1000,
+  padding: "5px 10px", // Padding mai mic pe mobil
+  "@media (max-width: 480px)": {
+    fontSize: "10px", // Font mai mic
+  },
 };
+
 
 const mainStyle = {
   flex: "1",
   overflowY: "auto",
   marginTop: "50px",
 };
+
+const headerStyle = {
+  backgroundColor: "#EC7015",
+  color: "#fff",
+  padding: "15px 20px", // Ajustăm padding-ul pentru ecrane mai mici
+  fontSize: "16px",
+  position: "fixed",
+  top: "0",
+  left: "0",
+  width: "100%", // Folosim toată lățimea ecranului
+  zIndex: 1000,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  flexWrap: "wrap", // Permitem conținutului să se împacheteze pe rânduri
+  gap: "10px", // Spațiu între elemente
+  "@media (max-width: 768px)": {
+    flexDirection: "column", // Toate elementele pe rânduri diferite
+    alignItems: "flex-start", // Aliniem la stânga
+  },
+};
+
+
+const cardStyle = {
+  backgroundColor: "#f9f9f9",
+  borderRadius: "10px",
+  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)",
+  padding: "15px",
+  flex: "1 1 calc(33.33% - 70px)", // Trei carduri pe desktop
+  margin: "0 10px",
+  textAlign: "left",
+  overflow: "hidden",
+  "@media (max-width: 768px)": {
+    flex: "1 1 calc(50% - 20px)", // Două carduri pe tabletă
+  },
+  "@media (max-width: 480px)": {
+    flex: "1 1 100%", // Un card pe telefon
+  },
+};
+
+
+const sliderContainerStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  position: "relative",
+  margin: "0 auto",
+  maxWidth: "100%",
+  "@media (max-width: 480px)": {
+    overflowX: "scroll", // Scroll orizontal pe telefoane
+    gap: "10px", // Spațiere între elemente
+  },
+};
+
+
+
+const sectionTitleStyle = {
+  textAlign: "left",
+  fontSize: "20px",
+  marginBottom: "10px",
+  padding: "0 20px",
+  "@media (max-width: 480px)": {
+    fontSize: "16px", // Text mai mic pe telefoane
+    padding: "0 10px", // Reducem padding-ul
+  },
+};
+
+const cardTitleStyle = {
+  fontSize: "14px",
+  margin: "10px 0",
+  color: "#333",
+  "@media (max-width: 480px)": {
+    fontSize: "12px", // Text mai mic pe mobil
+  },
+};
+
+
 
 export default CourseRecommendations;
