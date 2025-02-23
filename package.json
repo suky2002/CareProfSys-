@@ -1,7 +1,7 @@
 {
   "name": "careprofsys",
   "version": "1.0.0",
-  "description": "",
+  "description": "Smart Career Profiler based on a Semantic Data Fusion Framework and Virtual Reality Recommendations",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
