@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
 import { fetchJobs, fetchSkills } from "./utils/skills";
-
-import CourseRecommendations from "./components/CourseRecommendations";
+import TestRobert1 from "./components/TestRobert1";
+import CourseRecommendations from "./components/CourseRecommendations.jsx";
 import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
 import EnvironmentTwoScene from "./components/EnvironmentTwoScene";
 import ProfessionVRScene from "./components/ProfessionVRScene";
@@ -91,6 +91,7 @@ const App = () => {
             path="/recommendations"
             element={<Recommendations recommendedJobs={recommendedJobs} />}
           />
+          <Route path="/robert" element={<TestRobert1/>} />
           <Route path="/vr" element={<ProfessionVRScene />} />
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
