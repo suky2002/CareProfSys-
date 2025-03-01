@@ -1,13 +1,17 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Sky, useFBX } from '@react-three/drei';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
+import { Sky, useGLTF, Text } from '@react-three/drei';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TextureLoader } from 'three';
 
-// --------------------------------------------------
-// Hook pentru controlul tastelor (W, A, S, D)
+// ====================================================
+// 1. CHARACTER MOVEMENT & CAMERA SETUP
+// ====================================================
+
+// Hook for key controls (W, A, S, D)
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
-
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'w') keys.current.forward = true;
@@ -15,14 +19,12 @@ const useKeyControls = () => {
       if (e.key === 'a') keys.current.left = true;
       if (e.key === 'd') keys.current.right = true;
     };
-
     const onKeyUp = (e) => {
       if (e.key === 'w') keys.current.forward = false;
       if (e.key === 's') keys.current.backward = false;
       if (e.key === 'a') keys.current.left = false;
       if (e.key === 'd') keys.current.right = false;
     };
-
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
     return () => {
@@ -30,141 +32,138 @@ const useKeyControls = () => {
       window.removeEventListener('keyup', onKeyUp);
     };
   }, []);
-
   return keys.current;
 };
 
-// --------------------------------------------------
-// Funcție helper: Centrează modelul astfel încât partea de jos să fie la y = 0.
-function centerModelAtGround(model) {
-  model.traverse((child) => {
+// Helper: center a model so its bottom is at y=0
+function centerModelAtGround(scene) {
+  scene.traverse((child) => {
     if (child.isMesh) {
       child.geometry.computeBoundingBox();
     }
   });
-
-  const box = new THREE.Box3().setFromObject(model);
+  const box = new THREE.Box3().setFromObject(scene);
   const yOffset = box.min.y;
-  model.position.y -= yOffset;
+  scene.position.y -= yOffset;
 }
 
-// --------------------------------------------------
-// Componenta Character
+// Character with idle/walk animations
 const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget }, ref) => {
-    // Încărcăm modelele FBX: unul pentru idle (standing) și unul pentru walk.
-    const standingModel = useFBX('/models/qw.fbx');
-    const walkingModel = useFBX('/models/qwe.fbx');
-  
-    // Folosim două mixere separate pentru fiecare model
-    const idleMixer = useRef(null);
-    const walkMixer = useRef(null);
-    const actions = useRef({});
-    // Inițial, personajul este în starea idle (standing)
-    const [isWalking, setIsWalking] = useState(false);
-  
-    useEffect(() => {
-      if (standingModel && walkingModel) {
-        // Centrează modelele la sol
-        centerModelAtGround(standingModel);
-        centerModelAtGround(walkingModel);
-  
-        // Inițializăm câte un mixer pentru fiecare model
-        idleMixer.current = new THREE.AnimationMixer(standingModel);
-        walkMixer.current = new THREE.AnimationMixer(walkingModel);
-  
-        // Verifică dacă modelele conțin animații
-        if (!standingModel.animations.length || !walkingModel.animations.length) {
-          console.warn('FBX-urile nu conțin animații!');
-        }
-  
-        // Preluăm animațiile (presupunând că indexul 0 este corect)
-        actions.current.idle = idleMixer.current.clipAction(standingModel.animations[0]);
-        actions.current.walk = walkMixer.current.clipAction(walkingModel.animations[0]);
-  
-        // Pornim animația idle inițial
-        actions.current.idle.play();
-        // Pornim și animația walk, dar aceasta va fi invizibilă la început
-        actions.current.walk.play();
-      }
-    }, [standingModel, walkingModel]);
-  
-    // Funcție simplă de verificare a coliziunilor
-    const checkCollision = (newPosition) => {
-      for (const collider of wallColliders) {
-        if (collider.containsPoint(newPosition)) {
-          return true;
-        }
-      }
-      return false;
-    };
-  
-    useFrame((_, delta) => {
-        if (ref.current) {
-          const speed = 0.1;
-          const rotationSpeed = 0.1;
-      
-          // Calculăm direcția de deplasare (folosind W/S)
-          const direction = new THREE.Vector3();
-          ref.current.getWorldDirection(direction);
-          direction.y = 0;
-          direction.normalize();
-      
-          let moveVector = new THREE.Vector3();
-          if (keys.forward) {
-            moveVector.add(direction.clone().multiplyScalar(speed));
-          }
-          if (keys.backward) {
-            moveVector.add(direction.clone().multiplyScalar(-speed));
-          }
-          // Rotația se aplică separate
-          if (keys.left) {
-            ref.current.rotation.y += 0.05;
-          }
-          if (keys.right) {
-            ref.current.rotation.y -= 0.05;
-          }
-      
-          // Actualizează poziția, dacă există deplasare efectivă (W/S)
-          if (moveVector.length() > 0) {
-            const newPosition = ref.current.position.clone().add(moveVector);
-            if (!checkCollision(newPosition)) {
-              ref.current.position.copy(newPosition);
-            }
-          }
-          
-          // Dacă oricare tastă este apăsată, considerăm că se dorește mișcarea
-          const anyKeyPressed = keys.forward || keys.backward || keys.left || keys.right;
-      
-          // Comutare între animații în funcție de starea tastelor
-          if (anyKeyPressed && !isWalking) {
-            actions.current.idle.fadeOut(0.2);
-            actions.current.walk.fadeIn(0.2).play();
-            setIsWalking(true);
-          } else if (!anyKeyPressed && isWalking) {
-            actions.current.walk.fadeOut(0.2);
-            actions.current.idle.fadeIn(0.2).play();
-            setIsWalking(false);
-          }
-      
-          // Actualizează mixerele (fără reset, pentru o tranziție continuă)
-          if (idleMixer.current) idleMixer.current.update(delta);
-          if (walkMixer.current) walkMixer.current.update(delta);
-        }
-      });
-      
-  
-    return (
-      <group ref={ref} position={[0, 0, 0]}>
-        {/* Afișăm modelul idle (standing) când nu se mișcă și modelul walk când se mișcă */}
-        <primitive object={standingModel} dispose={null} visible={!isWalking} />
-        <primitive object={walkingModel} dispose={null} visible={isWalking} />
-      </group>
-    );
-  });
-  
+  const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
+  const walkingModel = useGLTF('/models/Deadwalking.glb');
 
-// --------------------------------------------------
-// CameraFollow: Camera care urmărește personajul
+  const mixer = useRef(null);
+  const actions = useRef({});
+  const [isWalking, setIsWalking] = useState(false);
+
+  useEffect(() => {
+    if (standingModel && walkingModel) {
+      centerModelAtGround(standingModel.scene);
+      centerModelAtGround(walkingModel.scene);
+
+      mixer.current = new THREE.AnimationMixer(standingModel.scene);
+      actions.current.idle = mixer.current.clipAction(standingModel.animations[0]);
+      actions.current.walk = mixer.current.clipAction(walkingModel.animations[0]);
+
+      actions.current.idle.play();
+    }
+  }, [standingModel, walkingModel]);
+
+  // Simple collision check
+  const checkCollision = (newPosition) => {
+    for (const collider of wallColliders) {
+      if (collider.containsPoint(newPosition)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  useFrame((_, delta) => {
+    if (ref.current && mixer.current) {
+      let moved = false;
+      const speed = 0.1;
+      const rotationSpeed = 0.1;
+
+      // Keyboard movement
+      if (keys.forward || keys.backward || keys.left || keys.right) {
+        if (target && clearTarget) clearTarget();
+
+        const direction = new THREE.Vector3();
+        ref.current.getWorldDirection(direction);
+        direction.y = 0;
+        direction.normalize();
+
+        let moveVector = new THREE.Vector3();
+        if (keys.forward) {
+          moveVector.add(direction.clone().multiplyScalar(speed));
+          moved = true;
+        }
+        if (keys.backward) {
+          moveVector.add(direction.clone().multiplyScalar(-speed));
+          moved = true;
+        }
+        if (keys.left) {
+          ref.current.rotation.y += 0.05;
+          moved = true;
+        }
+        if (keys.right) {
+          ref.current.rotation.y -= 0.05;
+          moved = true;
+        }
+
+        const newPosition = ref.current.position.clone().add(moveVector);
+        if (!checkCollision(newPosition)) {
+          ref.current.position.copy(newPosition);
+        }
+      }
+      // Point & click movement (≤ 10 units)
+      else if (target) {
+        const currentPos = ref.current.position.clone();
+        const moveDir = new THREE.Vector3().subVectors(target, currentPos);
+        const distance = moveDir.length();
+        if (distance > 0.1 && distance <= 10) {
+          moveDir.normalize();
+          const targetRotation = Math.atan2(moveDir.x, moveDir.z);
+          ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, targetRotation, rotationSpeed);
+          const newPosition = ref.current.position.clone().add(moveDir.clone().multiplyScalar(speed));
+          if (!checkCollision(newPosition)) {
+            ref.current.position.copy(newPosition);
+          }
+          moved = true;
+        } else if (distance > 10) {
+          clearTarget();
+        }
+      }
+
+      // Switch animations
+      if (actions.current.idle && actions.current.walk) {
+        if (moved && !isWalking) {
+          actions.current.idle.stop();
+          actions.current.walk.play();
+          setIsWalking(true);
+        } else if (!moved && isWalking) {
+          actions.current.walk.stop();
+          actions.current.idle.play();
+          setIsWalking(false);
+        }
+      }
+      mixer.current.update(delta);
+    }
+  });
+
+  return (
+    <group ref={ref} position={[0, 0, 0]}>
+      {isWalking ? (
+        <primitive object={walkingModel.scene} dispose={null} />
+      ) : (
+        <primitive object={standingModel.scene} dispose={null} />
+      )}
+    </group>
+  );
+});
+
+// CameraFollow: slightly raised behind the character
 const CameraFollow = ({ characterRef }) => {
   const { camera, gl } = useThree();
   const zoomRef = useRef(5);
@@ -188,7 +187,7 @@ const CameraFollow = ({ characterRef }) => {
       forward.normalize();
 
       const distanceBehind = zoomRef.current;
-      const verticalOffset = 2;
+      const verticalOffset = 3;
       const offset = forward.clone().multiplyScalar(-distanceBehind);
       offset.y += verticalOffset;
 
@@ -201,8 +200,7 @@ const CameraFollow = ({ characterRef }) => {
   return null;
 };
 
-// --------------------------------------------------
-// Ground: Planul pe care se mișcă personajul; setare target la click
+// Ground: plane for optional point & click
 const Ground = ({ setTargetPosition }) => (
   <mesh
     rotation={[-Math.PI / 2, 0, 0]}
@@ -217,13 +215,180 @@ const Ground = ({ setTargetPosition }) => (
   </mesh>
 );
 
-// --------------------------------------------------
-// Environment: Combină toate componentele într-o scenă R3F.
+// ====================================================
+// 2. ROOM (Electronics Lab)
+// ====================================================
+
+// Helper: Create a Box3 collider from a center + size
+const createBoxCollider = (center, size) => {
+  const half = new THREE.Vector3(size[0] / 2, size[1] / 2, size[2] / 2);
+  const min = new THREE.Vector3(center[0] - half.x, center[1] - half.y, center[2] - half.z);
+  const max = new THREE.Vector3(center[0] + half.x, center[1] + half.y, center[2] + half.z);
+  return new THREE.Box3(min, max);
+};
+
+// Colliders: walls, ceiling, table at y=1
+const roomColliders = [
+  // Walls
+  createBoxCollider([0, 2.5, -10], [20, 5, 1]),
+  createBoxCollider([-10, 2.5, 0], [1, 5, 20]),
+  createBoxCollider([10, 2.5, 0], [1, 5, 20]),
+  createBoxCollider([-5.5, 2.5, 10], [9, 5, 1]),
+  createBoxCollider([5.5, 2.5, 10], [9, 5, 1]),
+  // Ceiling
+  createBoxCollider([0, 5.5, 0], [20, 1, 20]),
+  // Table at y=1: geometry is 6 wide, 0.5 thick, 2 deep
+  // but we want to block the character at y=0. So let's
+  // extend collider down to y=0 => center ~ y=1, size ~ [6,2,2]
+  // that means half = [3,1,1], so min = [-3,0,-3], max=[3,2,-1].
+  // Enough to block the character from going under the table.
+  createBoxCollider([0, 1, -2], [6, 2, 2])
+];
+
+// Computer OBJ with a texture
+const Computer = (props) => {
+  const computerObj = useLoader(OBJLoader, '/models/Computer.obj');
+  const computerTexture = useLoader(TextureLoader, '/Imagini/Computerimg.jpg');
+  computerObj.traverse((child) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({ map: computerTexture });
+    }
+  });
+  return <primitive object={computerObj} {...props} />;
+};
+
+const Room = ({ characterRef }) => {
+  const doorRef = useRef();
+  const [doorOpen, setDoorOpen] = useState(false);
+
+  // Only toggle door if character is within 10 units
+  const handleDoorClick = (e) => {
+    e.stopPropagation();
+    if (characterRef && characterRef.current) {
+      const doorWorldPos = new THREE.Vector3();
+      doorRef.current.getWorldPosition(doorWorldPos);
+      const charPos = characterRef.current.position;
+      if (doorWorldPos.distanceTo(charPos) <= 10) {
+        setDoorOpen((prev) => !prev);
+      }
+    }
+  };
+
+  useFrame((_, delta) => {
+    if (doorRef.current) {
+      const targetAngle = doorOpen ? Math.PI / 2 : 0;
+      doorRef.current.rotation.y = THREE.MathUtils.lerp(doorRef.current.rotation.y, targetAngle, 0.1);
+    }
+  });
+
+  return (
+    // Room is raised by 0.1 on Y
+    <group position={[0, 0.1, 0]}>
+      {/* Floor */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial color="#333" side={THREE.DoubleSide} />
+      </mesh>
+      {/* Back Wall */}
+      <mesh position={[0, 2.5, -10]}>
+        <boxGeometry args={[20, 5, 1]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+      {/* Left Wall */}
+      <mesh position={[-10, 2.5, 0]}>
+        <boxGeometry args={[1, 5, 20]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+      {/* Right Wall */}
+      <mesh position={[10, 2.5, 0]}>
+        <boxGeometry args={[1, 5, 20]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+      {/* Front Wall Left */}
+      <mesh position={[-5.5, 2.5, 10]}>
+        <boxGeometry args={[9, 5, 1]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+      {/* Front Wall Right */}
+      <mesh position={[5.5, 2.5, 10]}>
+        <boxGeometry args={[9, 5, 1]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+
+      {/* Door Group */}
+      <group ref={doorRef} position={[-1, 0, 9.51]} onPointerDown={handleDoorClick}>
+        <mesh position={[1, 1.5, 0]}>
+          <boxGeometry args={[2, 3, 0.2]} />
+          <meshStandardMaterial color="brown" />
+        </mesh>
+      </group>
+      {/* Header above door */}
+      <mesh position={[0, 4, 10]}>
+        <boxGeometry args={[2, 2, 0.2]} />
+        <meshStandardMaterial color="#ccc" />
+      </mesh>
+      {/* Ceiling */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial color="#888" side={THREE.DoubleSide} />
+      </mesh>
+
+      {/* Table geometry at y=1 */}
+      {/* The table is 6 wide, 0.5 thick, 2 deep. */}
+      <mesh position={[0, 1, -2]}>
+        <boxGeometry args={[6, 0.5, 2]} />
+        <meshStandardMaterial color="#654321" />
+      </mesh>
+
+      {/* Monitor on table, top is at y=1.5 => place monitor a bit above. */}
+      <mesh position={[0, 1.5, -1.5]} rotation={[0, Math.PI, 0]}>
+        <boxGeometry args={[2, 1.2, 0.1]} />
+        <meshStandardMaterial color="#000" />
+      </mesh>
+
+      {/* "Mouse" (red box) on table */}
+      <mesh position={[-1, 1.25, -2]}>
+        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <meshStandardMaterial color="red" />
+      </mesh>
+
+      {/* "Computer button" (blue box) on table */}
+      <mesh position={[1, 1.25, -2]}>
+        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <meshStandardMaterial color="blue" />
+      </mesh>
+
+      {/* Poster on back wall */}
+      <mesh position={[0, 4, -9.51]}>
+        <planeGeometry args={[4, 2]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+      <Text position={[0, 4.5, -9.5]} fontSize={0.5} color="black">
+        Circuit Diagram
+      </Text>
+
+      {/* Lab Title */}
+      <Text position={[0, 6.5, -9]} fontSize={1} color="yellow">
+        Electronics Lab
+      </Text>
+
+      {/* Computer (OBJ) on table */}
+      <Computer
+        position={[2, 1.25, -2]}
+        scale={[0.03, 0.03, 0.03]}
+        rotation={[-Math.PI / 2, 0, Math.PI]}
+      />
+    </group>
+  );
+};
+
+// ====================================================
+// 3. COMBINED ENVIRONMENT
+// ====================================================
 const Environment = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
   const [targetPosition, setTargetPosition] = useState(null);
-
   const clearTarget = () => setTargetPosition(null);
 
   return (
@@ -232,15 +397,21 @@ const Environment = () => {
         <Sky />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
+
+        {/* Character with collisions (including the raised table) */}
         <Character
           ref={characterRef}
           keys={keys}
-          wallColliders={[]} // Dacă ai coliziuni, adaugă-le aici
+          wallColliders={roomColliders}
           target={targetPosition}
           clearTarget={clearTarget}
         />
+        {/* Camera following the character */}
         <CameraFollow characterRef={characterRef} />
+        {/* Ground for point & click */}
         <Ground setTargetPosition={setTargetPosition} />
+        {/* The room, passing characterRef for door distance check if needed */}
+        <Room characterRef={characterRef} />
       </Canvas>
     </div>
   );
