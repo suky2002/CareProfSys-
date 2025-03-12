@@ -5,11 +5,10 @@ import { Sky, useGLTF, Text } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { TextureLoader } from 'three';
 
-// ====================================================
-// 1. CHARACTER MOVEMENT & CAMERA SETUP
-// ====================================================
+// =============================
+// 1. CHARACTER & CAMERA SETUP
+// =============================
 
-// Hook for key controls (W, A, S, D)
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
   useEffect(() => {
@@ -35,7 +34,6 @@ const useKeyControls = () => {
   return keys.current;
 };
 
-// Helper: center a model so its bottom is at y=0
 function centerModelAtGround(scene) {
   scene.traverse((child) => {
     if (child.isMesh) {
@@ -47,7 +45,6 @@ function centerModelAtGround(scene) {
   scene.position.y -= yOffset;
 }
 
-// Character with idle/walk animations
 const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget }, ref) => {
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
   const walkingModel = useGLTF('/models/Deadwalking.glb');
@@ -68,7 +65,6 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
     }
   }, [standingModel, walkingModel]);
 
-  // Simple collision check
   const checkCollision = (newPosition) => {
     for (const collider of wallColliders) {
       if (collider.containsPoint(newPosition)) {
@@ -84,7 +80,7 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
       const speed = 0.1;
       const rotationSpeed = 0.1;
 
-      // Keyboard input
+      // Keyboard movement
       if (keys.forward || keys.backward || keys.left || keys.right) {
         if (target && clearTarget) clearTarget();
 
@@ -162,7 +158,6 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
   );
 });
 
-// CameraFollow: Slightly raised behind the character
 const CameraFollow = ({ characterRef }) => {
   const { camera, gl } = useThree();
   const zoomRef = useRef(5);
@@ -199,7 +194,6 @@ const CameraFollow = ({ characterRef }) => {
   return null;
 };
 
-// Ground: A plane for point & click
 const Ground = ({ setTargetPosition }) => (
   <mesh
     rotation={[-Math.PI / 2, 0, 0]}
@@ -214,42 +208,64 @@ const Ground = ({ setTargetPosition }) => (
   </mesh>
 );
 
-// ====================================================
-// 2. ROOM (Electronics Lab)
-// ====================================================
+// =============================
+// 2. OPTIONAL "BOOKSHELF" (BOXES)
+// =============================
 
-// The Monitor has the texture on the -z face (material-5) if you do want rotation,
-// but let's do no rotation and put the texture on material-4. 
-// Actually, let's do the opposite: no rotation, texture on material-5 if your user stands in front of it from z=0. 
-// We'll do rotation={[0, 0, 0]} and attach the texture to material-5 => that's the -z face by default.
-const Monitor = ({ monitorImage, onMonitorPointerMove }) => {
-  // If monitorImage is null, fallback to "Dekstopfree.png"
-  const texture = useLoader(TextureLoader, `/Imagini/${monitorImage || 'Dekstopfree.png'}`);
-
+function BookShelf(props) {
+  // A simple 3-shelf structure + one "book" object
   return (
-    <mesh
-      position={[0, 1.9, -1.5]}
-      rotation={[0, 0, 0]}
-      onPointerMove={(e) => {
-        if (e.uv && onMonitorPointerMove) {
-          onMonitorPointerMove(e.uv);
-        }
-      }}
-    >
-      <boxGeometry args={[2, 1.2, 0.1]} />
-      {/* 
-        We'll keep the front face as material-5 (the -z side) 
-        if your user is physically at z=0 looking at z=-1.5.
-      */}
-      <meshStandardMaterial attach="material-0" color="black" />
-      <meshStandardMaterial attach="material-1" color="black" />
-      <meshStandardMaterial attach="material-2" color="black" />
-      <meshStandardMaterial attach="material-3" color="black" />
-      <meshStandardMaterial attach="material-4" color="black" />
-      <meshStandardMaterial attach="material-5" map={texture} color="white" />
-    </mesh>
+    <group {...props}>
+      {/* Back board of the shelf */}
+      <mesh position={[0, 1, 0]}>
+        <boxGeometry args={[0.1, 2, 2]} />
+        <meshStandardMaterial color="brown" />
+      </mesh>
+
+      {/* Shelves (3 horizontal boards) */}
+      <mesh position={[0, 0.3, 0]}>
+        <boxGeometry args={[0.1, 0.05, 1.8]} />
+        <meshStandardMaterial color="brown" />
+      </mesh>
+      <mesh position={[0, 0.9, 0]}>
+        <boxGeometry args={[0.1, 0.05, 1.8]} />
+        <meshStandardMaterial color="brown" />
+      </mesh>
+      <mesh position={[0, 1.5, 0]}>
+        <boxGeometry args={[0.1, 0.05, 1.8]} />
+        <meshStandardMaterial color="brown" />
+      </mesh>
+
+      {/* Example small cube (like a "book" or item) */}
+      <mesh position={[0.15, 0.35, 0]}>
+        <boxGeometry args={[0.1, 0.1, 0.1]} />
+        <meshStandardMaterial color="red" />
+      </mesh>
+    </group>
   );
-};
+}
+
+// =============================
+// 3. SHELVES OBJ COMPONENT
+// =============================
+
+function ShelvesObj(props) {
+  // Loads an OBJ model called "shelves.obj"
+  const shelvesObj = useLoader(OBJLoader, '/models/shelves.obj');
+
+  // Optionally apply a material or a texture to all children
+  shelvesObj.traverse((child) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({ color: 'black' });
+    }
+  });
+
+  return <primitive object={shelvesObj} {...props} />;
+}
+
+// =============================
+// 4. ROOM (with blue wall)
+// =============================
 
 function createBoxCollider(center, size) {
   const half = new THREE.Vector3(size[0] / 2, size[1] / 2, size[2] / 2);
@@ -258,9 +274,9 @@ function createBoxCollider(center, size) {
   return new THREE.Box3(min, max);
 }
 
-// Colliders for walls, ceiling, table
 const roomColliders = [
   createBoxCollider([0, 2.5, -10], [20, 5, 1]),
+  // Left wall => we'll make it "blue"
   createBoxCollider([-10, 2.5, 0], [1, 5, 20]),
   createBoxCollider([10, 2.5, 0], [1, 5, 20]),
   createBoxCollider([-5.5, 2.5, 10], [9, 5, 1]),
@@ -269,7 +285,35 @@ const roomColliders = [
   createBoxCollider([0, 1, -2], [6, 2, 2])
 ];
 
-// Computer OBJ with texture
+const Monitor = ({ monitorImage }) => {
+  const dekstopTexture = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
+  const woodTexture = useLoader(TextureLoader, '/Imagini/wood.jpeg');
+
+  let texture;
+  if (monitorImage === 'Dekstopfree.png') {
+    texture = dekstopTexture;
+  } else if (monitorImage === 'wood.jpeg') {
+    texture = woodTexture;
+  } else {
+    texture = null;
+  }
+
+  return (
+    <mesh position={[0, 1.9, -1.5]} rotation={[0, 0, 0]}>
+      <boxGeometry args={[2, 1.2, 0.1]} />
+      <meshStandardMaterial attach="material-0" color="black" />
+      <meshStandardMaterial attach="material-1" color="black" />
+      <meshStandardMaterial attach="material-2" color="black" />
+      <meshStandardMaterial attach="material-3" color="black" />
+      <meshStandardMaterial attach="material-4" color="black" />
+      <meshStandardMaterial
+        attach="material-5"
+        {...(texture ? { map: texture, color: 'white' } : { color: 'black' })}
+      />
+    </mesh>
+  );
+};
+
 const Computer = (props) => {
   const computerObj = useLoader(OBJLoader, '/models/Computer.obj');
   const computerTexture = useLoader(TextureLoader, '/Imagini/Computerimg.jpg');
@@ -281,7 +325,7 @@ const Computer = (props) => {
   return <primitive object={computerObj} {...props} />;
 };
 
-const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointerMove }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -311,15 +355,20 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointe
         <planeGeometry args={[20, 20]} />
         <meshStandardMaterial color="#333" side={THREE.DoubleSide} />
       </mesh>
-      {/* Walls, door, etc. */}
+
+      {/* Front wall */}
       <mesh position={[0, 2.5, -10]}>
         <boxGeometry args={[20, 5, 1]} />
         <meshStandardMaterial color="#ccc" />
       </mesh>
+
+      {/* LEFT WALL => now "blue" */}
       <mesh position={[-10, 2.5, 0]}>
         <boxGeometry args={[1, 5, 20]} />
-        <meshStandardMaterial color="#ccc" />
+        <meshStandardMaterial color="blue" />
       </mesh>
+
+      {/* RIGHT WALL */}
       <mesh position={[10, 2.5, 0]}>
         <boxGeometry args={[1, 5, 20]} />
         <meshStandardMaterial color="#ccc" />
@@ -332,6 +381,8 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointe
         <boxGeometry args={[9, 5, 1]} />
         <meshStandardMaterial color="#ccc" />
       </mesh>
+
+      {/* DOOR */}
       <group ref={doorRef} position={[-1, 0, 9.51]} onPointerDown={handleDoorClick}>
         <mesh position={[1, 1.5, 0]}>
           <boxGeometry args={[2, 3, 0.2]} />
@@ -342,29 +393,44 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointe
         <boxGeometry args={[2, 2, 0.2]} />
         <meshStandardMaterial color="#ccc" />
       </mesh>
+
+      {/* CEILING */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 20]} />
         <meshStandardMaterial color="#888" side={THREE.DoubleSide} />
       </mesh>
 
-      {/* Table */}
+      {/* TABLE */}
       <mesh position={[0, 1, -2]}>
         <boxGeometry args={[6, 0.5, 2]} />
         <meshStandardMaterial color="#654321" />
       </mesh>
 
-      {/* Monitor: no rotation => texture on material-5 => facing user if user stands at z=0 */}
-      <Monitor monitorImage={monitorImage} onMonitorPointerMove={onMonitorPointerMove} />
+      
+      {/* TABLE2 */}
+      <mesh position={[8, 1, 5]}>
+        <boxGeometry args={[4, 0.5, 2]} />
+        <meshStandardMaterial color="#654321" />
+      </mesh>
 
-      {/* "Mouse" (red box) */}
-      <mesh position={[-1.8, 1.25, -2]}>
+      {/* MONITOR */}
+      <Monitor monitorImage={monitorImage} />
+
+      {/* MOUSE (red) */}
+      <mesh
+        position={[-1.8, 1.25, -2]}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          if (handleRedClick) handleRedClick();
+        }}
+      >
         <boxGeometry args={[0.5, 0.5, 0.5]} />
         <meshStandardMaterial color="red" />
       </mesh>
 
-      {/* "Computer button" (blue box) near monitor */}
+      {/* COMPUTER BUTTON (blue) */}
       <mesh
-       position={[2.2, 1.7, -3.1]}
+        position={[2.2, 1.7, -3.1]}
         onPointerDown={(e) => {
           e.stopPropagation();
           handleComputerClick();
@@ -374,7 +440,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointe
         <meshStandardMaterial color="blue" />
       </mesh>
 
-      {/* Poster on back wall */}
+      {/* POSTER */}
       <mesh position={[0, 4, -9.51]}>
         <planeGeometry args={[4, 2]} />
         <meshStandardMaterial color="white" />
@@ -386,41 +452,49 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, onMonitorPointe
         Electronics Lab
       </Text>
 
-      {/* Computer (OBJ) on table */}
-      <Computer
-        position={[2.2, 1.3, -2.1]}
-        scale={[0.04, 0.04, 0.04]}
-        rotation={[-Math.PI / 2, 0, Math.PI]}
-      />
+      {/* COMPUTER (OBJ) */}
+      <Computer position={[2.2, 1.3, -2.1]} scale={[0.04, 0.04, 0.04]} rotation={[-Math.PI / 2, 0, Math.PI]} />
+
+      {/* 1) BOX-BASED BOOKSHELF (OPTIONAL) */}
+      <BookShelf position={[-9.4, 0, 0]} />
+
+      {/* 2) SHELVES.OBJ  */}
+      <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0,  Math.PI, 0]} />
+      {/*
+        Adjust the position & scale as needed:
+        - X ~ -9.5 so it doesn't clip into the wall at -10
+        - Y ~ 0 so it rests on the floor
+        - Z ~ 2 or any offset you like
+        - scale might need to be bigger or smaller depending on the OBJ size
+      */}
     </group>
   );
 };
 
-// ====================================================
-// 3. COMBINED ENVIRONMENT
-// ====================================================
+// =============================
+// 5. MAIN ENVIRONMENT
+// =============================
+
 const Environment = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
   const [targetPosition, setTargetPosition] = useState(null);
   const clearTarget = () => setTargetPosition(null);
 
-  // Monitor image state: initially off (null).
+  // Monitor initially off (null)
   const [monitorImage, setMonitorImage] = useState(null);
 
-  // Blue button sets monitor image to "Dekstopfree.png"
+  // Blue button => set "Dekstopfree.png"
   const handleComputerClick = () => {
     if (!monitorImage) {
       setMonitorImage('Dekstopfree.png');
     }
   };
 
-  // If uv.x < 0.5 => "wood.jpeg", else => "Dekstopfree.png"
-  const handleMonitorPointerMove = (uv) => {
-    if (uv.x < 0.5) {
+  // Red button => if it's "Dekstopfree.png", change to "wood.jpeg"
+  const handleRedClick = () => {
+    if (monitorImage === 'Dekstopfree.png') {
       setMonitorImage('wood.jpeg');
-    } else {
-      setMonitorImage('Dekstopfree.png');
     }
   };
 
@@ -431,7 +505,6 @@ const Environment = () => {
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
 
-        {/* Character with collisions */}
         <Character
           ref={characterRef}
           keys={keys}
@@ -442,12 +515,11 @@ const Environment = () => {
         <CameraFollow characterRef={characterRef} />
         <Ground setTargetPosition={setTargetPosition} />
 
-        {/* The room, passing monitorImage */}
         <Room
           characterRef={characterRef}
           monitorImage={monitorImage}
           handleComputerClick={handleComputerClick}
-          onMonitorPointerMove={handleMonitorPointerMove}
+          handleRedClick={handleRedClick}
         />
       </Canvas>
     </div>
