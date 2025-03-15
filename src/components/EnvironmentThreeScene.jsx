@@ -1,12 +1,3 @@
-
-
-
-// EnvironmentThreeScene.jsx
-// This file defines a complete React component that creates a dome environment
-// for a broadcasting simulation. The user is placed inside an inverted sphere (the dome)
-// with a panoramic studio background. It supports desktop first-person movement (via PointerLockControls)
-// and VR (via VRButton). Helper classes and functions are declared at the end.
-
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
@@ -327,6 +318,53 @@ export default function EnvironmentThreeScene() {
   }, []);
 
 
+  const addRobotWithHotspot = useCallback(() => {
+    const fbxLoader = new FBXLoader();
+    fbxLoader.setPath('/models/Robot/'); // Ajustează calea după nevoie
+    fbxLoader.load(
+      'robot.fbx', // Numele fișierului FBX al robotului
+      (robot) => {
+        robot.scale.set(0.5, 0.5, 0.5);
+        // Poziționează robotul între pupitru și ecranul de știri (ajustează după necesitate)
+        robot.position.set(-4, 0, -8);
+        robot.rotation.y = -Math.PI / 2;
+        robot.name = 'Robot';
+        sceneRef.current.add(robot);
+        robot.traverse((child) => {
+          if (child.isMesh) {
+            collidableMeshList.current.push(child);
+          }
+        });
+
+        // Crează hotspot-ul: un plan cu litera "E"
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = 'Bold 100px Arial';
+        ctx.fillStyle = 'red';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('E', canvas.width / 2, canvas.height / 2);
+        const hotspotTexture = new THREE.CanvasTexture(canvas);
+        const hotspotMaterial = new THREE.MeshBasicMaterial({ map: hotspotTexture, transparent: true });
+        const hotspotGeometry = new THREE.PlaneGeometry(1, 1);
+        const hotspot = new THREE.Mesh(hotspotGeometry, hotspotMaterial);
+        hotspot.name = 'Hotspot';
+        // Poziționează hotspot-ul deasupra capului robotului (ajustează Y după necesitate)
+        hotspot.position.set(10, 3, 4);
+        robot.add(hotspot);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading robot FBX:', error);
+      }
+    );
+  }, []);
+
+
+
   // 10. Add Studio Objects (with collidables)
   const addStudioObjects = useCallback(() => {
     const scene = sceneRef.current;
@@ -348,16 +386,21 @@ export default function EnvironmentThreeScene() {
 
     studioChairFBX();
 
-    // Screen (collidable)
-    const screen = new THREE.Mesh(
-      new THREE.PlaneGeometry(6, 4),
-      new THREE.MeshStandardMaterial({ color: 0x224488 })
-    );
-    screen.position.set(-8, 2, -10);
+    addRobotWithHotspot();
+
+
+    const textureLoader = new THREE.TextureLoader();
+    const screenTexture = textureLoader.load('/Imagini/weather.jpg'); // Asigură-te că fișierul există la această cale
+    const screenMaterial = new THREE.MeshBasicMaterial({ map: screenTexture });
+    const screenGeometry = new THREE.PlaneGeometry(8, 5);
+    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+    screen.position.set(-9, 2, -10);
     screen.rotation.y = Math.PI / 6;
     screen.name = 'News Screen';
     scene.add(screen);
     collidableMeshList.current.push(screen);
+
+
 
     // Studio Camera Placeholder (if needed, as extra collidable)
     const studioCam = new THREE.Mesh(
@@ -368,7 +411,7 @@ export default function EnvironmentThreeScene() {
     studioCam.name = 'Studio Camera Placeholder';
    
     collidableMeshList.current.push(studioCam);
-  }, [loadDeskModel, cameraObject, studioChairFBX]);
+  }, [loadDeskModel, cameraObject, studioChairFBX, addRobotWithHotspot]);
 
   // 11. Load Additional Models (for custom props)
   const loadModels = useCallback(() => {
@@ -398,7 +441,7 @@ export default function EnvironmentThreeScene() {
     );
     customModel.position.set(-3, 0.5, -4);
     customModel.name = 'Custom Model Placeholder';
-    scene.add(customModel);
+    
     collidableMeshList.current.push(customModel);
   }, []);
 
@@ -417,8 +460,8 @@ export default function EnvironmentThreeScene() {
     directionRef.current.normalize();
 
     // Movement parameters (adjust these values for your desired speed)
-    const acceleration = 100.0;
-    const speed = 1.5;
+    const acceleration = 50.0;
+    const speed = 0.2;
     if (moveForwardRef.current || moveBackwardRef.current) {
       velocityRef.current.z -= directionRef.current.z * acceleration * delta;
     }
