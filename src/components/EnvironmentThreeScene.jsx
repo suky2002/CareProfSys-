@@ -269,8 +269,8 @@ export default function EnvironmentThreeScene() {
   // ----------------------------
   const loadDeskModel = useCallback(() => {
     const mtlLoader = new MTLLoader();
-    mtlLoader.setPath('/models/'); // adjust path if needed
-    mtlLoader.load('', (materials) => {
+    mtlLoader.setPath('/Imagini/'); // adjust path if needed
+    mtlLoader.load('black_wood.jpeg', (materials) => {
       materials.preload();
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
@@ -278,7 +278,7 @@ export default function EnvironmentThreeScene() {
       objLoader.load(
         'studio.obj',
         (object) => {
-          object.scale.set(0.015, 0.01, 0.01);
+          object.scale.set(0.013, 0.01, 0.01);
           object.position.set(0, 0, -6);
           object.name = 'News Desk';
           sceneRef.current.add(object);
