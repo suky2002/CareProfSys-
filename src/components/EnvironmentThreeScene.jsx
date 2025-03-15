@@ -9,6 +9,8 @@ import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -25,7 +27,7 @@ export default function EnvironmentThreeScene() {
   const composerRef = useRef(null);
   const controlsRef = useRef(null);
   const guiRef = useRef(null);
-  // Array of collidable objects
+  // Array for collidable objects
   const collidableMeshList = useRef([]);
 
   // Ref for the chat log container ("Action Logs")
@@ -53,7 +55,7 @@ export default function EnvironmentThreeScene() {
   // Collision parameters
   // ----------------------------
   const cameraColliderRadius = 0.5;
-  const domeInnerRadius = 490; // Prevent leaving the dome
+  const domeInnerRadius = 490; // Limit for camera movement inside the dome
 
   // ----------------------------
   // Helper: add a chat message (Action Logs)
@@ -65,11 +67,9 @@ export default function EnvironmentThreeScene() {
   // ----------------------------
   // Helper: Point-and-Click Interaction (Raycasting)
   // ----------------------------
-  // (Make sure this is defined before its usage in initControls.)
   const pointAndClickInteraction = useCallback(() => {
     const raycaster = new THREE.Raycaster();
-    // Use center of screen (NDC coordinates 0, 0)
-    const mouse = new THREE.Vector2(0, 0);
+    const mouse = new THREE.Vector2(0, 0); // center of screen
     raycaster.setFromCamera(mouse, cameraRef.current);
     const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
     if (intersects.length > 0) {
@@ -79,7 +79,7 @@ export default function EnvironmentThreeScene() {
   }, []);
 
   // ----------------------------
-  // Auto-scroll Action Logs when new messages are added
+  // Auto-scroll Action Logs on new messages
   // ----------------------------
   useEffect(() => {
     if (chatLogRef.current) {
@@ -88,7 +88,7 @@ export default function EnvironmentThreeScene() {
   }, [chatMessages]);
 
   // ----------------------------
-  // Disable page scroll
+  // Disable page scroll for full-screen experience
   // ----------------------------
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -138,7 +138,7 @@ export default function EnvironmentThreeScene() {
     const width = container.clientWidth;
     const height = container.clientHeight;
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
-    // Fix vertical position to 1.8 (prevent looking below floor)
+    // Fix vertical (Y) position at 1.8 so you remain on the floor
     camera.position.set(0, 1.8, 5);
     cameraRef.current = camera;
   }, []);
@@ -265,28 +265,56 @@ export default function EnvironmentThreeScene() {
   }, [addChatMessage]);
 
   // ----------------------------
-  // 8. Add Studio Objects (with colliders)
+  // 8. Load Desk Model (OBJ + MTL)
+  // ----------------------------
+  const loadDeskModel = useCallback(() => {
+    const mtlLoader = new MTLLoader();
+    mtlLoader.setPath('/models/'); // adjust path if needed
+    mtlLoader.load('', (materials) => {
+      materials.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.setPath('/models/'); // adjust path if needed
+      objLoader.load(
+        'studio.obj',
+        (object) => {
+          object.scale.set(0.015, 0.01, 0.01);
+          object.position.set(0, 0, -6);
+          object.name = 'News Desk';
+          sceneRef.current.add(object);
+          // Register each mesh for collision detection
+          object.traverse((child) => {
+            if (child.isMesh) {
+              collidableMeshList.current.push(child);
+            }
+          });
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading desk model (OBJ/MTL):', error);
+        }
+      );
+    });
+  }, []);
+
+  // ----------------------------
+  // 9. Add Studio Objects (with collidables)
   // ----------------------------
   const addStudioObjects = useCallback(() => {
     const scene = sceneRef.current;
-    // Floor – position it lower so you only see the floor you stand on and the dome overhead
+    // Floor: large fixed plane so you never see the dome's underside.
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(1000, 1000),
       new THREE.MeshStandardMaterial({ color: 0x333333 })
     );
     floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -10;
+    floor.position.y = 0;
     floor.receiveShadow = true;
     scene.add(floor);
-    // News Desk (collidable)
-    const desk = new THREE.Mesh(
-      new THREE.BoxGeometry(4, 1, 2),
-      new THREE.MeshStandardMaterial({ color: 0x882222 })
-    );
-    desk.position.set(0, 0.5, -6);
-    desk.name = 'News Desk';
-    scene.add(desk);
-    collidableMeshList.current.push(desk);
+
+    // Replace placeholder News Desk with custom model via loadDeskModel()
+    loadDeskModel();
+
     // Screen (collidable)
     const screen = new THREE.Mesh(
       new THREE.PlaneGeometry(6, 4),
@@ -297,6 +325,7 @@ export default function EnvironmentThreeScene() {
     screen.name = 'News Screen';
     scene.add(screen);
     collidableMeshList.current.push(screen);
+
     // Studio Camera Placeholder (collidable)
     const studioCam = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.5, 0.5),
@@ -306,10 +335,10 @@ export default function EnvironmentThreeScene() {
     studioCam.name = 'Studio Camera';
     scene.add(studioCam);
     collidableMeshList.current.push(studioCam);
-  }, []);
+  }, [loadDeskModel]);
 
   // ----------------------------
-  // 9. Load External Models (for custom props) and add to collidables
+  // 10. Load Additional Models (for custom props)
   // ----------------------------
   const loadModels = useCallback(() => {
     const loader = new GLTFLoader();
@@ -325,14 +354,12 @@ export default function EnvironmentThreeScene() {
         sceneRef.current.add(gltf.scene);
       },
       undefined,
-      (error) => {
-        console.error('Error loading prop model:', error);
-      }
+      (error) => { console.error('Error loading prop model:', error); }
     );
   }, []);
 
   // ----------------------------
-  // 10. Place Custom Models (Placeholder) and add to collidables
+  // 11. Place Custom Models (Placeholder) and register collidables
   // ----------------------------
   const placeCustomModels = useCallback(() => {
     const scene = sceneRef.current;
@@ -347,24 +374,24 @@ export default function EnvironmentThreeScene() {
   }, []);
 
   // ----------------------------
-  // 11. Animation Loop with Collision Checking and Fixed Y Position
+  // 12. Animation Loop with Collision Checking and Fixed Y Position
   // ----------------------------
   const animate = useCallback(() => {
     requestAnimationFrame(animate);
-    const delta = 0.016; // Fixed timestep ~60 FPS
+    const delta = 0.016; // Fixed ~60 FPS
 
     // Dampen velocity
     velocityRef.current.x -= velocityRef.current.x * 10.0 * delta;
     velocityRef.current.z -= velocityRef.current.z * 10.0 * delta;
 
-    // Update direction from WASD flags
+    // Update movement direction based on WASD flags
     directionRef.current.z = (moveForwardRef.current ? 1 : 0) - (moveBackwardRef.current ? 1 : 0);
     directionRef.current.x = (moveRightRef.current ? 1 : 0) - (moveLeftRef.current ? 1 : 0);
     directionRef.current.normalize();
 
-    // Use moderate acceleration and speed (you can adjust these values)
-    const acceleration = 200.0;
-    const speed = 1.0;
+    // Movement parameters (adjust these values for your desired speed)
+    const acceleration = 100.0;
+    const speed = 1.5;
     if (moveForwardRef.current || moveBackwardRef.current) {
       velocityRef.current.z -= directionRef.current.z * acceleration * delta;
     }
@@ -382,12 +409,12 @@ export default function EnvironmentThreeScene() {
     // Compute potential new position
     const currentPos = cameraRef.current.position.clone();
     const potentialPos = currentPos.add(displacement);
-    // Clamp Y to 1.8 (fixed height)
+    // Clamp Y to a fixed height (1.8)
     potentialPos.y = 1.8;
 
-    // Prevent leaving the dome: only update if within domeInnerRadius
+    // Prevent leaving the dome: ensure within domeInnerRadius
     if (potentialPos.length() <= domeInnerRadius) {
-      // Check collisions with each collidable object
+      // Check collisions with collidable objects
       let collision = false;
       const cameraSphere = new THREE.Sphere(potentialPos, cameraColliderRadius);
       collidableMeshList.current.forEach((mesh) => {
@@ -405,7 +432,7 @@ export default function EnvironmentThreeScene() {
   }, []);
 
   // ----------------------------
-  // 12. Handle Window Resize
+  // 13. Handle Window Resize
   // ----------------------------
   const onWindowResize = useCallback(() => {
     const container = mountRef.current;
@@ -420,7 +447,7 @@ export default function EnvironmentThreeScene() {
   }, []);
 
   // ----------------------------
-  // 13. Initialization and Cleanup
+  // 14. Initialization and Cleanup
   // ----------------------------
   useEffect(() => {
     initScene();
@@ -463,7 +490,7 @@ export default function EnvironmentThreeScene() {
   ]);
 
   // ----------------------------
-  // 14. UI Overlay (Action Logs & Broadcast Level)
+  // 15. Render UI Overlay (Action Logs & Broadcast Level)
   // ----------------------------
   const renderOverlay = () => {
     return (
@@ -505,7 +532,7 @@ export default function EnvironmentThreeScene() {
   };
 
   // ----------------------------
-  // 15. Final Render
+  // 16. Final Render
   // ----------------------------
   return (
     <div style={{
@@ -573,7 +600,10 @@ export class BroadcastingInventory {
   }
   removeItem(name, quantity = 1) {
     const idx = this.items.findIndex(item => item.name === name);
-    if (idx !== -1) { this.items[idx].quantity -= quantity; if (this.items[idx].quantity <= 0) this.items.splice(idx, 1); }
+    if (idx !== -1) {
+      this.items[idx].quantity -= quantity;
+      if (this.items[idx].quantity <= 0) this.items.splice(idx, 1);
+    }
   }
   listItems() { return this.items.map(item => `${item.name} x${item.quantity}`).join(', '); }
 }
