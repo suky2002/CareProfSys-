@@ -306,7 +306,7 @@ export default function EnvironmentThreeScene() {
       canvas.width = 500;
       canvas.height = 128;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'rgba(255,255,255)';
+      ctx.fillStyle = 'rgba(255,255,255, 0.8)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'black';
       ctx.font = '18px Arial';
@@ -321,6 +321,12 @@ export default function EnvironmentThreeScene() {
       const oldBubble = robot.getObjectByName('ChatBubble');
       if (oldBubble) robot.remove(oldBubble);
       chatBubble.name = 'ChatBubble';
+
+      chatBubble.onClick = () => {
+        robot.remove(chatBubble);
+        addChatMessage("Robot: Mulțumesc pentru interacțiune!");
+      };
+
       robot.add(chatBubble);
   
       // Mută camera astfel încât să se focalizeze pe robot
@@ -391,7 +397,7 @@ export default function EnvironmentThreeScene() {
         ctx.fillText('E', canvas.width / 2, canvas.height / 2);
         const hotspotTexture = new THREE.CanvasTexture(canvas);
         const hotspotMaterial = new THREE.MeshBasicMaterial({ map: hotspotTexture, transparent: true });
-        const hotspotGeometry = new THREE.PlaneGeometry(1, 1);
+        const hotspotGeometry = new THREE.PlaneGeometry(2, 2);
         const hotspot = new THREE.Mesh(hotspotGeometry, hotspotMaterial);
         hotspot.name = 'Hotspot';
         // Poziționează hotspot-ul deasupra capului robotului (ajustează Y după necesitate)
