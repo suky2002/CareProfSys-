@@ -1,3 +1,6 @@
+
+
+
 // EnvironmentThreeScene.jsx
 // This file defines a complete React component that creates a dome environment
 // for a broadcasting simulation. The user is placed inside an inverted sphere (the dome)
@@ -11,15 +14,14 @@ import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GUI } from 'dat.gui';
 
 export default function EnvironmentThreeScene() {
-  // ----------------------------
   // Refs for THREE.js objects and DOM elements
-  // ----------------------------
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
@@ -33,9 +35,7 @@ export default function EnvironmentThreeScene() {
   // Ref for the chat log container ("Action Logs")
   const chatLogRef = useRef(null);
 
-  // ----------------------------
   // Movement flags and vectors (WASD)
-  // ----------------------------
   const moveForwardRef = useRef(false);
   const moveBackwardRef = useRef(false);
   const moveLeftRef = useRef(false);
@@ -43,30 +43,22 @@ export default function EnvironmentThreeScene() {
   const velocityRef = useRef(new THREE.Vector3(0, 0, 0));
   const directionRef = useRef(new THREE.Vector3(0, 0, 0));
 
-  // ----------------------------
   // UI State
-  // ----------------------------
   const [chatMessages, setChatMessages] = useState([]);
   const [broadcastLevel, setBroadcastLevel] = useState(1);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // ----------------------------
   // Collision parameters
-  // ----------------------------
   const cameraColliderRadius = 0.5;
   const domeInnerRadius = 490; // Limit for camera movement inside the dome
 
-  // ----------------------------
   // Helper: add a chat message (Action Logs)
-  // ----------------------------
   const addChatMessage = useCallback((msg) => {
     setChatMessages((prev) => [...prev, msg]);
   }, []);
 
-  // ----------------------------
   // Helper: Point-and-Click Interaction (Raycasting)
-  // ----------------------------
   const pointAndClickInteraction = useCallback(() => {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(0, 0); // center of screen
@@ -78,29 +70,25 @@ export default function EnvironmentThreeScene() {
     return 'Nothing to interact with.';
   }, []);
 
-  // ----------------------------
+
   // Auto-scroll Action Logs on new messages
-  // ----------------------------
   useEffect(() => {
     if (chatLogRef.current) {
       chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight;
     }
   }, [chatMessages]);
 
-  // ----------------------------
   // Disable page scroll for full-screen experience
-  // ----------------------------
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = 'auto'; };
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, []);
 
-  // ----------------------------
   // 1. Initialize Scene (with Dome Background)
-  // ----------------------------
   const initScene = useCallback(() => {
     const scene = new THREE.Scene();
-    // Create an inverted sphere ("dome") with a panoramic studio background.
     const domeGeometry = new THREE.SphereGeometry(500, 60, 40);
     domeGeometry.scale(-1, 1, 1);
     const textureLoader = new THREE.TextureLoader();
@@ -130,22 +118,17 @@ export default function EnvironmentThreeScene() {
     sceneRef.current = scene;
   }, []);
 
-  // ----------------------------
   // 2. Initialize Camera
-  // ----------------------------
   const initCamera = useCallback(() => {
     const container = mountRef.current;
     const width = container.clientWidth;
     const height = container.clientHeight;
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
-    // Fix vertical (Y) position at 1.8 so you remain on the floor
     camera.position.set(0, 1.8, 5);
     cameraRef.current = camera;
   }, []);
 
-  // ----------------------------
   // 3. Initialize Renderer & VRButton
-  // ----------------------------
   const initRenderer = useCallback(() => {
     const container = mountRef.current;
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -157,9 +140,7 @@ export default function EnvironmentThreeScene() {
     document.body.appendChild(VRButton.createButton(renderer));
   }, []);
 
-  // ----------------------------
   // 4. Initialize Controls & Keyboard Input
-  // ----------------------------
   const initControls = useCallback(() => {
     const camera = cameraRef.current;
     const domElement = rendererRef.current.domElement;
@@ -218,9 +199,7 @@ export default function EnvironmentThreeScene() {
     };
   }, [addChatMessage, pointAndClickInteraction]);
 
-  // ----------------------------
   // 5. Initialize Lights
-  // ----------------------------
   const initLights = useCallback(() => {
     const scene = sceneRef.current;
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
@@ -230,9 +209,7 @@ export default function EnvironmentThreeScene() {
     scene.add(directionalLight);
   }, []);
 
-  // ----------------------------
   // 6. Initialize Post-Processing (Bloom)
-  // ----------------------------
   const initPostProcessing = useCallback(() => {
     const composer = new EffectComposer(rendererRef.current);
     const renderPass = new RenderPass(sceneRef.current, cameraRef.current);
@@ -247,9 +224,7 @@ export default function EnvironmentThreeScene() {
     composerRef.current = composer;
   }, []);
 
-  // ----------------------------
   // 7. Initialize GUI (dat.gui)
-  // ----------------------------
   const initGUI = useCallback(() => {
     const gui = new GUI();
     guiRef.current = gui;
@@ -264,17 +239,17 @@ export default function EnvironmentThreeScene() {
     studioFolder.open();
   }, [addChatMessage]);
 
-  // ----------------------------
   // 8. Load Desk Model (OBJ + MTL)
-  // ----------------------------
   const loadDeskModel = useCallback(() => {
     const mtlLoader = new MTLLoader();
-    mtlLoader.setPath('/Imagini/'); // adjust path if needed
-    mtlLoader.load('black_wood.jpeg', (materials) => {
+    mtlLoader.setPath('/Imagini/'); // Adjust the path as needed
+    // Replace 'black_wood.jpeg' with the correct MTL file for your desk model
+    mtlLoader.load('black_wood.mtl', (materials) => {
       materials.preload();
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
-      objLoader.setPath('/models/'); // adjust path if needed
+      objLoader.setPath('/models/'); // Adjust path as needed
+      // Replace 'studio.obj' with your desk model's OBJ file name
       objLoader.load(
         'studio.obj',
         (object) => {
@@ -282,7 +257,6 @@ export default function EnvironmentThreeScene() {
           object.position.set(0, 0, -6);
           object.name = 'News Desk';
           sceneRef.current.add(object);
-          // Register each mesh for collision detection
           object.traverse((child) => {
             if (child.isMesh) {
               collidableMeshList.current.push(child);
@@ -297,9 +271,63 @@ export default function EnvironmentThreeScene() {
     });
   }, []);
 
-  // ----------------------------
-  // 9. Add Studio Objects (with collidables)
-  // ----------------------------
+  // 9. Load Camera Model (OBJ + MTL)
+  const cameraObject = useCallback(() => {
+    const mtlLoader = new MTLLoader();
+    mtlLoader.setPath('/models/'); // Adjust path as needed
+    mtlLoader.load('camera.mtl', (materials) => {
+      materials.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.setPath('/models/'); // Adjust path as needed
+      objLoader.load(
+        'uploads_files_2423186_old+school+camera+nd+projector+obj+file.obj', // Replace with your camera model's OBJ file name
+        (object) => {
+          object.scale.set(0.4, 0.3, 0.4);
+          object.position.set(5, 0, 1);
+          object.rotation.y = (Math.PI / 2);
+          object.name = 'Studio Camera Placeholder';
+          sceneRef.current.add(object);
+          object.traverse((child) => {
+            if (child.isMesh) {
+              collidableMeshList.current.push(child);
+            }
+          });
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading camera model (OBJ/MTL):', error);
+        }
+      );
+    });
+  }, []);
+
+  const studioChairFBX = useCallback(() => {
+      const fbxLoader = new FBXLoader();
+      fbxLoader.setPath('/models/Desk Chair/'); // Adjust path as needed
+      fbxLoader.load(
+        'Desk Chair.fbx', // Replace with your camera model's OBJ file name
+        (object) => {
+          object.scale.set(1.5, 1.5, 2);
+          object.position.set(0, 0, -6);
+          object.rotation.y = -(Math.PI);
+          object.name = 'Studio Chair';
+          sceneRef.current.add(object);
+          object.traverse((child) => {
+            if (child.isMesh) {
+              collidableMeshList.current.push(child);
+            }
+          });
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading chair model (FBX):', error);
+        }
+      );
+  }, []);
+
+
+  // 10. Add Studio Objects (with collidables)
   const addStudioObjects = useCallback(() => {
     const scene = sceneRef.current;
     // Floor: large fixed plane so you never see the dome's underside.
@@ -312,8 +340,13 @@ export default function EnvironmentThreeScene() {
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // Replace placeholder News Desk with custom model via loadDeskModel()
+    // Load the desk model to replace the placeholder
     loadDeskModel();
+
+    // Load the camera model
+    cameraObject();
+
+    studioChairFBX();
 
     // Screen (collidable)
     const screen = new THREE.Mesh(
@@ -326,20 +359,18 @@ export default function EnvironmentThreeScene() {
     scene.add(screen);
     collidableMeshList.current.push(screen);
 
-    // Studio Camera Placeholder (collidable)
+    // Studio Camera Placeholder (if needed, as extra collidable)
     const studioCam = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.5, 0.5),
       new THREE.MeshStandardMaterial({ color: 0x222222 })
     );
     studioCam.position.set(8, 1.5, -8);
-    studioCam.name = 'Studio Camera';
-    scene.add(studioCam);
+    studioCam.name = 'Studio Camera Placeholder';
+   
     collidableMeshList.current.push(studioCam);
-  }, [loadDeskModel]);
+  }, [loadDeskModel, cameraObject, studioChairFBX]);
 
-  // ----------------------------
-  // 10. Load Additional Models (for custom props)
-  // ----------------------------
+  // 11. Load Additional Models (for custom props)
   const loadModels = useCallback(() => {
     const loader = new GLTFLoader();
     loader.load(
@@ -358,9 +389,7 @@ export default function EnvironmentThreeScene() {
     );
   }, []);
 
-  // ----------------------------
-  // 11. Place Custom Models (Placeholder) and register collidables
-  // ----------------------------
+  // 12. Place Custom Models (Placeholder) and register collidables
   const placeCustomModels = useCallback(() => {
     const scene = sceneRef.current;
     const customModel = new THREE.Mesh(
@@ -373,12 +402,10 @@ export default function EnvironmentThreeScene() {
     collidableMeshList.current.push(customModel);
   }, []);
 
-  // ----------------------------
-  // 12. Animation Loop with Collision Checking and Fixed Y Position
-  // ----------------------------
+  // 13. Animation Loop with Collision Checking and Fixed Y Position
   const animate = useCallback(() => {
     requestAnimationFrame(animate);
-    const delta = 0.016; // Fixed ~60 FPS
+    const delta = 0.016; // Fixed timestep ~60 FPS
 
     // Dampen velocity
     velocityRef.current.x -= velocityRef.current.x * 10.0 * delta;
@@ -431,9 +458,7 @@ export default function EnvironmentThreeScene() {
     rendererRef.current.render(sceneRef.current, cameraRef.current);
   }, []);
 
-  // ----------------------------
-  // 13. Handle Window Resize
-  // ----------------------------
+  // 14. Handle Window Resize
   const onWindowResize = useCallback(() => {
     const container = mountRef.current;
     const width = container.clientWidth;
@@ -441,14 +466,9 @@ export default function EnvironmentThreeScene() {
     cameraRef.current.aspect = width / height;
     cameraRef.current.updateProjectionMatrix();
     rendererRef.current.setSize(width, height);
-    if (composerRef.current) {
-      composerRef.current.setSize(width, height);
-    }
   }, []);
 
-  // ----------------------------
-  // 14. Initialization and Cleanup
-  // ----------------------------
+  // 15. Initialization and Cleanup
   useEffect(() => {
     initScene();
     initCamera();
@@ -489,9 +509,7 @@ export default function EnvironmentThreeScene() {
     animate,
   ]);
 
-  // ----------------------------
-  // 15. Render UI Overlay (Action Logs & Broadcast Level)
-  // ----------------------------
+  // 16. UI Overlay (Action Logs & Broadcast Level)
   const renderOverlay = () => {
     return (
       <>
@@ -531,9 +549,7 @@ export default function EnvironmentThreeScene() {
     );
   };
 
-  // ----------------------------
-  // 16. Final Render
-  // ----------------------------
+  // 17. Final Render
   return (
     <div style={{
       position: 'fixed',
