@@ -56,6 +56,11 @@ export default function EnvironmentThreeScene() {
     raycaster.setFromCamera(mouse, cameraRef.current);
     const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
     if (intersects.length > 0) {
+      const target = intersects[0].object;
+      if (target.userData && target.userData.message) {
+        showRobotInstructions();
+        return target.userData.message;
+      }
       return `Interacted with ${intersects[0].object.name || 'an object'}.`;
     }
     return 'Nothing to interact with.';
@@ -274,7 +279,7 @@ export default function EnvironmentThreeScene() {
       objLoader.load(
         'uploads_files_2423186_old+school+camera+nd+projector+obj+file.obj', // Replace with your camera model's OBJ file name
         (object) => {
-          object.scale.set(0.4, 0.3, 0.4);
+          object.scale.set(0.2, 0.2, 0.4);
           object.position.set(5, 0, 1);
           object.rotation.y = (Math.PI / 2);
           object.name = 'Studio Camera Placeholder';
@@ -292,6 +297,43 @@ export default function EnvironmentThreeScene() {
       );
     });
   }, []);
+
+  const showRobotInstructions = useCallback(() => {
+    const robot = sceneRef.current.getObjectByName('Robot');
+    if (robot) {
+      // Creează o bulă de chat folosind un sprite
+      const canvas = document.createElement('canvas');
+      canvas.width = 500;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgba(255,255,255)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'black';
+      ctx.font = '18px Arial';
+      ctx.fillText("Acestea sunt instrucțiunile robotului!", 10, 64);
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+      const chatBubble = new THREE.Sprite(spriteMaterial);
+      chatBubble.scale.set(4, 2, 1);
+      // Plasează bulă de chat deasupra robotului
+      chatBubble.position.set(4, 3, -5);
+      // Dacă există deja o bulă, o înlocuiește
+      const oldBubble = robot.getObjectByName('ChatBubble');
+      if (oldBubble) robot.remove(oldBubble);
+      chatBubble.name = 'ChatBubble';
+      robot.add(chatBubble);
+  
+      // Mută camera astfel încât să se focalizeze pe robot
+      const newCamPos = robot.position.clone().add(new THREE.Vector3(3, 2, 3));
+      cameraRef.current.position.copy(newCamPos);
+      cameraRef.current.lookAt(robot.position);
+  
+      addChatMessage("Robot: Acestea sunt instrucțiunile mele!");
+    }
+  }, [addChatMessage]);
+  
+  
+  
 
   const studioChairFBX = useCallback(() => {
       const fbxLoader = new FBXLoader();
@@ -353,7 +395,9 @@ export default function EnvironmentThreeScene() {
         const hotspot = new THREE.Mesh(hotspotGeometry, hotspotMaterial);
         hotspot.name = 'Hotspot';
         // Poziționează hotspot-ul deasupra capului robotului (ajustează Y după necesitate)
-        hotspot.position.set(10, 3, 4);
+        hotspot.position.set(3, 2, 0);
+        hotspot.rotateY(Math.PI / 2);
+        hotspot.userData.message = 'Interact with Robot';
         robot.add(hotspot);
       },
       undefined,
