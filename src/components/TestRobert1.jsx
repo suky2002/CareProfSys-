@@ -389,7 +389,7 @@ function CameraTeleportButton({ setFreeCamera }) {
 // BOARD MODEL - PUS PE MASA2
 // =============================
 function BoardModel() {
-  // Încărcăm materialele din Board.mtl din folderul "Imagini"
+  // Încărcăm materialele din BoardV2.mtl din folderul "Imagini"
   const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
   materials.preload();
   // Încărcăm modelul OBJ și setăm materialele
@@ -397,16 +397,142 @@ function BoardModel() {
     loader.setMaterials(materials);
   });
 
-  // Poziționăm modelul pe masa2; ajustează poziția și scara după preferință
   return (
-    <primitive
-      object={boardObj}
-      position={[-1, -3, -5]}
-      scale={[0.3, 0.3, 0.3]}
-      rotation={[3, 0, 3.15]}
-    />
+    <group>
+      {/* Modelul BoardV2 */}
+      <primitive
+        object={boardObj}
+        position={[-1, -3, -5]}
+        scale={[0.3, 0.3, 0.3]}
+        rotation={[3, 0, 3.15]}
+      />
+
+      {/* Potentiometru */}
+      <mesh
+        position={[-5, -9, -37]}
+        rotation={[3, 0, 0]}
+        scale={[2, 2, 2]}
+        onClick={() => alert("Potentiometru")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* US */}
+      <mesh
+        position={[-4, -11.5, -37]}
+        rotation={[3, 0, 0]}
+        scale={[4, 2, 1]}
+        onClick={() => alert("US")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* Arduino */}
+      <mesh
+        position={[1, -11, -37]}
+        rotation={[3, 0, 0]}
+        scale={[4, 5, 1]}
+        onClick={() => alert("Arduino")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* LCD */}
+      <mesh
+        position={[0, -6.5, -37]}
+        rotation={[3, 0, 0]}
+        scale={[6, 3, 1]}
+        onClick={() => alert("LCD")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* LSR */}
+      <mesh
+        position={[-2, -9.5, -37]}
+        rotation={[3, 0, 0]}
+        scale={[1, 1, 1]}
+        onClick={() => alert("LSR")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* Nano */}
+      <mesh
+        position={[-5, -3, -37]}
+        rotation={[3, 0, 0]}
+        scale={[3.2, 2, 1]}
+        onClick={() => alert("Nano")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* Joystick */}
+      <mesh
+        position={[-1, -3, -37]}
+        rotation={[3, 0, 0]}
+        scale={[3, 6, 3]}
+        onClick={() => alert("Joystick")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* ESP32 */}
+      <mesh
+        position={[2.8, -3, -37]}
+        rotation={[3, 0, 0]}
+        scale={[3, 3, 3]}
+        onClick={() => alert("ESP32")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* 7 Segment */}
+      <mesh
+        position={[6, -3, -37]}
+        rotation={[3, 0, 0]}
+        scale={[2, 2, 2]}
+        onClick={() => alert("7 Segment")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* LED */}
+      <mesh
+        position={[6, -6, -37]}
+        rotation={[3, 0, 0]}
+        scale={[2, 2, 2]}
+        onClick={() => alert("LED")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+
+      {/* Servomotor */}
+      <mesh
+        position={[4.5, -10.5, -37]}
+        rotation={[3, 0, 0]}
+        scale={[3, 3, 3]}
+        onClick={() => alert("Servomotor")}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial transparent opacity={0} />
+      </mesh>
+    </group>
   );
 }
+
+
+
 
 // =============================
 // ROOM
