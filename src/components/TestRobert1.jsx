@@ -229,7 +229,7 @@ const Ground = ({ setTargetPosition }) => (
       setTargetPosition(e.point.clone());
     }}
   >
-    <planeGeometry args={[50, 50]} />
+    <planeGeometry args={[0, 0]} />
     <meshStandardMaterial color="green" />
   </mesh>
 );
@@ -378,9 +378,9 @@ function CameraTeleportButton({ setFreeCamera }) {
   };
 
   return (
-    <mesh position={[1.8, 2, -5]} onPointerDown={handlePointerDown}>
-      <boxGeometry args={[0.5, 0.5, 0.5]} />
-      <meshStandardMaterial color="green" />
+    <mesh position={[7.7, 1.1, 4.5]} onPointerDown={handlePointerDown}>
+      <boxGeometry args={[1, 0.5, 0.5]} />
+      <meshStandardMaterial color="white" />
     </mesh>
   );
 }
@@ -402,10 +402,13 @@ function BoardModel() {
       {/* Modelul BoardV2 */}
       <primitive
         object={boardObj}
-        position={[-1, -3, -5]}
+        position={[-1, -3, -8]}
         scale={[0.3, 0.3, 0.3]}
         rotation={[3, 0, 3.15]}
       />
+
+
+
 
       {/* Potentiometru */}
       <mesh
