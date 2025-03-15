@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { Sky, useGLTF, Text, useFBX } from '@react-three/drei';
+import { Sky, useGLTF, Text } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { TextureLoader } from 'three';
 
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
-
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
   useEffect(() => {
@@ -158,7 +158,9 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
   );
 });
 
-// Modificare: CameraFollow nu va face update dacă freeCamera e activă
+// =============================
+// CAMERA URMĂRIRE
+// =============================
 const CameraFollow = ({ characterRef, freeCamera }) => {
   const { camera, gl } = useThree();
   const zoomRef = useRef(5);
@@ -175,7 +177,7 @@ const CameraFollow = ({ characterRef, freeCamera }) => {
   }, [gl.domElement]);
 
   useFrame(() => {
-    if (freeCamera) return; // Nu actualizează camera când free camera este activă
+    if (freeCamera) return; // Nu actualizează camera când free camera e activă
     if (characterRef.current) {
       const characterPosition = characterRef.current.position.clone();
       const forward = new THREE.Vector3();
@@ -196,7 +198,9 @@ const CameraFollow = ({ characterRef, freeCamera }) => {
   return null;
 };
 
-// Componentă pentru ascultarea tastei "p" și revenirea la urmărirea personajului
+// =============================
+// TASTA "P" => REVENIRE CAMERA URMĂRIRE
+// =============================
 function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
   const { camera } = useThree();
   useEffect(() => {
@@ -205,7 +209,6 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
         setFreeCamera(false);
         if (characterRef.current) {
           const characterPosition = characterRef.current.position.clone();
-          // Poziționăm camera la un offset față de personaj (ex.: ușor deasupra și în spate)
           camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 3, -5)));
           camera.lookAt(characterPosition);
         }
@@ -234,7 +237,6 @@ const Ground = ({ setTargetPosition }) => (
 // =============================
 // 2. OPTIONAL "BOOKSHELF" (BOXES)
 // =============================
-
 function BookShelf(props) {
   return (
     <group {...props}>
@@ -268,7 +270,6 @@ function BookShelf(props) {
 // =============================
 // 3. SHELVES OBJ COMPONENT
 // =============================
-
 function ShelvesObj(props) {
   const shelvesObj = useLoader(OBJLoader, '/models/shelves.obj');
   shelvesObj.traverse((child) => {
@@ -282,7 +283,6 @@ function ShelvesObj(props) {
 // =============================
 // 4. ROOM (with blue wall)
 // =============================
-
 function createBoxCollider(center, size) {
   const half = new THREE.Vector3(size[0] / 2, size[1] / 2, size[2] / 2);
   const min = new THREE.Vector3(center[0] - half.x, center[1] - half.y, center[2] - half.z);
@@ -340,30 +340,9 @@ const Computer = (props) => {
   return <primitive object={computerObj} {...props} />;
 };
 
-// COMPONENT: Scaun cu animația "Seated Idle"
-const ChairWithSeatedIdle = (props) => {
-  const chairModel = useLoader(OBJLoader, '/models/0139.obj');
-  const seatedModel = useFBX('/models/Seated Idle.fbx');
-
-  chairModel.traverse((child) => {
-    if (child.isMesh) {
-      child.material = new THREE.MeshStandardMaterial({ color: 'brown' });
-    }
-  });
-
-  seatedModel.position.set(0, 0.5, 0);
-  seatedModel.scale.set(0.01, 0.01, 0.01);
-
-  return (
-    <group {...props}>
-      <primitive object={chairModel} />
-      <primitive object={seatedModel} />
-    </group>
-  );
-};
-
-// COMPONENT: Teleportare cu personajul (buton roșu)
-// (Rămâne neschimbat față de versiunea anterioară)
+// =============================
+// TELEPORTARE CU PERSONAJUL (roșu)
+// =============================
 function TeleportButton({ characterRef }) {
   const { camera } = useThree();
 
@@ -371,8 +350,8 @@ function TeleportButton({ characterRef }) {
     e.stopPropagation();
     if (characterRef.current) {
       characterRef.current.position.set(50, 0, 50);
-      camera.position.set(50, 50, 50);
-      camera.lookAt(characterRef.current.position);
+      camera.position.set(60, 50, 50);
+      camera.lookAt(new THREE.Vector3(20, 0, 0));
     }
   };
 
@@ -384,15 +363,17 @@ function TeleportButton({ characterRef }) {
   );
 }
 
-// COMPONENT: Teleportare doar a camerei (buton verde)
+// =============================
+// TELEPORTARE DOAR CAMERA (verde)
+// =============================
 function CameraTeleportButton({ setFreeCamera }) {
   const { camera } = useThree();
 
   const handlePointerDown = (e) => {
     e.stopPropagation();
-    // Teleportăm doar camera la o locație fixă
-    camera.position.set(50, 50, 50);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    // Mutăm camera mai jos
+    camera.position.set(0, -10, -50);
+    camera.lookAt(new THREE.Vector3(0, -10, 0));
     setFreeCamera(true);
   };
 
@@ -404,6 +385,32 @@ function CameraTeleportButton({ setFreeCamera }) {
   );
 }
 
+// =============================
+// BOARD MODEL - PUS PE MASA2
+// =============================
+function BoardModel() {
+  // Încărcăm materialele din Board.mtl din folderul "Imagini"
+  const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
+  materials.preload();
+  // Încărcăm modelul OBJ și setăm materialele
+  const boardObj = useLoader(OBJLoader, '/models/BoardV2.obj', (loader) => {
+    loader.setMaterials(materials);
+  });
+
+  // Poziționăm modelul pe masa2; ajustează poziția și scara după preferință
+  return (
+    <primitive
+      object={boardObj}
+      position={[-1, -3, -5]}
+      scale={[0.3, 0.3, 0.3]}
+      rotation={[3, 0, 3.15]}
+    />
+  );
+}
+
+// =============================
+// ROOM
+// =============================
 const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
@@ -491,9 +498,6 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
         <meshStandardMaterial color="#654321" />
       </mesh>
 
-      {/* Scaunul cu "Seated Idle" lângă table2 */}
-      <ChairWithSeatedIdle position={[8, 1, 7]} />
-
       {/* MONITOR */}
       <Monitor monitorImage={monitorImage} />
 
@@ -509,10 +513,10 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
         <meshStandardMaterial color="red" />
       </mesh>
 
-      {/* Teleportare cu personajul (buton roșu) */}
+      {/* Teleportare cu personajul (roșu) */}
       <TeleportButton characterRef={characterRef} />
 
-      {/* Teleportare doar a camerei (buton verde) */}
+      {/* Teleportare doar a camerei (verde) */}
       <CameraTeleportButton setFreeCamera={setFreeCamera} />
 
       {/* COMPUTER BUTTON (blue) */}
@@ -547,6 +551,9 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
       {/* SHELVES.OBJ */}
       <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
+
+      {/* BOARD MODEL PUS PE MASA2 */}
+      <BoardModel />
     </group>
   );
 };
@@ -554,7 +561,6 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 // =============================
 // 5. MAIN ENVIRONMENT
 // =============================
-
 const Environment = () => {
   const keys = useKeyControls();
   const characterRef = useRef();
@@ -596,10 +602,8 @@ const Environment = () => {
           clearTarget={clearTarget}
         />
         <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
-        {/* Componenta care ascultă tasta "p" pentru a reveni la urmărire */}
         <CameraReturnHandler characterRef={characterRef} freeCamera={freeCamera} setFreeCamera={setFreeCamera} />
         <Ground setTargetPosition={setTargetPosition} />
-
         <Room
           characterRef={characterRef}
           monitorImage={monitorImage}
