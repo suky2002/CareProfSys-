@@ -355,12 +355,7 @@ function TeleportButton({ characterRef }) {
     }
   };
 
-  return (
-    <mesh position={[1.8, 2, -7]} onPointerDown={handlePointerDown}>
-      <boxGeometry args={[0.5, 0.5, 0.5]} />
-      <meshStandardMaterial color="red" />
-    </mesh>
-  );
+ 
 }
 
 // =============================
