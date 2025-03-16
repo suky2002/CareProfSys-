@@ -641,6 +641,20 @@ export default function EnvironmentThreeScene() {
             <div key={i} style={{ marginBottom: '5px' }}>{msg}</div>
           ))}
         </div>
+        <div style={{ position: 'absolute',
+          bottom: 20,
+          right: 20,
+          width: 320,
+          height: 220,
+          background: 'rgba(0,0,0,0.7)',
+          color: 'white',
+          padding: '10px',
+          borderRadius: '8px',
+          zIndex: 2,
+          overflowY: 'auto',
+          fontSize: '0.9rem'}}> 
+        <TaskSystem onAllTasksCompleted={() => console.log("Toate taskurile sunt complete!")} />
+      </div>   
       </>
     );
   };
@@ -672,8 +686,6 @@ export default function EnvironmentThreeScene() {
       )}
       {renderOverlay()}
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
-      
-    <TaskSystem onAllTasksCompleted={() => console.log("Toate taskurile sunt complete!")} />
     </div>
   );
 }
