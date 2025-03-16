@@ -10,6 +10,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GUI } from 'dat.gui';
+import { TaskSystem, useTaskSystem } from './TaskSystem';
 
 export default function EnvironmentThreeScene() {
   // Refs for THREE.js objects and DOM elements
@@ -299,6 +300,7 @@ export default function EnvironmentThreeScene() {
   }, []);
 
   const showRobotInstructions = useCallback(() => {
+    const {completeTask} = useTaskSystem();
     const robot = sceneRef.current.getObjectByName('Robot');
     if (robot) {
       // Creează o bulă de chat folosind un sprite
@@ -335,6 +337,7 @@ export default function EnvironmentThreeScene() {
       cameraRef.current.lookAt(robot.position);
   
       addChatMessage("Robot: Acestea sunt instrucțiunile mele!");
+      completeTask(5);
     }
   }, [addChatMessage]);
   
@@ -669,6 +672,8 @@ export default function EnvironmentThreeScene() {
       )}
       {renderOverlay()}
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+      
+    <TaskSystem onAllTasksCompleted={() => console.log("Toate taskurile sunt complete!")} />
     </div>
   );
 }
@@ -906,6 +911,7 @@ export class BroadcastingInteractionSystem {
     const intersects = raycaster.intersectObjects(this.scene.children, true);
     if (intersects.length > 0 && intersects[0].distance < this.range) {
       return `Interacted with ${intersects[0].object.name}`;
+      taskSystem.completeTask(6);
     }
     return 'Nothing to interact with';
   }
@@ -990,5 +996,6 @@ export class BroadcastingCollisionSystem {
     return collisions;
   }
 }
+
 
 
