@@ -68,40 +68,56 @@ export default function EnvironmentThreeScene() {
   const showRobotInstructions = useCallback(() => {
     const robot = sceneRef.current.getObjectByName('Robot');
     if (robot) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 500;
-      canvas.height = 128;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'rgba(255,255,255, 0.8)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'black';
-      ctx.font = '18px Arial';
-      ctx.fillText("Acestea sunt instrucțiunile robotului!", 10, 64);
-      const texture = new THREE.CanvasTexture(canvas);
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-      const chatBubble = new THREE.Sprite(spriteMaterial);
-      chatBubble.scale.set(4, 2, 1);
-      chatBubble.position.set(4, 3, -5);
-      
-      const oldBubble = robot.getObjectByName('ChatBubble');
-      if (oldBubble) robot.remove(oldBubble);
-      chatBubble.name = 'ChatBubble';
+        const canvas = document.createElement('canvas');
+        canvas.width = 500;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        
+        // Make background more visible
+        ctx.fillStyle = 'rgba(0,0,0,0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Add instructions text
+        ctx.fillStyle = 'white';
+        ctx.font = '18px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText("Acestea sunt instrucțiunile robotului!", canvas.width/2, 40);
+        ctx.font = '16px Arial';
+        ctx.fillText("Apasă tasta 'E' din nou pentru a închide.", canvas.width/2, 80);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+        const chatBubble = new THREE.Sprite(spriteMaterial);
+        chatBubble.scale.set(4, 2, 1);
+        chatBubble.position.set(3, 2.5, 0); // Adjusted height
+        
+        const oldBubble = robot.getObjectByName('ChatBubble');
+        if (oldBubble) robot.remove(oldBubble);
+        chatBubble.name = 'ChatBubble';
 
-      chatBubble.onClick = () => {
-        robot.remove(chatBubble);
-        addChatMessage("Robot: Mulțumesc pentru interacțiune!");
-      };
-
-      robot.add(chatBubble);
+        collidableMeshList.current.push(chatBubble);
+        robot.add(chatBubble);
   
-      const newCamPos = robot.position.clone().add(new THREE.Vector3(3, 2, 3));
-      cameraRef.current.position.copy(newCamPos);
-      cameraRef.current.lookAt(robot.position);
+        // Position camera directly in front of robot with better angle
+        const robotPos = robot.position.clone();
+        const distance = 3; // Closer to robot
+        const height = 1.8; // Eye level
+        
+        // Calculate position in front of robot considering its rotation
+        const angle = robot.rotation.y;
+        const newCamPos = new THREE.Vector3(
+            robotPos.x + Math.sin(angle) * distance,
+            height,
+            robotPos.z + Math.cos(angle) * distance
+        );
+        
+        cameraRef.current.position.copy(newCamPos);
+        cameraRef.current.lookAt(new THREE.Vector3(robotPos.x, height, robotPos.z));
   
-      addChatMessage("Robot: Acestea sunt instrucțiunile mele!");
-      handleTaskCompletion(5); // Use handleTaskCompletion instead of completeTask directly
+        addChatMessage("Robot: Acestea sunt instrucțiunile mele! Apasă E pentru a închide.");
+        handleTaskCompletion(5);
     }
-  }, [addChatMessage, handleTaskCompletion]);
+}, [addChatMessage, handleTaskCompletion]);
 
   const checkTaskCompletion = useCallback((interactedObject) => {
     switch(interactedObject.name) {
@@ -125,20 +141,46 @@ export default function EnvironmentThreeScene() {
   // Helper: Point-and-Click Interaction (Raycasting)
   const pointAndClickInteraction = useCallback(() => {
     const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2(0, 0); // center of screen
+    const mouse = new THREE.Vector2(0, 0);
     raycaster.setFromCamera(mouse, cameraRef.current);
     const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
+    
     if (intersects.length > 0) {
-      const target = intersects[0].object;
-      checkTaskCompletion(target);
-      if (target.userData && target.userData.message) {
-        showRobotInstructions();
-        return target.userData.message;
-      }
-      return `Interacted with ${intersects[0].object.name || 'an object'}.`;
+        const target = intersects[0].object;
+        
+        // Check if we clicked on the chat bubble
+        if (target.name === 'ChatBubble') {
+            const robot = sceneRef.current.getObjectByName('Robot');
+            if (robot) {
+                const bubble = robot.getObjectByName('ChatBubble');
+                if (bubble) {
+                    robot.remove(bubble);
+                    collidableMeshList.current = collidableMeshList.current.filter(obj => obj !== bubble);
+                    addChatMessage("Robot: Mulțumesc pentru interacțiune!");
+                    
+                    // Re-lock controls if they were unlocked
+                    if (!controlsRef.current.isLocked) {
+                        controlsRef.current.lock();
+                    }
+                    
+                    return "Closed robot instructions";
+                }
+            }
+        }
+
+        checkTaskCompletion(target);
+        if (target.userData && target.userData.message) {
+            showRobotInstructions();
+            // Make sure controls stay locked after showing instructions
+            if (!controlsRef.current.isLocked) {
+                controlsRef.current.lock();
+            }
+            return target.userData.message;
+        }
+        return `Interacted with ${target.name || 'an object'}.`;
     }
     return 'Nothing to interact with.';
-  }, [checkTaskCompletion, showRobotInstructions]);
+}, [checkTaskCompletion, showRobotInstructions, addChatMessage]);
 
   
 
