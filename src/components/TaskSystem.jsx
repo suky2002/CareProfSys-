@@ -82,21 +82,24 @@ export function TaskSystem({ onAllTasksCompleted }) {
  * Hook-ul useTaskSystem oferă acces la starea taskurilor și funcția completeTask,
  * pentru a fi folosit în orice componentă.
  */
-export function useTaskSystem() {
-  const [tasks, setTasks] = useState([
-    { id: 1, description: "Explorează camera 1", completed: false },
-    { id: 2, description: "Treci prin hol", completed: false },
-    { id: 3, description: "Ajungi la camera 2", completed: false },
-    { id: 4, description: "Schimbă intensitatea luminii", completed: false },
-  ]);
+export const useTaskSystem = () => {
+  const tasks = [
+    { id: 1, description: "Setup your workspace at the news desk" },
+    { id: 2, description: "Check camera equipment" },
+    { id: 3, description: "Talk to the robot assistant" },
+    { id: 4, description: "Review the broadcast screen" },
+    { id: 5, description: "Complete robot instructions" }
+  ];
 
-  const completeTask = useCallback((taskId) => {
-    setTasks(prev => prev.map(task =>
-      task.id === taskId ? { ...task, completed: true } : task
-    ));
-  }, []);
+  const completeTask = (taskId) => {
+    // Implementation of task completion
+  };
 
-  return { tasks, completeTask };
-}
+  const resetTasks = () => {
+    // Implementation of task reset
+  };
+
+  return { tasks, completeTask, resetTasks };
+};
 
 

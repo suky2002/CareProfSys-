@@ -13,6 +13,10 @@ import { GUI } from 'dat.gui';
 import { TaskSystem, useTaskSystem } from './TaskSystem';
 
 export default function EnvironmentThreeScene() {
+  // Add task system hook and state
+  const { tasks, completeTask, resetTasks } = useTaskSystem();
+  const [completedTasks, setCompletedTasks] = useState(new Set());
+
   // Refs for THREE.js objects and DOM elements
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
@@ -42,13 +46,81 @@ export default function EnvironmentThreeScene() {
   const [loading, setLoading] = useState(true);
 
   // Collision parameters
-  const cameraColliderRadius = 0.5;
+  const cameraColliderRadius = 0.3; // Reduce from 0.5 to 0.3
   const domeInnerRadius = 490; // Limit for camera movement inside the dome
 
   // Helper: add a chat message (Action Logs)
   const addChatMessage = useCallback((msg) => {
     setChatMessages((prev) => [...prev, msg]);
   }, []);
+
+  // Add task completion handler
+  const handleTaskCompletion = useCallback((taskId) => {
+    if (!completedTasks.has(taskId)) {
+      completeTask(taskId);
+      setCompletedTasks(prev => new Set([...prev, taskId]));
+      addChatMessage(`Task ${taskId} completed!`);
+    }
+  }, [completeTask, completedTasks, addChatMessage]);
+
+  // Add task checking to interaction system
+
+  const showRobotInstructions = useCallback(() => {
+    const robot = sceneRef.current.getObjectByName('Robot');
+    if (robot) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 500;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgba(255,255,255, 0.8)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'black';
+      ctx.font = '18px Arial';
+      ctx.fillText("Acestea sunt instrucțiunile robotului!", 10, 64);
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+      const chatBubble = new THREE.Sprite(spriteMaterial);
+      chatBubble.scale.set(4, 2, 1);
+      chatBubble.position.set(4, 3, -5);
+      
+      const oldBubble = robot.getObjectByName('ChatBubble');
+      if (oldBubble) robot.remove(oldBubble);
+      chatBubble.name = 'ChatBubble';
+
+      chatBubble.onClick = () => {
+        robot.remove(chatBubble);
+        addChatMessage("Robot: Mulțumesc pentru interacțiune!");
+      };
+
+      robot.add(chatBubble);
+  
+      const newCamPos = robot.position.clone().add(new THREE.Vector3(3, 2, 3));
+      cameraRef.current.position.copy(newCamPos);
+      cameraRef.current.lookAt(robot.position);
+  
+      addChatMessage("Robot: Acestea sunt instrucțiunile mele!");
+      handleTaskCompletion(5); // Use handleTaskCompletion instead of completeTask directly
+    }
+  }, [addChatMessage, handleTaskCompletion]);
+
+  const checkTaskCompletion = useCallback((interactedObject) => {
+    switch(interactedObject.name) {
+      case 'News Desk':
+        handleTaskCompletion(1); // Setup workspace task
+        break;
+      case 'Studio Camera Placeholder':
+        handleTaskCompletion(2); // Check camera equipment
+        break;
+      case 'Robot':
+        handleTaskCompletion(3); // Interact with robot
+        break;
+      case 'News Screen':
+        handleTaskCompletion(4); // Check broadcast screen
+        break;
+      default:
+        break;
+    }
+  }, [handleTaskCompletion]);
 
   // Helper: Point-and-Click Interaction (Raycasting)
   const pointAndClickInteraction = useCallback(() => {
@@ -58,6 +130,7 @@ export default function EnvironmentThreeScene() {
     const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
     if (intersects.length > 0) {
       const target = intersects[0].object;
+      checkTaskCompletion(target);
       if (target.userData && target.userData.message) {
         showRobotInstructions();
         return target.userData.message;
@@ -65,8 +138,9 @@ export default function EnvironmentThreeScene() {
       return `Interacted with ${intersects[0].object.name || 'an object'}.`;
     }
     return 'Nothing to interact with.';
-  }, []);
+  }, [checkTaskCompletion, showRobotInstructions]);
 
+  
 
   // Auto-scroll Action Logs on new messages
   useEffect(() => {
@@ -142,59 +216,32 @@ export default function EnvironmentThreeScene() {
     const camera = cameraRef.current;
     const domElement = rendererRef.current.domElement;
     const controls = new PointerLockControls(camera, domElement);
+    
     controls.addEventListener('lock', () => {
-      addChatMessage('Pointer locked. Use WASD to move and press E to interact.');
+      addChatMessage('Controls locked. Use WASD to move and E to interact.');
     });
+    
     controls.addEventListener('unlock', () => {
-      addChatMessage('Pointer unlocked.');
+      addChatMessage('Controls unlocked. Click to resume.');
     });
+    
     controlsRef.current = controls;
-    domElement.addEventListener('click', () => controls.lock());
 
-    const onKeyDown = (event) => {
-      switch (event.code) {
-        case 'KeyW': moveForwardRef.current = true; break;
-        case 'KeyS': moveBackwardRef.current = true; break;
-        case 'KeyA': moveLeftRef.current = true; break;
-        case 'KeyD': moveRightRef.current = true; break;
-        case 'Digit1':
-          setBroadcastLevel(1);
-          addChatMessage('Broadcast Level: 1 (Basic Studio Setup)');
-          break;
-        case 'Digit2':
-          setBroadcastLevel(2);
-          addChatMessage('Broadcast Level: 2 (Intermediate Tasks)');
-          break;
-        case 'Digit3':
-          setBroadcastLevel(3);
-          addChatMessage('Broadcast Level: 3 (Advanced Broadcast)');
-          break;
-        case 'KeyE': {
-          const msg = pointAndClickInteraction();
-          addChatMessage(msg);
-          break;
-        }
-        default: break;
+    // Modified click handler
+    const onClick = (event) => {
+      event.preventDefault(); // Prevent default browser behavior
+      if (!controls.isLocked) {
+        controls.lock();
       }
     };
 
-    const onKeyUp = (event) => {
-      switch (event.code) {
-        case 'KeyW': moveForwardRef.current = false; break;
-        case 'KeyS': moveBackwardRef.current = false; break;
-        case 'KeyA': moveLeftRef.current = false; break;
-        case 'KeyD': moveRightRef.current = false; break;
-        default: break;
-      }
-    };
+    // Use mousedown instead of click
+    domElement.addEventListener('click', onClick);
 
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup', onKeyUp);
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('keyup', onKeyUp);
+      domElement.removeEventListener('click', onClick);
     };
-  }, [addChatMessage, pointAndClickInteraction]);
+}, [addChatMessage]);
 
   // 5. Initialize Lights
   const initLights = useCallback(() => {
@@ -298,51 +345,6 @@ export default function EnvironmentThreeScene() {
       );
     });
   }, []);
-
-  const showRobotInstructions = useCallback(() => {
-    const {completeTask} = useTaskSystem();
-    const robot = sceneRef.current.getObjectByName('Robot');
-    if (robot) {
-      // Creează o bulă de chat folosind un sprite
-      const canvas = document.createElement('canvas');
-      canvas.width = 500;
-      canvas.height = 128;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'rgba(255,255,255, 0.8)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'black';
-      ctx.font = '18px Arial';
-      ctx.fillText("Acestea sunt instrucțiunile robotului!", 10, 64);
-      const texture = new THREE.CanvasTexture(canvas);
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-      const chatBubble = new THREE.Sprite(spriteMaterial);
-      chatBubble.scale.set(4, 2, 1);
-      // Plasează bulă de chat deasupra robotului
-      chatBubble.position.set(4, 3, -5);
-      // Dacă există deja o bulă, o înlocuiește
-      const oldBubble = robot.getObjectByName('ChatBubble');
-      if (oldBubble) robot.remove(oldBubble);
-      chatBubble.name = 'ChatBubble';
-
-      chatBubble.onClick = () => {
-        robot.remove(chatBubble);
-        addChatMessage("Robot: Mulțumesc pentru interacțiune!");
-      };
-
-      robot.add(chatBubble);
-  
-      // Mută camera astfel încât să se focalizeze pe robot
-      const newCamPos = robot.position.clone().add(new THREE.Vector3(3, 2, 3));
-      cameraRef.current.position.copy(newCamPos);
-      cameraRef.current.lookAt(robot.position);
-  
-      addChatMessage("Robot: Acestea sunt instrucțiunile mele!");
-      completeTask(5);
-    }
-  }, [addChatMessage]);
-  
-  
-  
 
   const studioChairFBX = useCallback(() => {
       const fbxLoader = new FBXLoader();
@@ -500,59 +502,80 @@ export default function EnvironmentThreeScene() {
 
   // 13. Animation Loop with Collision Checking and Fixed Y Position
   const animate = useCallback(() => {
-    requestAnimationFrame(animate);
-    const delta = 0.016; // Fixed timestep ~60 FPS
+    if (!mountRef.current) return;
 
-    // Dampen velocity
-    velocityRef.current.x -= velocityRef.current.x * 10.0 * delta;
-    velocityRef.current.z -= velocityRef.current.z * 10.0 * delta;
+    const animateFrame = () => {
+        const delta = 0.016;
 
-    // Update movement direction based on WASD flags
-    directionRef.current.z = (moveForwardRef.current ? 1 : 0) - (moveBackwardRef.current ? 1 : 0);
-    directionRef.current.x = (moveRightRef.current ? 1 : 0) - (moveLeftRef.current ? 1 : 0);
-    directionRef.current.normalize();
+        if (controlsRef.current?.isLocked) {
+            // Update velocity with damping
+            velocityRef.current.x -= velocityRef.current.x * 10.0 * delta;
+            velocityRef.current.z -= velocityRef.current.z * 10.0 * delta;
 
-    // Movement parameters (adjust these values for your desired speed)
-    const acceleration = 50.0;
-    const speed = 0.2;
-    if (moveForwardRef.current || moveBackwardRef.current) {
-      velocityRef.current.z -= directionRef.current.z * acceleration * delta;
-    }
-    if (moveLeftRef.current || moveRightRef.current) {
-      velocityRef.current.x -= directionRef.current.x * acceleration * delta;
-    }
+            // Get movement direction
+            directionRef.current.z = Number(moveForwardRef.current) - Number(moveBackwardRef.current);
+            directionRef.current.x = Number(moveRightRef.current) - Number(moveLeftRef.current);
+            directionRef.current.normalize();
 
-    // Compute displacement vector
-    const displacement = new THREE.Vector3(
-      -velocityRef.current.x * delta,
-      0,
-      -velocityRef.current.z * delta
-    );
+            // Apply movement in camera direction
+            if (moveForwardRef.current || moveBackwardRef.current) {
+                velocityRef.current.z -= directionRef.current.z * 50.0 * delta;
+            }
+            if (moveLeftRef.current || moveRightRef.current) {
+                velocityRef.current.x -= directionRef.current.x * 50.0 * delta;
+            }
 
-    // Compute potential new position
-    const currentPos = cameraRef.current.position.clone();
-    const potentialPos = currentPos.add(displacement);
-    // Clamp Y to a fixed height (1.8)
-    potentialPos.y = 1.8;
+            // Apply movement relative to camera direction
+            const cameraDirection = new THREE.Vector3();
+            cameraRef.current.getWorldDirection(cameraDirection);
+            cameraDirection.y = 0;
+            cameraDirection.normalize();
 
-    // Prevent leaving the dome: ensure within domeInnerRadius
-    if (potentialPos.length() <= domeInnerRadius) {
-      // Check collisions with collidable objects
-      let collision = false;
-      const cameraSphere = new THREE.Sphere(potentialPos, cameraColliderRadius);
-      collidableMeshList.current.forEach((mesh) => {
-        const box = new THREE.Box3().setFromObject(mesh);
-        if (box.intersectsSphere(cameraSphere)) {
-          collision = true;
+            const sideways = new THREE.Vector3(-cameraDirection.z, 0, cameraDirection.x);
+            
+            const moveX = velocityRef.current.x * delta;
+            const moveZ = velocityRef.current.z * delta;
+
+            const forward = cameraDirection.multiplyScalar(moveZ);
+            const side = sideways.multiplyScalar(moveX);
+
+            const movement = new THREE.Vector3()
+                .addVectors(forward, side);
+
+            // Apply movement if no collision
+            const newPosition = cameraRef.current.position.clone().add(movement);
+            newPosition.y = 1.8; // Keep fixed height
+
+            // Check bounds and collisions
+            if (newPosition.length() <= domeInnerRadius) {
+                let collision = false;
+                const cameraSphere = new THREE.Sphere(newPosition, cameraColliderRadius);
+                
+                collidableMeshList.current.forEach((mesh) => {
+                    if (!mesh) return;
+                    const box = new THREE.Box3().setFromObject(mesh);
+                    if (box.intersectsSphere(cameraSphere)) {
+                        const meshCenter = new THREE.Vector3();
+                        box.getCenter(meshCenter);
+                        const distance = newPosition.distanceTo(meshCenter);
+                        if (distance < 1.5) {
+                            collision = true;
+                        }
+                    }
+                });
+
+                if (!collision) {
+                    cameraRef.current.position.copy(newPosition);
+                }
+            }
         }
-      });
-      if (!collision) {
-        cameraRef.current.position.copy(potentialPos);
-      }
-    }
 
-    rendererRef.current.render(sceneRef.current, cameraRef.current);
-  }, []);
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+        requestAnimationFrame(animateFrame);
+    };
+
+    requestAnimationFrame(animateFrame);
+}, []);
 
   // 14. Handle Window Resize
   const onWindowResize = useCallback(() => {
@@ -566,44 +589,106 @@ export default function EnvironmentThreeScene() {
 
   // 15. Initialization and Cleanup
   useEffect(() => {
-    initScene();
-    initCamera();
-    initRenderer();
-    initControls();
-    initLights();
-    initPostProcessing();
-    initGUI();
-    addStudioObjects();
-    placeCustomModels();
-    loadModels();
+    // ... existing initialization code ...
 
-    window.addEventListener('resize', onWindowResize);
-    animate();
+    let mounted = true;
+    
+    if (mounted) {
+        initScene();
+        initCamera();
+        initRenderer();
+        initControls();
+        initLights();
+        initPostProcessing();
+        initGUI();
+        addStudioObjects();
+        placeCustomModels();
+        loadModels();
+        
+        window.addEventListener('resize', onWindowResize);
+        animate();
+    }
 
     return () => {
-      window.removeEventListener('resize', onWindowResize);
-      if (guiRef.current) guiRef.current.destroy();
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
-        if (mountRef.current && rendererRef.current.domElement) {
-          mountRef.current.removeChild(rendererRef.current.domElement);
+        mounted = false;
+        window.removeEventListener('resize', onWindowResize);
+        if (controlsRef.current) {
+            controlsRef.current.unlock();
         }
-      }
+        if (guiRef.current) {
+            guiRef.current.destroy();
+        }
+        if (rendererRef.current) {
+            rendererRef.current.dispose();
+            if (mountRef.current && rendererRef.current.domElement) {
+                mountRef.current.removeChild(rendererRef.current.domElement);
+            }
+        }
     };
-  }, [
-    initScene,
-    initCamera,
-    initRenderer,
-    initControls,
-    initLights,
-    initPostProcessing,
-    initGUI,
-    addStudioObjects,
-    placeCustomModels,
-    loadModels,
-    onWindowResize,
-    animate,
-  ]);
+}, [initScene, initCamera, initRenderer, initControls, initLights, initPostProcessing, initGUI, addStudioObjects, placeCustomModels, loadModels, onWindowResize, animate]);
+
+  // Add task reset on component mount
+  useEffect(() => {
+    resetTasks();
+  }, [resetTasks]);
+
+  // Add keyboard event handlers in the useEffect after initControls
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+        switch (event.code) {
+            case 'KeyW':
+            case 'ArrowUp':
+                moveForwardRef.current = true;
+                break;
+            case 'KeyS':
+            case 'ArrowDown':
+                moveBackwardRef.current = true;
+                break;
+            case 'KeyA':
+            case 'ArrowLeft':
+                moveLeftRef.current = true;
+                break;
+            case 'KeyD':
+            case 'ArrowRight':
+                moveRightRef.current = true;
+                break;
+            case 'KeyE':
+                pointAndClickInteraction();
+                break;
+        }
+    };
+
+    const handleKeyUp = (event) => {
+        switch (event.code) {
+            case 'KeyW':
+            case 'ArrowUp':
+                moveForwardRef.current = false;
+                break;
+            case 'KeyS':
+            case 'ArrowDown':
+                moveBackwardRef.current = false;
+                break;
+            case 'KeyA':
+            case 'ArrowLeft':
+                moveLeftRef.current = false;
+                break;
+            case 'KeyD':
+            case 'ArrowRight':
+                moveRightRef.current = false;
+                break;
+        }
+    };
+
+    // Add event listeners
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    // Cleanup
+    return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keyup', handleKeyUp);
+    };
+}, [pointAndClickInteraction]);
 
   // 16. UI Overlay (Action Logs & Broadcast Level)
   const renderOverlay = () => {
@@ -641,7 +726,8 @@ export default function EnvironmentThreeScene() {
             <div key={i} style={{ marginBottom: '5px' }}>{msg}</div>
           ))}
         </div>
-        <div style={{ position: 'absolute',
+        <div style={{
+          position: 'absolute',
           bottom: 20,
           right: 20,
           width: 320,
@@ -652,9 +738,22 @@ export default function EnvironmentThreeScene() {
           borderRadius: '8px',
           zIndex: 2,
           overflowY: 'auto',
-          fontSize: '0.9rem'}}> 
-        <TaskSystem onAllTasksCompleted={() => console.log("Toate taskurile sunt complete!")} />
-      </div>   
+          fontSize: '0.9rem'
+        }}>
+          <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>Tasks</div>
+          {tasks.map((task) => (
+            <div 
+              key={task.id} 
+              style={{
+                marginBottom: '5px',
+                color: completedTasks.has(task.id) ? '#00ff00' : 'white',
+                textDecoration: completedTasks.has(task.id) ? 'line-through' : 'none'
+              }}
+            >
+              {task.description}
+            </div>
+          ))}
+        </div>
       </>
     );
   };
@@ -808,7 +907,7 @@ export class BroadcastingAnimationSystem {
     this.animations.forEach(anim => {
       anim.elapsed += delta;
       const t = Math.min(anim.elapsed / anim.duration, 1);
-      anim.mesh[anim.prop] = THREE.MathUtils.lerp(anim.fromValue, anim.toValue, t);
+      anim.mesh[anim.prop] = THREE.MathUtils.lerp(anim.fromValue, toValue, t);
     });
     this.animations = this.animations.filter(anim => anim.elapsed < anim.duration);
   }
