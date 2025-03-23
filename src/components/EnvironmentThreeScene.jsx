@@ -17,6 +17,9 @@ export default function EnvironmentThreeScene() {
   const { tasks, completeTask, resetTasks } = useTaskSystem();
   const [completedTasks, setCompletedTasks] = useState(new Set());
 
+  // Add new state
+  const [cameraViewActive, setCameraViewActive] = useState(false);
+
   // Refs for THREE.js objects and DOM elements
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
@@ -138,6 +141,17 @@ export default function EnvironmentThreeScene() {
     }
   }, [handleTaskCompletion]);
 
+  // Add handler for camera interaction
+  const handleCameraInteraction = useCallback(() => {
+    setCameraViewActive(true);
+    // Disable controls while in camera view
+    if (controlsRef.current) {
+      controlsRef.current.unlock();
+    }
+    addChatMessage("Entered camera view mode. Use arrow keys to adjust.");
+    handleTaskCompletion(7); // New task for camera adjustment
+  }, [addChatMessage, handleTaskCompletion]);
+
   // Helper: Point-and-Click Interaction (Raycasting)
   const pointAndClickInteraction = useCallback(() => {
     const raycaster = new THREE.Raycaster();
@@ -177,10 +191,16 @@ export default function EnvironmentThreeScene() {
             }
             return target.userData.message;
         }
+
+        if (target.name === 'Studio Camera Placeholder' || target.name === 'CameraHotspot') {
+          handleCameraInteraction();
+          return "Accessed camera controls";
+        }
+
         return `Interacted with ${target.name || 'an object'}.`;
     }
     return 'Nothing to interact with.';
-}, [checkTaskCompletion, showRobotInstructions, addChatMessage]);
+}, [checkTaskCompletion, showRobotInstructions, addChatMessage, handleCameraInteraction]);
 
   
 
@@ -357,22 +377,59 @@ export default function EnvironmentThreeScene() {
     });
   }, []);
 
+  const createCameraHotspot = useCallback(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    
+    // Create circular white background with shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(64, 64, 40, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    
+    // Add red 'E' text with shadow
+    ctx.shadowColor = 'rgba(255,0,0,0.3)';
+    ctx.fillStyle = 'red';
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('E', 64, 64);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.SpriteMaterial({ map: texture });
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(1, 1, 1);
+    sprite.name = 'CameraHotspot';
+    
+    return sprite;
+  }, []);
+
   // 9. Load Camera Model (OBJ + MTL)
   const cameraObject = useCallback(() => {
     const mtlLoader = new MTLLoader();
-    mtlLoader.setPath('/models/'); // Adjust path as needed
+    mtlLoader.setPath('/models/');
     mtlLoader.load('camera.mtl', (materials) => {
       materials.preload();
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
-      objLoader.setPath('/models/'); // Adjust path as needed
+      objLoader.setPath('/models/');
       objLoader.load(
-        'uploads_files_2423186_old+school+camera+nd+projector+obj+file.obj', // Replace with your camera model's OBJ file name
+        'uploads_files_2423186_old+school+camera+nd+projector+obj+file.obj',
         (object) => {
-          object.scale.set(0.2, 0.2, 0.4);
-          object.position.set(5, 0, 1);
-          object.rotation.y = (Math.PI / 2);
+          object.scale.set(0.2, 0.1, 0.1); // Made camera smaller
+          object.position.set(5, 1, 1); // Raised height above desk
+          object.rotation.set(0, Math.PI / 2, 0); // Rotated to face opposite direction, level with floor
           object.name = 'Studio Camera Placeholder';
+          
+          // Add hotspot to camera at a higher position
+          const hotspot = createCameraHotspot();
+          hotspot.position.set(0, 10, 0); // Raised hotspot position
+          object.add(hotspot);
+          
           sceneRef.current.add(object);
           object.traverse((child) => {
             if (child.isMesh) {
@@ -382,11 +439,11 @@ export default function EnvironmentThreeScene() {
         },
         undefined,
         (error) => {
-          console.error('Error loading camera model (OBJ/MTL):', error);
+          console.error('Error loading camera model:', error);
         }
       );
     });
-  }, []);
+}, [createCameraHotspot]);
 
   const studioChairFBX = useCallback(() => {
       const fbxLoader = new FBXLoader();
@@ -460,7 +517,7 @@ export default function EnvironmentThreeScene() {
     );
   }, []);
 
-
+  
 
   // 10. Add Studio Objects (with collidables)
   const addStudioObjects = useCallback(() => {
@@ -827,6 +884,17 @@ export default function EnvironmentThreeScene() {
       )}
       {renderOverlay()}
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+      <CameraViewOverlay 
+        isActive={cameraViewActive}
+        onClose={() => {
+          setCameraViewActive(false);
+          if (controlsRef.current) {
+            controlsRef.current.lock();
+          }
+        }}
+        cameraPosition={cameraRef.current?.position}
+        cameraRotation={cameraRef.current?.rotation}
+      />
     </div>
   );
 }
@@ -1149,6 +1217,193 @@ export class BroadcastingCollisionSystem {
     return collisions;
   }
 }
+
+const CameraViewOverlay = ({ isActive, onClose, cameraPosition, cameraRotation }) => {
+  const [zoom, setZoom] = useState(1);
+  const [focus, setFocus] = useState(0);
+  const [exposure, setExposure] = useState(0);
+  const [saved, setSaved] = useState(false);
+
+  // Reset function
+  const resetSettings = () => {
+    setZoom(1);
+    setFocus(0);
+    setExposure(0);
+    setSaved(false);
+  };
+
+  // Load saved settings when opening overlay
+  useEffect(() => {
+    if (isActive) {
+      const savedSettings = localStorage.getItem('cameraSettings');
+      if (savedSettings) {
+        const { zoom: savedZoom, focus: savedFocus, exposure: savedExposure } = JSON.parse(savedSettings);
+        setZoom(savedZoom);
+        setFocus(savedFocus);
+        setExposure(savedExposure);
+      }
+      setSaved(false); // Reset saved state when opening
+    }
+  }, [isActive]);
+
+  const handleSave = () => {
+    localStorage.setItem('cameraSettings', JSON.stringify({
+      zoom, focus, exposure
+    }));
+    setSaved(true);
+    handleTaskCompletion(8);
+    addChatMessage("Camera settings saved successfully!");
+    setTimeout(() => onClose(), 1500);
+  };
+
+  const handleKeyDown = (e) => {
+    if (!isActive) return;
+    
+    switch(e.code) {
+      case 'ArrowUp':
+        e.preventDefault();
+        setFocus(prev => Math.min(prev + 0.1, 1));
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setFocus(prev => Math.max(prev - 0.1, -1));
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        setExposure(prev => Math.max(prev - 0.1, -1));
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        setExposure(prev => Math.min(prev + 0.1, 1));
+        break;
+      case 'KeyQ':
+        setZoom(prev => Math.max(prev - 0.1, 0.5));
+        break;
+      case 'Escape':
+        onClose();
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (isActive) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isActive]);
+
+  if (!isActive) return null;
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.8)',
+      zIndex: 1000,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column'
+    }}>
+      <div style={{
+        width: '600px', // Reduced from 800px
+        height: '600px', // Reduced from 800px
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        {/* Blurred background */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          filter: 'blur(10px)',
+          backgroundColor: 'rgba(0,0,0,0.5)'
+        }} />
+        
+        {/* Clear viewfinder circle */}
+        <div style={{
+          width: '500px', // Reduced from 700px
+          height: '500px', // Reduced from 700px
+          borderRadius: '50%',
+          position: 'relative',
+          overflow: 'hidden',
+          border: '2px solid white',
+          filter: `brightness(${1 + exposure}) blur(${Math.max(0, 1-focus) * 5}px)`,
+          backgroundColor: 'transparent',
+          boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+          transform: `scale(${zoom})`
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            color: 'white',
+            fontSize: '24px',
+            textShadow: '0 0 10px rgba(0,0,0,0.5)'
+          }}>
+            + Recording
+          </div>
+        </div>
+      </div>
+      
+      <div style={{
+        marginTop: '20px',
+        padding: '15px',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        borderRadius: '8px',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <p>↑↓ Keys: Focus ({(focus * 100).toFixed(0)}%)</p>
+        <p>←→ Keys: Exposure ({(exposure * 100).toFixed(0)}%)</p>
+        <p>Q: Zoom ({(zoom * 100).toFixed(0)}%)</p>
+        <p>ESC: Exit</p>
+        
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+          <button 
+            onClick={resetSettings}
+            style={{
+              marginTop: '15px',
+              padding: '10px 20px',
+              backgroundColor: '#ff4444',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px'
+            }}
+          >
+            Reset Settings
+          </button>
+          
+          <button 
+            onClick={handleSave}
+            style={{
+              marginTop: '15px',
+              padding: '10px 20px',
+              backgroundColor: saved ? '#4CAF50' : '#2196F3',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px'
+            }}
+          >
+            {saved ? 'Settings Saved!' : 'Save Settings'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 
 
