@@ -14,7 +14,6 @@ export {
     default as LightingModel,
     LightingModelDirectInput,
     LightingModelDirectRectAreaInput,
-    LightingModelIndirectInput,
     LightingModelReflectedLight,
 } from "./core/LightingModel.js";
 export { default as MRTNode } from "./core/MRTNode.js";
@@ -52,6 +51,7 @@ export { NodeUtils };
 // utils
 export { default as ArrayElementNode } from "./utils/ArrayElementNode.js";
 export { default as ConvertNode } from "./utils/ConvertNode.js";
+export { default as DebugNode } from "./utils/DebugNode.js";
 export { default as EquirectUVNode } from "./utils/EquirectUVNode.js";
 export { default as FunctionOverloadingNode } from "./utils/FunctionOverloadingNode.js";
 export { default as JoinNode } from "./utils/JoinNode.js";
@@ -134,7 +134,7 @@ export { default as EnvironmentNode } from "./lighting/EnvironmentNode.js";
 export { default as HemisphereLightNode } from "./lighting/HemisphereLightNode.js";
 export { default as IESSpotLightNode } from "./lighting/IESSpotLightNode.js";
 export { default as IrradianceNode } from "./lighting/IrradianceNode.js";
-export { default as LightingContextNode } from "./lighting/LightingContextNode.js";
+export { default as LightingContextNode, LightingContext } from "./lighting/LightingContextNode.js";
 export { default as LightingNode } from "./lighting/LightingNode.js";
 export { default as LightProbeNode } from "./lighting/LightProbeNode.js";
 export { default as LightsNode } from "./lighting/LightsNode.js";

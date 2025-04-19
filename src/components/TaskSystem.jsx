@@ -18,6 +18,8 @@ export function TaskSystem({ onAllTasksCompleted }) {
     // Poți adăuga și alte taskuri...
   ]);
 
+  const [points, setPoints] = useState(0); // Points for gamification
+  const [badge, setBadge] = useState(null); // Badge for milestones
   // Funcție pentru a marca un task ca completat
   const completeTask = useCallback((taskId) => {
     setTasks(prevTasks =>
@@ -29,12 +31,28 @@ export function TaskSystem({ onAllTasksCompleted }) {
 
   // Efect pentru a verifica dacă toate taskurile sunt complete
   useEffect(() => {
-    if (tasks.every(task => task.completed)) {
+    const completedTasks = tasks.filter(task => task.completed).length;
+    setPoints(completedTasks * 10); // 10 points per task
+
+    // Award badges based on milestones
+    if (completedTasks === tasks.length) {
+      setBadge("Task Master");
       if (typeof onAllTasksCompleted === 'function') {
         onAllTasksCompleted();
       }
+    } else if (completedTasks >= tasks.length / 2) {
+      setBadge("Halfway There");
+    } else {
+      setBadge(null);
     }
+    // if (tasks.every(task => task.completed)) {
+    //   if (typeof onAllTasksCompleted === 'function') {
+    //     onAllTasksCompleted();
+    //   }
+    // }
   }, [tasks, onAllTasksCompleted]);
+
+  const progress = Math.round((tasks.filter(task => task.completed).length / tasks.length) * 100);
 
   return (
     <div style={{
@@ -45,6 +63,11 @@ export function TaskSystem({ onAllTasksCompleted }) {
       fontFamily: 'sans-serif'
     }}>
       <h3 style={{ marginBottom: '10px', fontSize: '16px', textAlign: 'center' }}>Task-uri</h3>
+      <p style={{ marginBottom: '100px', textAlign: 'center', fontSize: '14px' }}>Puncte: {points}</p>
+      <p style={{ textAlign: 'center', fontSize: '14px' }}>Progres: {progress}%</p>
+      <p style={{ textAlign: 'center', fontSize: '14px', color: badge ? 'gold' : 'gray' }}>
+        Badge: {badge || "No badge"}
+      </p>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {tasks.map(task => (
           <li key={task.id} style={{
@@ -57,7 +80,6 @@ export function TaskSystem({ onAllTasksCompleted }) {
           </li>
         ))}
       </ul>
-      {/* Butoane pentru completare manuală (opțional) */}
       <div style={{ marginTop: '10px', textAlign: 'center' }}>
         {tasks.map(task => (
           <button
