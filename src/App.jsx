@@ -9,6 +9,7 @@ import ProfessionVRScene from "./components/ProfessionVRScene";
 import RecommendationStyles from "./components/css/Recommendation.module.css";
 import SkillForm from "./components/SkillForm";
 import styles from "./components/css/App.module.css";
+import UploadCV from "./components/UploadCV";
 
 const App = () => {
   const [skills, setSkills] = useState([]);
@@ -94,6 +95,7 @@ const App = () => {
           <Route path="/vr" element={<ProfessionVRScene />} />
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
+          <Route path="/upload-cv" element={<UploadCV />} />
           <Route
             path="/course-recommendations"
             element={
