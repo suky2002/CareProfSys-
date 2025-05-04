@@ -2,48 +2,39 @@ import React, { useState } from "react";
 
 export default function UploadCV() {
     const [file, setFile] = useState(null);
-    const [response, setResponse] = useState(null);
-    const [error, setError] = useState("");
-
-    const handleFileChange = (e) => {
-        setResponse(null);
-        setError("");
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        }
-    };
+    const [msg, setMsg] = useState("");
 
     const handleUpload = async () => {
         if (!file) {
-            setError("Selectează un fișier .docx");
+            setMsg("Selectează un fișier .docx");
             return;
         }
-
-        const fakePath = "C:\\fakepath\\" + file.name;
+        const form = new FormData();
+        form.append("cv", file);
 
         try {
-            const res = await fetch("http://localhost:3001/start-trigger", {
+            const res = await fetch("http://localhost:3001/trigger", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cvPath: fakePath })
+                body: form
             });
-
             const data = await res.json();
-            if (!res.ok) throw new Error(data?.error?.message || "Eroare de la server");
-            setResponse(data);
-        } catch (err) {
-            console.error(err);
-            setError(err.message || "Eroare necunoscută");
+            if (!res.ok) throw new Error(data.error?.message || JSON.stringify(data.error));
+            setMsg("✅ Automatizarea a pornit cu succes!");
+        } catch (e) {
+            console.error(e);
+            setMsg("❌ " + (e.message || "Eroare necunoscută"));
         }
     };
 
     return (
-        <div>
+        <div style={{ padding: 20, maxWidth: 400, margin: "auto" }}>
             <h2>Încarcă CV (.docx)</h2>
-            <input type="file" accept=".docx" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Trimite</button>
-            {error && <div style={{ color: "red" }}>{error}</div>}
-            {response && <pre>{JSON.stringify(response, null, 2)}</pre>}
+            <input type="file" accept=".docx" onChange={(e) => e.target.files.length && setFile(e.target.files[0])} />
+            <br />
+            <button onClick={handleUpload} style={{ marginTop: 10 }}>
+                Trimite
+            </button>
+            {msg && <p>{msg}</p>}
         </div>
     );
 }

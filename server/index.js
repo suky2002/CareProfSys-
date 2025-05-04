@@ -1,57 +1,55 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import fileUpload from "express-fileupload";
+import dotenv from "dotenv";
 import axios from "axios";
+import path from "path";
+import os from "os";
+import fs from "fs";
 
 dotenv.config();
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
 
-app.post("/start-trigger", async (req, res) => {
+// ensure our temp folder exists
+const UPLOAD_DIR = path.join(os.tmpdir(), "uipath-cvs");
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR);
+
+app.post("/trigger", async (req, res) => {
     try {
-        // 1. Obține token
-        const tokenRes = await axios.post("https://cloud.uipath.com/identity_/connect/token",
-            new URLSearchParams({
-                grant_type: "client_credentials",
-                client_id: process.env.UIPATH_CLIENT_ID,
-                client_secret: process.env.UIPATH_CLIENT_SECRET,
-                scope: process.env.UIPATH_SCOPE
-            }),
-            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        // 1) pull the file from the multipart form
+        const file = req.files?.cv;
+        if (!file) return res.status(400).json({ success: false, error: "No file uploaded" });
+
+        // 2) save it to a real folder on disk
+        const tempPath = path.join(UPLOAD_DIR, file.name);
+        await file.mv(tempPath);
+
+        // 3) build our trigger URL with the real path
+        const triggerUrl = `${process.env.UIPATH_TRIGGER_URL}?cvPath=${encodeURIComponent(tempPath)}`;
+
+        // 4) fire the PAT‐based trigger
+        const triggerRes = await axios.post(
+            triggerUrl,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.UIPATH_PERSONAL_TOKEN}`,
+                    "X-UIPATH-TenantName": process.env.UIPATH_TENANT_NAME,
+                    "X-UIPATH-OrganizationUnitId": process.env.UIPATH_FOLDER_ID
+                }
+            }
         );
 
-        const token = tokenRes.data.access_token;
-
-        // 2. Rulează trigger POST
-        const response = await axios.post(process.env.UIPATH_TRIGGER_URL, {
-            startInfo: {
-                ReleaseKey: process.env.UIPATH_RELEASE_KEY,
-                Strategy: "ModernJobsCount",
-                JobsCount: 1,
-                InputArguments: JSON.stringify({
-                    cvPath: req.body.cvPath || "C:\\fakepath\\cv.docx"
-                })
-            }
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "X-UIPATH-TenantName": process.env.UIPATH_TENANT_NAME,
-                "X-UIPATH-OrganizationUnitId": process.env.UIPATH_FOLDER_ID,
-                "Content-Type": "application/json"
-            }
-        });
-
-        res.json({ success: true, result: response.data });
+        res.json({ success: true, data: triggerRes.data });
     } catch (err) {
         console.error("Trigger error:", err.response?.data || err.message);
         res.status(500).json({ success: false, error: err.response?.data || err.message });
     }
 });
 
-app.listen(process.env.PORT || 3001, () => {
-    console.log(`Server started on http://localhost:${process.env.PORT}`);
-});
+app.listen(process.env.PORT, () =>
+    console.log(`✅ Server running on http://localhost:${process.env.PORT}`)
+);
