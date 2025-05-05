@@ -9,6 +9,7 @@ import ProfessionVRScene from "./components/ProfessionVRScene";
 import RecommendationStyles from "./components/css/Recommendation.module.css";
 import SkillForm from "./components/SkillForm";
 import styles from "./components/css/App.module.css";
+import LandingPage from "./components/LandingPage.jsx";
 
 const App = () => {
   const [skills, setSkills] = useState([]);
@@ -76,8 +77,9 @@ const App = () => {
     <Router>
       <div className={styles["app-container"]}>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route
-            path="/"
+            path="/start"
             element={
               <HomePage
                 skills={skills}
@@ -91,7 +93,7 @@ const App = () => {
             path="/recommendations"
             element={<Recommendations recommendedJobs={recommendedJobs} />}
           />
-          <Route path="/robert" element={<TestRobert1/>} />
+          <Route path="/robert" element={<TestRobert1 />} />
           <Route path="/vr" element={<ProfessionVRScene />} />
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
