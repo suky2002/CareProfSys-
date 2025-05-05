@@ -359,7 +359,7 @@ function TeleportButton({ characterRef }) {
 }
 
 // =============================
-// TELEPORTARE DOAR CAMERA (verde)
+// TELEPORTARE DOAR CAMERA (alb)
 // =============================
 function CameraTeleportButton({ setFreeCamera }) {
   const { camera } = useThree();
