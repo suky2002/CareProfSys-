@@ -19,7 +19,7 @@ export default function UploadCV() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error?.message || JSON.stringify(data.error));
-            setMsg("✅ Automatizarea a pornit cu succes!");
+            setMsg("Automatizarea a pornit cu succes!");
         } catch (e) {
             console.error(e);
             setMsg("❌ " + (e.message || "Eroare necunoscută"));

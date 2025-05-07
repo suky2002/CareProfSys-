@@ -10,6 +10,10 @@ import RecommendationStyles from "./components/css/Recommendation.module.css";
 import SkillForm from "./components/SkillForm";
 import styles from "./components/css/App.module.css";
 import UploadCV from "./components/UploadCV";
+import StartScreen from "./components/StartScreen";
+import JobIntroPortalContent from "./components/JobIntroPortalContent";
+import CreateAvatar from "./components/CreateAvatar";  
+
 
 const App = () => {
   const [skills, setSkills] = useState([]);
@@ -96,6 +100,9 @@ const App = () => {
           <Route path="/environment-two" element={<EnvironmentTwoScene />} />
           <Route path="/env3" element={<EnvironmentThreeScene />} />
           <Route path="/upload-cv" element={<UploadCV />} />
+          <Route path="/startscreen" element={<StartScreen />} />
+          <Route path="/jobportal" element={<JobIntroPortalContent />} />
+          <Route path="/create-avatar" element={<CreateAvatar />} />
           <Route
             path="/course-recommendations"
             element={

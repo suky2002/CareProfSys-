@@ -51,5 +51,5 @@ app.post("/trigger", async (req, res) => {
 });
 
 app.listen(process.env.PORT, () =>
-    console.log(`✅ Server running on http://localhost:${process.env.PORT}`)
+    console.log(`Server running on http://localhost:${process.env.PORT}`)
 );
