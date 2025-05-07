@@ -3,23 +3,22 @@ import { Stars, OrbitControls } from '@react-three/drei'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useSound from 'use-sound'
+import { useNavigate } from 'react-router-dom'
 import './css/StartScreen.css'
 
 export default function StartScreen() {
-  const [started, setStarted] = useState(false)
-  // Get initial sound state from localStorage or default to true
+  const navigate = useNavigate()
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const saved = localStorage.getItem('soundEnabled')
     return saved ? JSON.parse(saved) : true
   })
-  
+
   const [play, { stop }] = useSound('/audio/intro.mpeg', {
     volume: 0.5,
     loop: true,
     interrupt: true,
   })
 
-  // Save sound preference when it changes
   useEffect(() => {
     localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled))
     if (soundEnabled) {
@@ -29,8 +28,6 @@ export default function StartScreen() {
     }
     return () => stop()
   }, [soundEnabled, play, stop])
-
-  if (started) return null
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
@@ -70,7 +67,7 @@ export default function StartScreen() {
         <motion.button
           onClick={() => {
             stop()
-            setStarted(true)
+            navigate("/create-avatar")
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

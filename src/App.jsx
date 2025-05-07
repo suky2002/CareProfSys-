@@ -1,201 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
-import { fetchJobs, fetchSkills } from "./utils/skills";
-
-import CourseRecommendations from "./components/CourseRecommendations";
-import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
-import EnvironmentTwoScene from "./components/EnvironmentTwoScene";
-import ProfessionVRScene from "./components/ProfessionVRScene";
-import RecommendationStyles from "./components/css/Recommendation.module.css";
-import SkillForm from "./components/SkillForm";
-import styles from "./components/css/App.module.css";
-import UploadCV from "./components/UploadCV";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import StartScreen from "./components/StartScreen";
+import CreateAvatar from "./components/CreateAvatar";
+import JobPortal from "./components/JobIntroPortalContent";
+import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
+import CourseRecommendations from "./components/CourseRecommendations";
 import JobIntroPortalContent from "./components/JobIntroPortalContent";
-import CreateAvatar from "./components/CreateAvatar";  
-
 
 const App = () => {
-  const [skills, setSkills] = useState([]);
-  const [recommendedJobs, setRecommendedJobs] = useState([]);
-  const [jobs, setJobs] = useState([]);
-
-  useEffect(() => {
-    fetchSkills()
-      .then((data) => {
-        console.log("Loaded Skills:", data);
-        setSkills(data);
-      })
-      .catch((error) => console.error("Error loading skills:", error));
-
-    fetchJobs()
-      .then((data) => {
-        console.log("Loaded Jobs from CSV:", data);
-        setJobs(data);
-      })
-      .catch((error) => console.error("Error loading jobs:", error));
-  }, []);
-
-  const handleRecommendation = (selectedSkills, navigate) => {
-    if (selectedSkills.length < 2 || selectedSkills.length > 10) {
-      alert("Please select between 2 and 10 skills.");
-      return;
-    }
-
-    const normalizedSelectedSkills = selectedSkills.map((skill) =>
-      skill.toLowerCase().trim()
-    );
-
-    const matchingJobs = jobs
-      .map((job) => {
-        const jobSkills = job.skills.map((skill) =>
-          skill.toLowerCase().trim()
-        );
-        const matchingSkills = jobSkills.filter((skill) =>
-          normalizedSelectedSkills.includes(skill)
-        );
-        const score = matchingSkills.length / normalizedSelectedSkills.length;
-
-        let route = "/environment-two";
-        if (job.industry === "Information Technology") route = "/environment-two";
-        if (job.industry === "Education") route = "/env3";
-
-        return { ...job, score, route };
-      })
-      .filter((job) => job.score >= 0.4)
-      .sort((a, b) => b.score - a.score);
-
-    const groupedJobs = matchingJobs.reduce((acc, job) => {
-      const industry = job.industry;
-      if (industry === "Others") return acc;
-      if (!acc[industry]) acc[industry] = [];
-      acc[industry].push(job);
-      return acc;
-    }, {});
-
-    setRecommendedJobs(groupedJobs);
-    navigate("/recommendations");
-  };
-
   return (
     <Router>
-      <div className={styles["app-container"]}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <HomePage
-                skills={skills}
-                onRecommend={(selectedSkills, navigate) =>
-                  handleRecommendation(selectedSkills, navigate)
-                }
-              />
-            }
-          />
-          <Route
-            path="/recommendations"
-            element={<Recommendations recommendedJobs={recommendedJobs} />}
-          />
-          <Route path="/vr" element={<ProfessionVRScene />} />
-          <Route path="/environment-two" element={<EnvironmentTwoScene />} />
-          <Route path="/env3" element={<EnvironmentThreeScene />} />
-          <Route path="/upload-cv" element={<UploadCV />} />
-          <Route path="/startscreen" element={<StartScreen />} />
-          <Route path="/jobportal" element={<JobIntroPortalContent />} />
-          <Route path="/create-avatar" element={<CreateAvatar />} />
-          <Route
-            path="/course-recommendations"
-            element={
-              <CourseRecommendations
-                recommendedCourses={[
-                  {
-                    name: "Politehnica University of Bucharest",
-                    description: "Specialization courses in IT and Engineering.",
-                    link: "https://www.upb.ro/",
-                  },
-                  {
-                    name: "Academy of Economic Studies Bucharest",
-                    description: "Courses in economics and management.",
-                    link: "https://www.ase.ro/",
-                  },
-                ]}
-              />
-            }
-          />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<StartScreen />} />
+        <Route path="/create-avatar" element={<CreateAvatar />} />
+        <Route path="/job-portal" element={<JobIntroPortalContent />} />
+        <Route path="/env3" element={<EnvironmentThreeScene />} />
+        <Route path="/course-recommendations" element={<CourseRecommendations recommendedCourses={[
+          {
+            name: "Politehnica University of Bucharest",
+            description: "Specialization courses in IT and Engineering.",
+            link: "https://www.upb.ro/",
+          },
+          {
+            name: "Academy of Economic Studies Bucharest",
+            description: "Courses in economics and management.",
+            link: "https://www.ase.ro/",
+          },
+        ]} />} />
+      </Routes>
     </Router>
-  );
-};
-
-const HomePage = ({ skills, onRecommend }) => {
-  const navigate = useNavigate();
-  return (
-    <div className={styles["home-container"]}>
-      <h1 className={styles["app-title"]}>Select between 2 and 10 skills</h1>
-      <div className={styles["skill-form-container"]}>
-        <SkillForm
-          skills={skills}
-          onRecommend={(selectedSkills) => onRecommend(selectedSkills, navigate)}
-        />
-      </div>
-    </div>
-  );
-};
-
-const Recommendations = ({ recommendedJobs }) => {
-  const [expandedIndustries, setExpandedIndustries] = useState({});
-
-  const toggleExpand = (industry) => {
-    setExpandedIndustries((prev) => ({
-      ...prev,
-      [industry]: !prev[industry],
-    }));
-  };
-
-  return (
-    <div className={RecommendationStyles["recommendations-page"]}>
-      <h1 className={RecommendationStyles["app-title"]}>Your Recommendations</h1>
-      {Object.keys(recommendedJobs).length > 0 ? (
-        <div className={RecommendationStyles["recommendations-container"]}>
-          {Object.keys(recommendedJobs).map((industry, index) => {
-            const isExpanded = expandedIndustries[industry];
-            const jobsToShow = isExpanded
-              ? recommendedJobs[industry]
-              : recommendedJobs[industry].slice(0, 2);
-
-            return (
-              <div key={index} className={RecommendationStyles["industry-section"]}>
-                <h3 className={RecommendationStyles["industry-title"]}>{industry}</h3>
-                <div className={RecommendationStyles["jobs-grid"]}>
-                  {jobsToShow.map((job, idx) => (
-                    <div key={idx} className={RecommendationStyles["job-card"]}>
-                      <div className={RecommendationStyles["job-card-title"]}>{job.title}</div>
-                      <div className={RecommendationStyles["job-card-score"]}>
-                        Score: {(job.score * 100).toFixed(0)}%
-                      </div>
-                      <a href={job.route} className={RecommendationStyles["job-card-link"]}>
-                        Explore in VR
-                      </a>
-                    </div>
-                  ))}
-                </div>
-                {recommendedJobs[industry].length > 4 && (
-                  <button
-                    className={RecommendationStyles["view-more-button"]}
-                    onClick={() => toggleExpand(industry)}
-                  >
-                    {isExpanded ? "View Less" : "View More"}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p>No experiences available for the selected skills.</p>
-      )}
-    </div>
   );
 };
 
