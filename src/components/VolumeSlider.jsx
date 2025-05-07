@@ -5,7 +5,7 @@ const VolumeSlider = ({ volume, setVolume }) => {
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4">
       <input
         type="range"
-        min="0"
+        min="none"
         max="1"
         step="0.01"
         value={volume}
