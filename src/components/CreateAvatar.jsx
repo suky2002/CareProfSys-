@@ -6,6 +6,7 @@ import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { motion } from "framer-motion";
+import VolumeSlider from "./VolumeSlider";
 
 const HumanHeadset = () => {
   const materials = useLoader(MTLLoader, "/models/humanheadset/humanheadset.mtl");

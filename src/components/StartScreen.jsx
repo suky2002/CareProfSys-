@@ -1,38 +1,47 @@
-import { Canvas } from '@react-three/fiber'
-import { Stars, OrbitControls } from '@react-three/drei'
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import useSound from 'use-sound'
-import { useNavigate } from 'react-router-dom'
-import './css/StartScreen.css'
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Stars, OrbitControls } from '@react-three/drei';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import VolumeSlider from './VolumeSlider';
+import "./css/StartScreen.css";
 
-export default function StartScreen() {
-  const navigate = useNavigate()
-  const [soundEnabled, setSoundEnabled] = useState(() => {
-    const saved = localStorage.getItem('soundEnabled')
-    return saved ? JSON.parse(saved) : true
-  })
 
-  const [play, { stop }] = useSound('/audio/intro.mpeg', {
-    volume: 0.5,
-    loop: true,
-    interrupt: true,
-  })
+function ShootingStar() {
+  const ref = useRef();
+  const [x, setX] = useState(5);
+  const [y, setY] = useState(5);
+  const [opacity, setOpacity] = useState(1);
 
-  useEffect(() => {
-    localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled))
-    if (soundEnabled) {
-      play()
-    } else {
-      stop()
+  useFrame(() => {
+    if (ref.current) {
+      const speed = 0.04;
+      ref.current.position.x -= speed;
+      ref.current.position.y -= speed;
+      setOpacity((prev) => Math.max(0, prev - 0.01));
+      if (ref.current.position.x < -5) {
+        ref.current.position.set(5, 3, -1);
+        setOpacity(1);
+      }
     }
-    return () => stop()
-  }, [soundEnabled, play, stop])
+  });
+
+  return (
+    <mesh ref={ref} position={[x, y, 0]}>
+      <sphereGeometry args={[0.05, 16, 16]} />
+      <meshBasicMaterial color="white" transparent opacity={opacity} />
+    </mesh>
+  );
+}
+
+export default function StartScreen({ volume, setVolume }) {
+  const navigate = useNavigate();
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
       <Canvas className="!fixed inset-0" camera={{ position: [0, 0, 5] }}>
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={3} />
+        <ShootingStar />
         <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
       </Canvas>
 
@@ -65,10 +74,7 @@ export default function StartScreen() {
         </motion.p>
 
         <motion.button
-          onClick={() => {
-            stop()
-            navigate("/create-avatar")
-          }}
+          onClick={() => navigate('/create-avatar')}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 1 }}
@@ -77,23 +83,10 @@ export default function StartScreen() {
           ENTER THE WORLD
         </motion.button>
 
-        <motion.span
-          onClick={() => {
-            if (soundEnabled) {
-              stop()
-            } else {
-              play()
-            }
-            setSoundEnabled(!soundEnabled)
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
-          transition={{ duration: 1.5, delay: 1.2 }}
-          className="absolute bottom-8 text-white cursor-pointer hover:opacity-100 transition-opacity"
-        >
-          {soundEnabled ? 'Mute Music' : 'Play Music'}
-        </motion.span>
+        <div className="absolute bottom-6 w-full flex justify-center">
+          <VolumeSlider volume={volume} setVolume={setVolume} />
+        </div>
       </div>
     </div>
-  )
+  );
 }

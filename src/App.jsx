@@ -1,35 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import StartScreen from "./components/StartScreen";
 import CreateAvatar from "./components/CreateAvatar";
-import JobPortal from "./components/JobIntroPortalContent";
+import JobPortal from "./components/JobPortal";
 import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
 import CourseRecommendations from "./components/CourseRecommendations";
-import JobIntroPortalContent from "./components/JobIntroPortalContent";
+import SoundManager from "./components/SoundManager";
 
-const App = () => {
+const soundPages = ["/", "/create-avatar", "/job-portal"];
+
+const AppContent = () => {
+  const location = useLocation();
+  const [volume, setVolume] = useState(() => {
+    const stored = localStorage.getItem("volume");
+    return stored ? parseFloat(stored) : 0.5;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("volume", volume);
+  }, [volume]);
+
+  const shouldPlaySound = soundPages.includes(location.pathname);
+
   return (
-    <Router>
+    <>
+      {shouldPlaySound && <SoundManager volume={volume} />}
       <Routes>
-        <Route path="/" element={<StartScreen />} />
-        <Route path="/create-avatar" element={<CreateAvatar />} />
-        <Route path="/job-portal" element={<JobIntroPortalContent />} />
+        <Route path="/" element={<StartScreen volume={volume} setVolume={setVolume} />} />
+        <Route path="/create-avatar" element={<CreateAvatar volume={volume} setVolume={setVolume} />} />
+        <Route path="/job-portal" element={<JobPortal volume={volume} setVolume={setVolume} />} />
         <Route path="/env3" element={<EnvironmentThreeScene />} />
-        <Route path="/course-recommendations" element={<CourseRecommendations recommendedCourses={[
-          {
-            name: "Politehnica University of Bucharest",
-            description: "Specialization courses in IT and Engineering.",
-            link: "https://www.upb.ro/",
-          },
-          {
-            name: "Academy of Economic Studies Bucharest",
-            description: "Courses in economics and management.",
-            link: "https://www.ase.ro/",
-          },
-        ]} />} />
+        <Route
+          path="/course-recommendations"
+          element={
+            <CourseRecommendations
+              recommendedCourses={[
+                {
+                  name: "Politehnica University of Bucharest",
+                  description: "Specialization courses in IT and Engineering.",
+                  link: "https://www.upb.ro/",
+                },
+                {
+                  name: "Academy of Economic Studies Bucharest",
+                  description: "Courses in economics and management.",
+                  link: "https://www.ase.ro/",
+                },
+              ]}
+            />
+          }
+        />
       </Routes>
-    </Router>
+    </>
   );
 };
+
+const App = () => (
+  <Router>
+    <AppContent />
+  </Router>
+);
 
 export default App;
