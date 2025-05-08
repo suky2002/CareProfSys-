@@ -154,20 +154,19 @@ const CourseRecommendations = () => {
 };
 
 const headerButtonStyle = {
-  backgroundColor: "transparent", // Fără background
-  color: "#fff", // Text alb
-  border: "1px solid #fff", // Border alb subțire
+  backgroundColor: "transparent",
+  color: "#fff",
+  border: "1px solid #fff",
   borderRadius: "5px",
-  padding: "8px 15px", // Dimensiune ajustată pentru mobile
+  padding: "8px 15px",
   cursor: "pointer",
   fontSize: "14px",
   marginLeft: "10px",
   "@media (max-width: 768px)": {
-    marginLeft: "0", // Eliminăm spațiul lateral
-    width: "100%", // Butoanele ocupă întreaga lățime
+    marginLeft: "0",
+    width: "100%",
   },
 };
-
 
 const containerStyle = {
   fontFamily: "Arial, sans-serif",
@@ -177,8 +176,9 @@ const containerStyle = {
   margin: "0",
   boxSizing: "border-box",
   overflow: "hidden",
+  backgroundColor: "#E8F5E9",           // light green background
   "@media (max-width: 768px)": {
-    padding: "0 10px", // Micșorăm marginile pe tabletă și mobil
+    padding: "0 10px",
   },
 };
 
@@ -195,20 +195,19 @@ const cardsWrapperStyle = {
 
 const cardsContainerStyle = {
   display: "flex",
-  transition: "transform 0.8s ease-in-out", // Animație lină
+  transition: "transform 0.8s ease-in-out",
   width: "100%",
   height: "100%",
-  gap: "20px", // Spațiu între carduri
+  gap: "20px",
 
   "@media (max-width: 480px)": {
-    justifyContent: "flex-start", // Aliniere la stânga
-    overflowX: "scroll", // Activăm scroll-ul pe mobil
-    scrollSnapType: "x mandatory", // Scrolling fluid între carduri
-    scrollPadding: "10px", // Spațiere interioară
-    gap: "15px", // Reducem spațiul între carduri
+    justifyContent: "flex-start",
+    overflowX: "scroll",
+    scrollSnapType: "x mandatory",
+    scrollPadding: "10px",
+    gap: "15px",
   },
 };
-
 
 const cardDescriptionStyle = {
   fontSize: "12px",
@@ -216,7 +215,7 @@ const cardDescriptionStyle = {
   marginBottom: "5px",
   lineHeight: "1.4",
   "@media (max-width: 480px)": {
-    fontSize: "10px", // Text mai mic pentru descriere
+    fontSize: "10px",
   },
 };
 
@@ -228,7 +227,7 @@ const imageStyle = {
 };
 
 const navButtonStyle = {
-  backgroundColor: "#EC7015",
+  backgroundColor: "#4CAF50",        // green
   color: "#fff",
   border: "none",
   borderRadius: "50%",
@@ -242,16 +241,15 @@ const navButtonStyle = {
   "@media (max-width: 480px)": {
     width: "25px",
     height: "25px",
-    fontSize: "12px", // Font mai mic
+    fontSize: "12px",
   },
 };
-
 
 const linkStyle = {
   display: "inline-block",
   marginTop: "10px",
   padding: "8px 12px",
-  backgroundColor: "#EC7015",
+  backgroundColor: "#4CAF50",        // green
   color: "#fff",
   textDecoration: "none",
   borderRadius: "5px",
@@ -259,7 +257,7 @@ const linkStyle = {
 };
 
 const footerStyle = {
-  backgroundColor: "#EC7015",
+  backgroundColor: "#388E3C",        // darker green
   textAlign: "center",
   color: "#fff",
   fontSize: "12px",
@@ -268,12 +266,11 @@ const footerStyle = {
   left: "0",
   width: "100%",
   zIndex: 1000,
-  padding: "5px 10px", // Padding mai mic pe mobil
+  padding: "5px 10px",
   "@media (max-width: 480px)": {
-    fontSize: "10px", // Font mai mic
+    fontSize: "10px",
   },
 };
-
 
 const mainStyle = {
   flex: "1",
@@ -282,44 +279,42 @@ const mainStyle = {
 };
 
 const headerStyle = {
-  backgroundColor: "#EC7015",
+  backgroundColor: "#4CAF50",        // green
   color: "#fff",
-  padding: "15px 50px 15px", // Ajustăm padding-ul pentru ecrane mai mici
+  padding: "15px 50px 15px",
   fontSize: "16px",
   position: "fixed",
   top: "0",
   left: "0",
-  width: "95%", // Folosim toată lățimea ecranului
+  width: "95%",
   zIndex: 1000,
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  flexWrap: "wrap", // Permitem conținutului să se împacheteze pe rânduri
-  gap: "10px", // Spațiu între elemente
+  flexWrap: "wrap",
+  gap: "10px",
   "@media (max-width: 768px)": {
-    flexDirection: "column", // Toate elementele pe rânduri diferite
-    alignItems: "flex-start", // Aliniem la stânga
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
 };
 
-
 const cardStyle = {
-  backgroundColor: "#f9f9f9",
+  backgroundColor: "#fff",
   borderRadius: "10px",
-  boxShadow: "0px 4px 8px rgba(4, 110, 224, 0.28)",
+  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
   padding: "15px",
-  flex: "1 1 calc(33.33% - 70px)", // Trei carduri pe desktop
+  flex: "1 1 calc(33.33% - 70px)",
   margin: "0 10px",
   textAlign: "left",
   overflow: "hidden",
   "@media (max-width: 768px)": {
-    flex: "1 1 calc(50% - 20px)", // Două carduri pe tabletă
+    flex: "1 1 calc(50% - 20px)",
   },
   "@media (max-width: 480px)": {
-    flex: "1 1 100%", // Un card pe telefon
+    flex: "1 1 100%",
   },
 };
-
 
 const sliderContainerStyle = {
   display: "flex",
@@ -329,32 +324,32 @@ const sliderContainerStyle = {
   margin: "0 auto",
   maxWidth: "100%",
   "@media (max-width: 480px)": {
-    overflowX: "scroll", // Scroll orizontal pe telefoane
-    gap: "10px", // Spațiere între elemente
+    overflowX: "scroll",
+    gap: "10px",
   },
 };
-
-
 
 const sectionTitleStyle = {
   textAlign: "left",
   fontSize: "20px",
   marginBottom: "10px",
   padding: "0 20px",
+  color: "#2E7D32",                   // deep green
   "@media (max-width: 480px)": {
-    fontSize: "16px", // Text mai mic pe telefoane
-    padding: "0 10px", // Reducem padding-ul
+    fontSize: "16px",
+    padding: "0 10px",
   },
 };
 
 const cardTitleStyle = {
   fontSize: "14px",
   margin: "10px 0",
-  color: "#333",
+  color: "#1B5E20",                   // darker green
   "@media (max-width: 480px)": {
-    fontSize: "12px", // Text mai mic pe mobil
+    fontSize: "12px",
   },
 };
+
 
 
 

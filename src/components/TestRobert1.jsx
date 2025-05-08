@@ -368,8 +368,8 @@ function CameraTeleportButton({ setFreeCamera }) {
   const handlePointerDown = (e) => {
     e.stopPropagation();
     // Mutăm camera mai jos
-    camera.position.set(0, -10, -50);
-    camera.lookAt(new THREE.Vector3(0, -10, 0));
+    camera.position.set(0, -6.5, -50);  
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     setFreeCamera(true);
   };
 
@@ -384,7 +384,7 @@ function CameraTeleportButton({ setFreeCamera }) {
 // =============================
 // BOARD MODEL - PUS PE MASA2
 // =============================
-function BoardModel() {
+function BoardModel({ onLCDClick }) {
   // Încărcăm materialele din BoardV2.mtl din folderul "Imagini"
   const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
   materials.preload();
@@ -408,7 +408,7 @@ function BoardModel() {
 
       {/* Potentiometru */}
       <mesh
-        position={[-5, -9, -37]}
+        position={[-5, -6, -37]}
         rotation={[3, 0, 0]}
         scale={[2, 2, 2]}
         onClick={() => alert("Potentiometru")}
@@ -419,7 +419,7 @@ function BoardModel() {
 
       {/* US */}
       <mesh
-        position={[-4, -11.5, -37]}
+        position={[-4, -9, -37]}
         rotation={[3, 0, 0]}
         scale={[4, 2, 1]}
         onClick={() => alert("US")}
@@ -430,7 +430,7 @@ function BoardModel() {
 
       {/* Arduino */}
       <mesh
-        position={[1, -11, -37]}
+        position={[1, -8.5, -37]}
         rotation={[3, 0, 0]}
         scale={[4, 5, 1]}
         onClick={() => alert("Arduino")}
@@ -441,10 +441,14 @@ function BoardModel() {
 
       {/* LCD */}
       <mesh
-        position={[0, -6.5, -37]}
+        position={[0, -3.5, -37]}
         rotation={[3, 0, 0]}
         scale={[6, 3, 1]}
-        onClick={(e) => { e.stopPropagation(); onLCDClick(); }}
+        onPointerDown={(e) => { 
+                    e.stopPropagation();
+                    console.log("LCD clicked");   // ← for debugging
+                    onLCDClick();
+                  }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -452,7 +456,7 @@ function BoardModel() {
 
       {/* LSR */}
       <mesh
-        position={[-2, -9.5, -37]}
+        position={[-2, -7, -37]}
         rotation={[3, 0, 0]}
         scale={[1, 1, 1]}
         onClick={() => alert("LSR")}
@@ -463,7 +467,7 @@ function BoardModel() {
 
       {/* Nano */}
       <mesh
-        position={[-5, -3, -37]}
+        position={[-5, 0, -37]}
         rotation={[3, 0, 0]}
         scale={[3.2, 2, 1]}
         onClick={() => alert("Nano")}
@@ -474,18 +478,18 @@ function BoardModel() {
 
       {/* Joystick */}
       <mesh
-        position={[-1, -3, -37]}
+        position={[-1, 0, -37]}
         rotation={[3, 0, 0]}
         scale={[3, 6, 3]}
         onClick={() => alert("Joystick")}
       >
-        <planeGeometry args={[1, 1]} />
+        <planeGeometry args={[1, 0.5]} />
         <meshStandardMaterial transparent opacity={0} />
       </mesh>
 
       {/* ESP32 */}
       <mesh
-        position={[2.8, -3, -37]}
+        position={[2.8, 0, -37]}
         rotation={[3, 0, 0]}
         scale={[3, 3, 3]}
         onClick={() => alert("ESP32")}
@@ -496,7 +500,7 @@ function BoardModel() {
 
       {/* 7 Segment */}
       <mesh
-        position={[6, -3, -37]}
+        position={[6, 0, -37]}
         rotation={[3, 0, 0]}
         scale={[2, 2, 2]}
         onClick={() => alert("7 Segment")}
@@ -507,7 +511,7 @@ function BoardModel() {
 
       {/* LED */}
       <mesh
-        position={[6, -6, -37]}
+        position={[6, -4, -37]}
         rotation={[3, 0, 0]}
         scale={[2, 2, 2]}
         onClick={() => alert("LED")}
@@ -518,7 +522,7 @@ function BoardModel() {
 
       {/* Servomotor */}
       <mesh
-        position={[4.5, -10.5, -37]}
+        position={[5.5, -8, -37]}
         rotation={[3, 0, 0]}
         scale={[3, 3, 3]}
         onClick={() => alert("Servomotor")}
@@ -536,7 +540,7 @@ function BoardModel() {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -686,37 +690,59 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 // =============================
 // 5. MAIN ENVIRONMENT
 // =============================
-const TaskList = ({ tasks }) => (
-  <div
-    style={{
-      position: "absolute",
-      top: 10,
-      right: 10,
-      backgroundColor: "rgba(0,0,0,0.7)",
-      color: "#fff",
-      padding: 12,
-      borderRadius: 6,
-      zIndex: 1000,
-      fontSize: 14,
-    }}
-  >
-    <h3 style={{ margin: "0 0 8px", textAlign: "center" }}>Task-uri</h3>
-    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-      {tasks.map(t => (
-        <li
-          key={t.id}
-          style={{
-            marginBottom: 6,
-            color: t.completed ? "#4caf50" : "#f44336",
-            textDecoration: t.completed ? "line-through" : "none"
-          }}
-        >
-          {t.description}
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+
+const TaskList = ({ tasks }) => {
+  const navigate = useNavigate();
+  const allDone = tasks.every(t => t.completed);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 10,
+        right: 10,
+        backgroundColor: "rgba(0,0,0,0.7)",
+        color: "#fff",
+        padding: 12,
+        borderRadius: 6,
+        zIndex: 1000,
+        fontSize: 14,
+      }}
+    >
+      <h3 style={{ margin: "0 0 8px", textAlign: "center" }}>Task-uri</h3>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        {tasks.map(t => (
+          <li
+            key={t.id}
+            style={{
+              marginBottom: 6,
+              color: t.completed ? "#4caf50" : "#f44336",
+              textDecoration: t.completed ? "line-through" : "none"
+            }}
+          >
+            {t.description}
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() => navigate("/course-recommendations")}
+        disabled={!allDone}
+        style={{
+          marginTop: 8,
+          width: "100%",
+          padding: "6px 0",
+          background: allDone ? "#4caf50" : "#777",
+          color: "#fff",
+          border: "none",
+          borderRadius: 4,
+          cursor: allDone ? "pointer" : "not-allowed",
+        }}
+      >
+        {allDone ? "Continuă la recomandări" : "Finalizați task-urile întâi"}
+      </button>
+    </div>
+  );
+};
 const Environment = () => {
   const navigate = useNavigate();
 
@@ -733,12 +759,12 @@ const Environment = () => {
   };
 
   // 2) whenever *all* tasks are done, navigate
-  useEffect(() => {
-    if (tasks.every(t => t.completed)) {
+ // useEffect(() => {
+   // if (tasks.every(t => t.completed)) {
       // small delay so the user sees the UI update
-      setTimeout(() => navigate("/course-recommendations"), 500);
-    }
-  }, [tasks, navigate]);
+    //  setTimeout(() => navigate("/course-recommendations"), 500);
+   // }
+ // }, [tasks, navigate]);
   const [showTutorial, setShowTutorial] = useState(true);
   const keys = useKeyControls();
   const characterRef = useRef();
