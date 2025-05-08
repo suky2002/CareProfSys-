@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Html, useProgress } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { Menu, X, ArrowRightCircle } from "lucide-react";
+import emailjs from "emailjs-com";
 import styles from "./css/LandingPage.module.css";
 
 // Loader for 3D model
@@ -28,30 +29,57 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // --- EmailJS subscription state & handler ---
+  const [email, setEmail] = useState("");
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    emailjs
+      .send(
+        "service_628799u",
+        "template_2xx0mld",
+        { user_email: email },
+        "OQ7jKakPsDW33JA0g"
+      )
+      .then(() => {
+        alert("Mulțumim pentru abonare!");
+        setEmail("");
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Ceva nu a mers. Te rog încearcă din nou.");
+      });
+  };
+  // ----------------------------------------------
+
   const features = [
     { icon: "🌐", title: "Immersive Simulations", desc: "WebXR-powered environments for hands-on trials." },
-    { icon: "🧠", title: "AI Recommendations", desc: "Match your skills to roles with intelligent guidance." },
+    { icon: "🧠", title: "AI Recommendations",    desc: "Match your skills to roles with intelligent guidance." },
     { icon: "📚", title: "Education Integrations", desc: "Seamless connection with courses & credentials." },
-    { icon: "🕹", title: "Gamified Trials", desc: "Learn and test both hard and soft skills interactively." },
-    { icon: "📜", title: "Microcredentials", desc: "Earn badges to showcase your competencies." },
-    { icon: "🌍", title: "Global Network", desc: "Connect with mentors and peers worldwide." },
+    { icon: "🕹", title: "Gamified Trials",        desc: "Learn and test both hard and soft skills interactively." },
+    { icon: "📜", title: "Microcredentials",      desc: "Earn badges to showcase your competencies." },
+    { icon: "🌍", title: "Global Network",         desc: "Connect with mentors and peers worldwide." },
   ];
 
   const faqs = [
     { question: "How do I access the VR simulations?", answer: "Simply click 'Start Exploring' and follow the onboarding steps; no additional installs needed." },
-    { question: "Can I track my progress?", answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
+    { question: "Can I track my progress?",             answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
     { question: "Are educational credentials recognized?", answer: "We partner with accredited institutions to issue microcredentials that boost your portfolio." },
   ];
 
   return (
     <div className={styles.container}>
+      {/* Navbar */}
       <header className={styles.header}>
-        <h1 className={styles.title} onClick={() => navigate("/")}>CareProfSys++</h1>
+        <h1 className={styles.title} onClick={() => navigate("/")}>
+          CareProfSys++
+        </h1>
         <nav className={styles.nav}>
-          <a href="#features" className={styles.navLink}>Features</a>
+          <a href="#features"  className={styles.navLink}>Features</a>
           <a href="#experience" className={styles.navLink}>Experience</a>
-          <a href="#faqs" className={styles.navLink}>FAQs</a>
-          <button className={styles.signIn} onClick={() => navigate("/login")}>Sign In</button>
+          <a href="#faqs"     className={styles.navLink}>FAQs</a>
+          <button className={styles.signIn} onClick={() => navigate("/login")}>
+            Sign In
+          </button>
         </nav>
         <button className={styles.mobileToggle} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X /> : <Menu />}
@@ -60,13 +88,16 @@ export default function LandingPage() {
 
       {mobileOpen && (
         <nav className={styles.mobileNav}>
-          <a href="#features" className={styles.navLinkBlock}>Features</a>
+          <a href="#features"  className={styles.navLinkBlock}>Features</a>
           <a href="#experience" className={styles.navLinkBlock}>Experience</a>
-          <a href="#faqs" className={styles.navLinkBlock}>FAQs</a>
-          <button className={styles.signInBlock} onClick={() => navigate("/login")}>Sign In</button>
+          <a href="#faqs"     className={styles.navLinkBlock}>FAQs</a>
+          <button className={styles.signInBlock} onClick={() => navigate("/login")}>
+            Sign In
+          </button>
         </nav>
       )}
 
+      {/* Hero Section */}
       <section className={styles.hero}>
         <motion.h2
           className={styles.heroTitle}
@@ -82,11 +113,12 @@ export default function LandingPage() {
         >
           CareProfSys++ combines WebXR, AI-driven recommendations, and gamified simulations to help you discover and prepare for your dream profession.
         </motion.p>
-        <button className={styles.startButton} onClick={() => navigate("/start") }>
+        <button className={styles.startButton} onClick={() => navigate("/start")}>
           Start Exploring <ArrowRightCircle />
         </button>
       </section>
 
+      {/* 3D Experience Preview */}
       <section id="experience" className={`${styles.section} ${styles.experience}`}>
         <Canvas>
           <ambientLight intensity={0.4} />
@@ -96,9 +128,12 @@ export default function LandingPage() {
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1.5} />
         </Canvas>
-        <div className={styles.modelHint}>Rotate the model to preview VR setup</div>
+        <div className={styles.modelHint}>
+          Rotate the model to preview VR setup
+        </div>
       </section>
 
+      {/* Platform Features */}
       <section id="features" className={`${styles.section} ${styles.featuresSection}`}>
         <h3 className={styles.sectionTitle}>Platform Features</h3>
         <div className={styles.featuresGrid}>
@@ -112,6 +147,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
       <section id="faqs" className={`${styles.section} ${styles.faqSection}`}>
         <h3 className={styles.sectionTitle}>Frequently Asked Questions</h3>
         <div className={styles.faqList}>
@@ -124,12 +160,13 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Subscription Section */}
       <section className={`${styles.section} ${styles.subscription}`}>
         <h3 className={styles.sectionTitle}>Stay Updated</h3>
         <p className={styles.sectionText}>
           Subscribe to our newsletter for the latest features, career tips, and exclusive VR content.
         </p>
-        <form className={styles.subscriptionForm}>
+        <form className={styles.subscriptionForm} onSubmit={handleSubscribe}>
           <label htmlFor="email" className={styles.label}>Email Address</label>
           <input
             id="email"
@@ -137,31 +174,19 @@ export default function LandingPage() {
             className={styles.input}
             placeholder="you@example.com"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <button type="submit" className={styles.startButton}>Subscribe</button>
         </form>
       </section>
 
+      {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <div>
             <h4 className={styles.footerTitle}>CareProfSys++</h4>
             <p>Empowering your future, one VR simulation at a time.</p>
-          </div>
-          <div>
-            <h4 className={styles.footerTitle}>Resources</h4>
-            <ul className={styles.footerList}>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#experience">Experience</a></li>
-              <li><a href="#faqs">FAQs</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className={styles.footerTitle}>Legal</h4>
-            <ul className={styles.footerList}>
-              <li><a href="/terms">Terms of Service</a></li>
-              <li><a href="/privacy">Privacy Policy</a></li>
-            </ul>
           </div>
         </div>
         <div className={styles.footerCopy}>© 2025 CareProfSys++. All rights reserved.</div>
