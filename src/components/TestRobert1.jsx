@@ -4,8 +4,9 @@ import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { Sky, useGLTF, Text } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import TutorialOverlay from './TutorialOverlay2';
 import { TextureLoader } from 'three';
-
+import { useNavigate } from 'react-router-dom';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -443,7 +444,7 @@ function BoardModel() {
         position={[0, -6.5, -37]}
         rotation={[3, 0, 0]}
         scale={[6, 3, 1]}
-        onClick={() => alert("LCD")}
+        onClick={(e) => { e.stopPropagation(); onLCDClick(); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -677,7 +678,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
 
       {/* BOARD MODEL PUS PE MASA2 */}
-      <BoardModel />
+      <BoardModel onLCDClick={() => completeTask(1)} />
     </group>
   );
 };
@@ -685,7 +686,60 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 // =============================
 // 5. MAIN ENVIRONMENT
 // =============================
+const TaskList = ({ tasks }) => (
+  <div
+    style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      backgroundColor: "rgba(0,0,0,0.7)",
+      color: "#fff",
+      padding: 12,
+      borderRadius: 6,
+      zIndex: 1000,
+      fontSize: 14,
+    }}
+  >
+    <h3 style={{ margin: "0 0 8px", textAlign: "center" }}>Task-uri</h3>
+    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      {tasks.map(t => (
+        <li
+          key={t.id}
+          style={{
+            marginBottom: 6,
+            color: t.completed ? "#4caf50" : "#f44336",
+            textDecoration: t.completed ? "line-through" : "none"
+          }}
+        >
+          {t.description}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 const Environment = () => {
+  const navigate = useNavigate();
+
+  // 1) tasks state
+  const [tasks, setTasks] = useState([
+    { id: 1, description: "Apasă pe LCD", completed: false },
+    // … you could add more later
+  ]);
+
+  const completeTask = (taskId) => {
+    setTasks((prev) =>
+      prev.map(t => t.id === taskId ? { ...t, completed: true } : t)
+    );
+  };
+
+  // 2) whenever *all* tasks are done, navigate
+  useEffect(() => {
+    if (tasks.every(t => t.completed)) {
+      // small delay so the user sees the UI update
+      setTimeout(() => navigate("/course-recommendations"), 500);
+    }
+  }, [tasks, navigate]);
+  const [showTutorial, setShowTutorial] = useState(true);
   const keys = useKeyControls();
   const characterRef = useRef();
   const [targetPosition, setTargetPosition] = useState(null);
@@ -710,10 +764,16 @@ const Environment = () => {
       setMonitorImage('wood.jpeg');
     }
   };
-
-  return (
-    <div style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}>
-      <Canvas shadows style={{ width: '100%', height: '100%' }}>
+  if (showTutorial) {
+    return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
+  }
+    return (
+        <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+         {/* 1) TASK PANEL */}
+         <TaskList tasks={tasks} />
+  
+         {/* 2) 3D SCENE */}
+         <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <Sky />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
@@ -726,7 +786,11 @@ const Environment = () => {
           clearTarget={clearTarget}
         />
         <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
-        <CameraReturnHandler characterRef={characterRef} freeCamera={freeCamera} setFreeCamera={setFreeCamera} />
+        <CameraReturnHandler
+          characterRef={characterRef}
+          freeCamera={freeCamera}
+          setFreeCamera={setFreeCamera}
+        />
         <Ground setTargetPosition={setTargetPosition} />
         <Room
           characterRef={characterRef}
@@ -734,6 +798,7 @@ const Environment = () => {
           handleComputerClick={handleComputerClick}
           handleRedClick={handleRedClick}
           setFreeCamera={setFreeCamera}
+          completeTask={completeTask}
         />
       </Canvas>
     </div>
