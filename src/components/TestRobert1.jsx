@@ -7,6 +7,9 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import TutorialOverlay from './TutorialOverlay2';
 import { TextureLoader } from 'three';
 import { useNavigate } from 'react-router-dom';
+import { XR } from '@react-three/xr';
+
+
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -302,33 +305,39 @@ const roomColliders = [
 ];
 
 const Monitor = ({ monitorImage }) => {
-  const dekstopTexture = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
-  const woodTexture = useLoader(TextureLoader, '/Imagini/wood.jpeg');
+  // Încarci texturile o singură dată
+  const dekstopTex = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
+  const woodTex    = useLoader(TextureLoader, '/Imagini/wood.jpeg');
 
-  let texture;
-  if (monitorImage === 'Dekstopfree.png') {
-    texture = dekstopTexture;
-  } else if (monitorImage === 'wood.jpeg') {
-    texture = woodTexture;
-  } else {
-    texture = null;
-  }
+  // Alege textura potrivită
+  const texture = monitorImage === 'wood.jpeg'
+    ? woodTex
+    : dekstopTex;
 
   return (
-    <mesh position={[0, 1.9, -1.5]} rotation={[0, 0, 0]}>
-      <boxGeometry args={[2, 1.2, 0.1]} />
-      <meshStandardMaterial attach="material-0" color="black" />
-      <meshStandardMaterial attach="material-1" color="black" />
-      <meshStandardMaterial attach="material-2" color="black" />
-      <meshStandardMaterial attach="material-3" color="black" />
-      <meshStandardMaterial attach="material-4" color="black" />
-      <meshStandardMaterial
-        attach="material-5"
-        {...(texture ? { map: texture, color: 'white' } : { color: 'black' })}
-      />
-    </mesh>
+    <group position={[0, 1.9, -1.5]}>
+      {/* Rama monitorului e mereu neagră */}
+      <mesh>
+        <boxGeometry args={[2, 1.2, 0.1]} />
+        <meshStandardMaterial color="black" />
+      </mesh>
+
+      {/* Ecranul: afișăm plane doar dacă avem o imagine setată */}
+      {monitorImage && (
+        <mesh position={[0, 0, -0.055]}>
+          <planeGeometry args={[1.8, 1.0]} />
+          <meshStandardMaterial
+            map={texture}
+            side={THREE.DoubleSide}
+            toneMapped={false}
+          />
+        </mesh>
+      )}
+    </group>
   );
 };
+
+
 
 const Computer = (props) => {
   const computerObj = useLoader(OBJLoader, '/models/Computer.obj');
@@ -632,33 +641,28 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
       {/* MOUSE (red) */}
       <mesh
-        position={[-1.8, 1.25, -2]}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          handleRedClick();
-        }}
-      >
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color="red" />
-      </mesh>
+  position={[2.2,1.7,-3.1]}
+  onPointerDown={e => { e.stopPropagation(); handleComputerClick() }}
+>
+  <boxGeometry args={[0.5,0.5,0.5]} />
+  <meshStandardMaterial color="blue" />
+</mesh>
 
+<mesh
+  position={[-1.8,1.25,-2]}
+  onPointerDown={e => { e.stopPropagation(); handleRedClick() }}
+>
+  <boxGeometry args={[0.5,0.5,0.5]} />
+  <meshStandardMaterial color="red" />
+</mesh>
+      {/* MOUSE (blue) */}
       {/* Teleportare cu personajul (roșu) */}
       <TeleportButton characterRef={characterRef} />
 
       {/* Teleportare doar a camerei (verde) */}
       <CameraTeleportButton setFreeCamera={setFreeCamera} />
 
-      {/* COMPUTER BUTTON (blue) */}
-      <mesh
-        position={[2.2, 1.7, -3.1]}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          handleComputerClick();
-        }}
-      >
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color="blue" />
-      </mesh>
+      
 
       {/* POSTER */}
       <mesh position={[0, 4, -9.51]}>
@@ -673,7 +677,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       </Text>
 
       {/* COMPUTER (OBJ) */}
-      <Computer position={[2.2, 1.3, -2.1]} scale={[0.04, 0.04, 0.04]} rotation={[-Math.PI / 2, 0, Math.PI]} />
+      <Computer position={[2.2, 1.3, -2.1]} scale={[0.025, 0.025, 0.025]} rotation={[-Math.PI / 2, 0, Math.PI]} />
 
       {/* BOX-BASED BOOKSHELF */}
       <BookShelf position={[-9.4, 0, 0]} />
@@ -778,18 +782,16 @@ const Environment = () => {
   const [freeCamera, setFreeCamera] = useState(false);
 
   // Blue button => setează "Dekstopfree.png"
-  const handleComputerClick = () => {
-    if (!monitorImage) {
-      setMonitorImage('Dekstopfree.png');
-    }
-  };
+ // buton albastru — setează întotdeauna prima imagine
+ const handleComputerClick = () => {
+  // setează prima imagine doar când apeși
+  setMonitorImage('Dekstopfree.png');
+};
 
-  // Red button => schimbă imaginea monitorului în "wood.jpeg"
-  const handleRedClick = () => {
-    if (monitorImage === 'Dekstopfree.png') {
-      setMonitorImage('wood.jpeg');
-    }
-  };
+// buton roșu — a doua imagine
+const handleRedClick = () => {
+  setMonitorImage('wood.jpeg');
+};
   if (showTutorial) {
     return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
   }
@@ -800,6 +802,7 @@ const Environment = () => {
   
          {/* 2) 3D SCENE */}
          <Canvas shadows style={{ width: "100%", height: "100%" }}>
+          <XR>
         <Sky />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
@@ -826,6 +829,7 @@ const Environment = () => {
           setFreeCamera={setFreeCamera}
           completeTask={completeTask}
         />
+      </XR>
       </Canvas>
     </div>
   );

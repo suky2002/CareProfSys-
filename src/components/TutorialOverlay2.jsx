@@ -1,5 +1,4 @@
-import "./css/TutorialOverlay.css"; // Creăm un fișier CSS pentru stiluri
-
+import "./css/TutorialOverlay.css";
 import React, { useState } from "react";
 
 const TutorialOverlay = ({ onClose }) => {
@@ -8,19 +7,21 @@ const TutorialOverlay = ({ onClose }) => {
   const slides = [
     {
       title: "Welcome to the Broadcasting Studio!",
-      content: (
+      beforeImage: (
         <>
           <p>You are in a professional broadcasting engineering studio simulator.</p>
           <p>
-            Use the <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> keys to move
-            around. Use the mouse to interact with objects by clicking on them.
+            Use the <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> keys to move around.
+            Use the mouse to interact with objects by clicking on them.
           </p>
-          <img
-            src="https://png.pngtree.com/png-vector/20230414/ourmid/pngtree-keyboard-keys-vector-png-image_6705739.png" // Înlocuiește cu calea corectă către imaginea ta
-            alt="WASD keys"
-            className="tutorial-keys-image"
-          />
         </>
+      ),
+      image: (
+        <img
+          src="https://png.pngtree.com/png-vector/20230414/ourmid/pngtree-keyboard-keys-vector-png-image_6705739.png"
+          alt="WASD keys"
+          className="tutorial-keys-image"
+        />
       ),
     },
     {
@@ -28,12 +29,12 @@ const TutorialOverlay = ({ onClose }) => {
       content: (
         <>
           <p>
-            There are <strong>5 tasks</strong> you need to complete to understand the work of an engineer in a
-            broadcasting studio. Each task simulates real-world challenges.
+            There are <strong>5 tasks</strong> you need to complete to understand the work of an engineer in a broadcasting studio.
+            Each task simulates real-world challenges.
           </p>
           <p>
-            Completing tasks will unlock new features and advance the studio simulation. Keep an eye out for
-            instructions and hints as you explore.
+            Completing tasks will unlock new features and advance the studio simulation.
+            Keep an eye out for instructions and hints as you explore.
           </p>
         </>
       ),
@@ -42,14 +43,12 @@ const TutorialOverlay = ({ onClose }) => {
       title: "Gamification System",
       content: (
         <>
-          <p>
-            Completing tasks will grant you rewards such as:
-            <ul>
-              <li>Unlocking new equipment.</li>
-              <li>Increasing studio performance metrics.</li>
-              <li>Receiving badges and achievements.</li>
-            </ul>
-          </p>
+          <p>Completing tasks will grant you rewards such as:</p>
+          <ul>
+            <li>Unlocking new equipment.</li>
+            <li>Increasing studio performance metrics.</li>
+            <li>Receiving badges and achievements.</li>
+          </ul>
           <p>Can you complete all tasks and optimize the studio setup?</p>
         </>
       ),
@@ -67,10 +66,23 @@ const TutorialOverlay = ({ onClose }) => {
   return (
     <div className="tutorial-overlay">
       <h1>{slides[currentSlide].title}</h1>
-      <div>{slides[currentSlide].content}</div>
-      <button className="tutorial-button" onClick={nextSlide}>
-        {currentSlide < slides.length - 1 ? "Next" : "Start Exploring"}
-      </button>
+
+      {currentSlide === 0 ? (
+        <>
+          <div>{slides[0].beforeImage}</div>
+          <button className="tutorial-button" onClick={nextSlide}>
+            Next
+          </button>
+          <div>{slides[0].image}</div>
+        </>
+      ) : (
+        <>
+          <div>{slides[currentSlide].content}</div>
+          <button className="tutorial-button" onClick={nextSlide}>
+            {currentSlide < slides.length - 1 ? "Next" : "Start Exploring"}
+          </button>
+        </>
+      )}
     </div>
   );
 };

@@ -1,4 +1,6 @@
-import React, { useState, Suspense } from "react";
+// src/components/LandingPage.jsx
+
+import React, { useState, Suspense, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Html, useProgress } from "@react-three/drei";
@@ -6,6 +8,9 @@ import { motion } from "framer-motion";
 import { Menu, X, ArrowRightCircle } from "lucide-react";
 import emailjs from "emailjs-com";
 import styles from "./css/LandingPage.module.css";
+
+// Initialize EmailJS with your Public Key
+emailjs.init("OQ7jKakPsDW33JA0g");
 
 // Loader for 3D model
 const Loader = () => {
@@ -31,38 +36,50 @@ export default function LandingPage() {
 
   // --- EmailJS subscription state & handler ---
   const [email, setEmail] = useState("");
+
   const handleSubscribe = (e) => {
     e.preventDefault();
+
+    const serviceID         = "service_628799u";
+    const ownerTemplateID   = "template_2xx0mld";     // notificare către tine
+    const confirmTemplateID = "template_b2it3ht";     // confirmare abonat
+    const publicKey         = "OQ7jKakPsDW33JA0g";
+
+    // 1) Trimite notificarea către tine
     emailjs
-      .send(
-        "service_628799u",
-        "template_2xx0mld",
-        { user_email: email },
-        "OQ7jKakPsDW33JA0g"
-      )
+      .send(serviceID, ownerTemplateID, { user_email: email }, publicKey)
       .then(() => {
-        alert("Mulțumim pentru abonare!");
+        // 2) Apoi trimite emailul de bun-venit către abonat
+        return emailjs.send(
+          serviceID,
+          confirmTemplateID,
+          { user_email: email },
+          publicKey
+        );
+      })
+      .then(() => {
+        alert("Mulțumim pentru abonare! Vei primi un email de confirmare.");
         setEmail("");
       })
       .catch((err) => {
-        console.error(err);
+        console.error("EmailJS error:", err);
         alert("Ceva nu a mers. Te rog încearcă din nou.");
       });
   };
   // ----------------------------------------------
 
   const features = [
-    { icon: "🌐", title: "Immersive Simulations", desc: "WebXR-powered environments for hands-on trials." },
-    { icon: "🧠", title: "AI Recommendations",    desc: "Match your skills to roles with intelligent guidance." },
-    { icon: "📚", title: "Education Integrations", desc: "Seamless connection with courses & credentials." },
-    { icon: "🕹", title: "Gamified Trials",        desc: "Learn and test both hard and soft skills interactively." },
-    { icon: "📜", title: "Microcredentials",      desc: "Earn badges to showcase your competencies." },
-    { icon: "🌍", title: "Global Network",         desc: "Connect with mentors and peers worldwide." },
+    { icon: "🌐", title: "Immersive Simulations",    desc: "WebXR-powered environments for hands-on trials." },
+    { icon: "🧠", title: "AI Recommendations",        desc: "Match your skills to roles with intelligent guidance." },
+    { icon: "📚", title: "Education Integrations",   desc: "Seamless connection with courses & credentials." },
+    { icon: "🕹", title: "Gamified Trials",           desc: "Learn and test both hard and soft skills interactively." },
+    { icon: "📜", title: "Microcredentials",         desc: "Earn badges to showcase your competencies." },
+    { icon: "🌍", title: "Global Network",           desc: "Connect with mentors and peers worldwide." },
   ];
 
   const faqs = [
     { question: "How do I access the VR simulations?", answer: "Simply click 'Start Exploring' and follow the onboarding steps; no additional installs needed." },
-    { question: "Can I track my progress?",             answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
+    { question: "Can I track my progress?",            answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
     { question: "Are educational credentials recognized?", answer: "We partner with accredited institutions to issue microcredentials that boost your portfolio." },
   ];
 
@@ -76,7 +93,7 @@ export default function LandingPage() {
         <nav className={styles.nav}>
           <a href="#features"  className={styles.navLink}>Features</a>
           <a href="#experience" className={styles.navLink}>Experience</a>
-          <a href="#faqs"     className={styles.navLink}>FAQs</a>
+          <a href="#faqs"      className={styles.navLink}>FAQs</a>
           <button className={styles.signIn} onClick={() => navigate("/login")}>
             Sign In
           </button>
@@ -86,11 +103,12 @@ export default function LandingPage() {
         </button>
       </header>
 
+      {/* Mobile nav */}
       {mobileOpen && (
         <nav className={styles.mobileNav}>
           <a href="#features"  className={styles.navLinkBlock}>Features</a>
           <a href="#experience" className={styles.navLinkBlock}>Experience</a>
-          <a href="#faqs"     className={styles.navLinkBlock}>FAQs</a>
+          <a href="#faqs"      className={styles.navLinkBlock}>FAQs</a>
           <button className={styles.signInBlock} onClick={() => navigate("/login")}>
             Sign In
           </button>
@@ -128,9 +146,7 @@ export default function LandingPage() {
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1.5} />
         </Canvas>
-        <div className={styles.modelHint}>
-          Rotate the model to preview VR setup
-        </div>
+        <div className={styles.modelHint}>Rotate the model to preview VR setup</div>
       </section>
 
       {/* Platform Features */}
@@ -177,7 +193,9 @@ export default function LandingPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button type="submit" className={styles.startButton}>Subscribe</button>
+          <button type="submit" className={styles.startButton}>
+            Subscribe
+          </button>
         </form>
       </section>
 
