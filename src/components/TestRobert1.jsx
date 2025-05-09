@@ -2,14 +2,15 @@ import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { Sky, useGLTF, Text } from '@react-three/drei';
+import { MathUtils } from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import TutorialOverlay from './TutorialOverlay2';
 import { TextureLoader } from 'three';
 import { useNavigate } from 'react-router-dom';
-import { XR } from '@react-three/xr';
-
-
+import { OrbitControls } from '@react-three/drei';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
+import { XR } from '@react-three/xr'
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -223,18 +224,37 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
   }, [freeCamera, setFreeCamera, characterRef, camera]);
   return null;
 }
+function CameraBoundaryEnforcer() {
+  
+  const { camera } = useThree();
+  useFrame(() => {
+    // horizontal limits (walls sit at ±10±0.5 → interior ±9.5)
+    const xMin = -9.5, xMax =  9.5;
+    const zMin = -9.5, zMax =  9.5;
+    // vertical limits: floor at y=0, ceiling collider runs y∈[5,6]
+    const yMin =  0.0, yMax = 4.5;
 
+    camera.position.x = MathUtils.clamp(camera.position.x, xMin, xMax);
+    camera.position.y = MathUtils.clamp(camera.position.y, yMin, yMax);
+    camera.position.z = MathUtils.clamp(camera.position.z, zMin, zMax);
+  });
+  return null;
+}
 const Ground = ({ setTargetPosition }) => (
   <mesh
-    rotation={[-Math.PI / 2, 0, 0]}
+  rotation={[-Math.PI / 2, 0, 0]}
     position={[0, 0, 0]}
-    onPointerDown={(e) => {
+    receiveShadow
+   onPointerDown={(e) => {
       e.stopPropagation();
+      // e.point conține coordonatele 3D ale punctului de impact
       setTargetPosition(e.point.clone());
     }}
   >
-    <planeGeometry args={[0, 0]} />
-    <meshStandardMaterial color="green" />
+    {/* extinde planeGeometry ca să primească click‐uri */}
+    <planeGeometry args={[20, 20]} />
+    {/* fă‐l invizibil, dar să continue să primească evenimente */}
+    <meshStandardMaterial transparent opacity={0} />
   </mesh>
 );
 
@@ -748,8 +768,16 @@ const TaskList = ({ tasks }) => {
   );
 };
 const Environment = () => {
-  const navigate = useNavigate();
-
+    const navigate = useNavigate();
+    const controlsRef = useRef(null);
+    function ControlsUpdater() {
+    useFrame(() => {
+      if (controlsRef.current && characterRef.current) {
+        controlsRef.current.target.copy(characterRef.current.position);
+      }
+    });
+    return null;
+  }
   // 1) tasks state
   const [tasks, setTasks] = useState([
     { id: 1, description: "Apasă pe LCD", completed: false },
@@ -795,44 +823,86 @@ const handleRedClick = () => {
   if (showTutorial) {
     return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
   }
-    return (
-        <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-         {/* 1) TASK PANEL */}
-         <TaskList tasks={tasks} />
+  return (
+    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+      {/* 1) TASK PANEL */}
+      <TaskList tasks={tasks} />
+      +   {/* 2) BUTTON TO RETURN CAMERA */}
+   <button
+     onClick={() => setFreeCamera(false)}
+     style={{
+       position: "absolute",
+       top: 120,
+       right: 10,
+       zIndex: 1000,
+       padding: "6px 12px",
+       background: "#4caf50",
+       color: "#fff",
+       border: "none",
+       borderRadius: 4,
+       cursor: "pointer",
+     }}
+   >
+     Revenire Cameră
+   </button>
+      {/* 2) 3D SCENE */}
+      <Canvas shadows style={{ width: "100%", height: "100%" }}>
+        <XR>
+          <Sky />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
   
-         {/* 2) 3D SCENE */}
-         <Canvas shadows style={{ width: "100%", height: "100%" }}>
-          <XR>
-        <Sky />
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+          <Character
+            ref={characterRef}
+            keys={keys}
+            wallColliders={roomColliders}
+            target={targetPosition}
+            clearTarget={clearTarget}
+          />
+  <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
 
-        <Character
-          ref={characterRef}
-          keys={keys}
-          wallColliders={roomColliders}
-          target={targetPosition}
-          clearTarget={clearTarget}
-        />
-        <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
-        <CameraReturnHandler
-          characterRef={characterRef}
-          freeCamera={freeCamera}
-          setFreeCamera={setFreeCamera}
-        />
-        <Ground setTargetPosition={setTargetPosition} />
-        <Room
-          characterRef={characterRef}
-          monitorImage={monitorImage}
-          handleComputerClick={handleComputerClick}
-          handleRedClick={handleRedClick}
-          setFreeCamera={setFreeCamera}
-          completeTask={completeTask}
-        />
-      </XR>
+       {/* listen for P to return the cam to follow‐mode */}
+       <CameraReturnHandler
+         characterRef={characterRef}
+         freeCamera={freeCamera}
+         setFreeCamera={setFreeCamera}
+       />
+  
+          {/* Ground invizibil, care primește click-urile */}
+          <Ground setTargetPosition={setTargetPosition} />
+  
+          <Room
+            characterRef={characterRef}
+            monitorImage={monitorImage}
+            handleComputerClick={handleComputerClick}
+            handleRedClick={handleRedClick}
+            setFreeCamera={setFreeCamera}
+            completeTask={completeTask}
+          />
+  
+          {/* orbit liber, pivot pe caracter */}
+          <OrbitControls
+            ref={controlsRef}
+            makeDefault
+            enablePan={false}
+            enableRotate
+            enableZoom
+            minDistance={5}
+            maxDistance={15}
+            minPolarAngle={Math.PI * 0.17}  /* ~30° */
+            maxPolarAngle={Math.PI * 0.44}  /* ~80° */
+            minAzimuthAngle={-Infinity}
+           maxAzimuthAngle={ Infinity }
+           onStart={() => setFreeCamera(true)}
+           onEnd={() => {/* nothing here; pressing “P” will re-attach */}}
+         />
+         <ControlsUpdater />
+         <CameraBoundaryEnforcer />
+        </XR>
       </Canvas>
     </div>
   );
+  
 };
 
 export default Environment;
