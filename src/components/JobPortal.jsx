@@ -11,7 +11,7 @@ function JobIntroPortalContent() {
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black" />
-      
+
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 -translate-y-[10%] px-8">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -32,7 +32,7 @@ function JobIntroPortalContent() {
             <p className="text-2xl font-medium text-white mb-2">
               Matching Score: <span className="text-yellow-400 font-bold">{matchScore}%</span>
             </p>
-            <p className={`text-xl ${isMatch ? 'text-green-400' : 'text-orange-400'}`}> 
+            <p className={`text-xl ${isMatch ? 'text-green-400' : 'text-orange-400'}`}>
               {isMatch
                 ? "Great match! You're ready to dive into this role."
                 : "This role might be challenging, but you're welcome to explore it."}
@@ -58,12 +58,11 @@ function JobIntroPortalContent() {
           className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl px-4"
         >
           <div
-            className={`relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 ${
-              isMatch 
-                ? 'bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm' 
+            className={`relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 ${isMatch
+                ? 'bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm'
                 : 'bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-gray-600 hover:shadow-lg cursor-pointer backdrop-blur-sm'
-            }`}
-            onClick={() => navigate('/env3')}
+              }`}
+            onClick={() => navigate('/level1')}
           >
             <h2 className="text-4xl font-bold mb-4 text-white">Broadcasting Engineer</h2>
             <p className="text-white text-opacity-90 text-lg">

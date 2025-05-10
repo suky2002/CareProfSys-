@@ -6,6 +6,9 @@ import JobPortal from "./components/JobPortal";
 import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
 import CourseRecommendations from "./components/CourseRecommendations";
 import SoundManager from "./components/SoundManager";
+import Level1 from "./scenes/Level1";
+import QuizLevel from "./scenes/QuizLevel";
+import QuizResults from "./components/QuizResults";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -29,7 +32,10 @@ const AppContent = () => {
         <Route path="/" element={<StartScreen volume={volume} setVolume={setVolume} />} />
         <Route path="/create-avatar" element={<CreateAvatar volume={volume} setVolume={setVolume} />} />
         <Route path="/job-portal" element={<JobPortal volume={volume} setVolume={setVolume} />} />
-        <Route path="/env3" element={<EnvironmentThreeScene />} />
+        <Route path="/level1" element={<Level1 />} />
+        <Route path="/quiz" element={<QuizLevel />} />
+        <Route path="/quiz-results" element={<QuizResults />} />
+        {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"
           element={
