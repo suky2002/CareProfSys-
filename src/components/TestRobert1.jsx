@@ -38,29 +38,33 @@ const useKeyControls = () => {
   }, []);
   return keys.current;
 };
-function KeyboardTeleport({ controlsRef, setFreeCamera }) {
+function KeyboardTeleport({ controlsRef, setFreeCamera, setSavedCameraPosition }) {
   const { camera } = useThree();
 
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key.toLowerCase() === 'm') {
-        // 1) flip into free-camera mode
-        setFreeCamera(true);
+        setFreeCamera(true); // 1. activează freeCamera
+        setSavedCameraPosition(camera.position.clone()); // 2. salvează poziția camerei
 
-        // 2) enable orbit controls so you can look around
-        if (controlsRef.current) controlsRef.current.enabled = true;
+        if (controlsRef.current) {
+          controlsRef.current.enabled = true;
+          // 3. dezactivează orbit target lock pe caracter
+          controlsRef.current.target.set(0, 0, 0);
+        }
 
-        // 3) *now* teleport the camera
-        camera.position.set(0, 6, -50);
+        // 4. setează camera într-o poziție fixă
+        camera.position.set(0, 1, -14);
         camera.lookAt(0, 0, 0);
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [camera, controlsRef, setFreeCamera]);
+  }, [camera, controlsRef, setFreeCamera, setSavedCameraPosition]);
 
   return null;
 }
+
 function centerModelAtGround(scene) {
   scene.traverse((child) => {
     if (child.isMesh) {
@@ -72,7 +76,8 @@ function centerModelAtGround(scene) {
   scene.position.y -= yOffset;
 }
 
-const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget }, ref) => {
+const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget, freeCamera }, ref) => {
+
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
   const walkingModel = useGLTF('/models/Deadwalking.glb');
 
@@ -228,16 +233,21 @@ const CameraFollow = ({ characterRef, freeCamera }) => {
 // =============================
 // TASTA "P" => REVENIRE CAMERA URMĂRIRE
 // =============================
-function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
+function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera, savedCameraPosition }) {
+
   const { camera } = useThree();
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (freeCamera && e.key.toLowerCase() === 'p') {
         setFreeCamera(false);
-        if (characterRef.current) {
+        if (savedCameraPosition) {
+          camera.position.copy(savedCameraPosition); // ← revenim la poziția anterioară
+        } else if (characterRef.current) {
           const characterPosition = characterRef.current.position.clone();
           camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 1, -1)));
-          camera.lookAt(characterPosition);
+        }
+        if (characterRef.current) {
+          camera.lookAt(characterRef.current.position);
         }
       }
     };
@@ -420,7 +430,7 @@ function CameraTeleportButton({ setFreeCamera }) {
   const handlePointerDown = (e) => {
     e.stopPropagation();
     // Mutăm camera mai jos
-    camera.position.set(0, -6.5, -50);  
+    camera.position.set(0, -1, -13);  
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     setFreeCamera(true);
   };
@@ -450,9 +460,9 @@ function BoardModel({ onLCDClick }) {
       {/* Modelul BoardV2 */}
       <primitive
         object={boardObj}
-        position={[-1, -3, -8]}
-        scale={[0.3, 0.3, 0.3]}
-        rotation={[3, 0, 3.15]}
+        position={[-1, 2.6, -11]}
+        scale={[0.025, 0.025, 0.025]}
+        rotation={[3.15, 0, 3.15]}
       />
 
 
@@ -547,7 +557,7 @@ function BoardModel({ onLCDClick }) {
         onClick={() => alert("ESP32")}
       >
         <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial transparent opacity={0} />
+        <meshStandardMaterial transparent opacity={1} />
       </mesh>
 
       {/* 7 Segment */}
@@ -715,7 +725,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       <Text position={[0, 4.5, -9.5]} fontSize={0.5} color="black">
         Circuit Diagram
       </Text>
-      <Text position={[0, 6.5, -9]} fontSize={1} color="yellow">
+      <Text position={[0, 6.5, -9]} rotation={[0,3.3,0]} fontSize={1} color="yellow">
         Electronics Lab
       </Text>
 
@@ -793,14 +803,18 @@ const TaskList = ({ tasks }) => {
 const Environment = () => {
     const navigate = useNavigate();
     const controlsRef = useRef(null);
-    function ControlsUpdater() {
-    useFrame(() => {
-      if (controlsRef.current && characterRef.current) {
-        controlsRef.current.target.copy(characterRef.current.position);
-      }
-    });
-    return null;
-  }
+    function ControlsUpdater({ freeCamera }) {
+      const { camera } = useThree();
+      useFrame(() => {
+        if (freeCamera) return; // ✅ Blochează actualizarea target-ului când e în mod liber
+        if (controlsRef.current && characterRef.current) {
+          controlsRef.current.target.copy(characterRef.current.position);
+        }
+      });
+      return null;
+    }
+    
+  const [savedCameraPosition, setSavedCameraPosition] = useState(null);
   // 1) tasks state
   const [tasks, setTasks] = useState([
     { id: 1, description: "Apasă pe LCD", completed: false },
@@ -881,15 +895,17 @@ const handleRedClick = () => {
             wallColliders={roomColliders}
             target={targetPosition}
             clearTarget={clearTarget}
+            freeCamera={freeCamera}
           />
   <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
 
        {/* listen for P to return the cam to follow‐mode */}
        <CameraReturnHandler
-         characterRef={characterRef}
-         freeCamera={freeCamera}
-         setFreeCamera={setFreeCamera}
-       />
+  characterRef={characterRef}
+  freeCamera={freeCamera}
+  setFreeCamera={setFreeCamera}
+  savedCameraPosition={savedCameraPosition}
+/>
   
           {/* Ground invizibil, care primește click-urile */}
           <Ground setTargetPosition={setTargetPosition} />
@@ -919,10 +935,11 @@ const handleRedClick = () => {
            onStart={() => setFreeCamera(true)}
            onEnd={() => {/* nothing here; pressing “P” will re-attach */}}
          />
-          <KeyboardTeleport
-           controlsRef={controlsRef}
-           setFreeCamera={setFreeCamera}
-         />
+        <KeyboardTeleport
+  controlsRef={controlsRef}
+  setFreeCamera={setFreeCamera}
+  setSavedCameraPosition={setSavedCameraPosition}
+/>
          <ControlsUpdater />
          <CameraBoundaryEnforcer freeCamera={freeCamera} />
         </XR>
