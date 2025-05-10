@@ -290,7 +290,78 @@ const Ground = ({ setTargetPosition }) => (
     <meshStandardMaterial transparent opacity={0} />
   </mesh>
 );
+const ElectricPanel = ({ lightOn, toggleLight }) => {
+  return (
+    <group position={[-8, 1, -5]}>
+      {/* Cutie electrică */}
+      <mesh>
+        <boxGeometry args={[1, 2, 0.3]} />
+        <meshStandardMaterial color="#222" />
+      </mesh>
 
+      {/* Buton de comutare */}
+      <mesh
+        position={[0, 0.5, 0.15]}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleLight();
+        }}
+      >
+        <boxGeometry args={[0.3, 0.3, 0.1]} />
+        <meshStandardMaterial color={lightOn ? 'green' : 'red'} />
+      </mesh>
+
+      {/* Bec */}
+      <mesh position={[0, 1.2, 0.15]}>
+        <sphereGeometry args={[0.1, 16, 16]} />
+        <meshStandardMaterial color={lightOn ? 'yellow' : 'gray'} emissive={lightOn ? 'yellow' : 'black'} />
+      </mesh>
+    </group>
+  );
+};
+
+// Componentă pentru un task de tip quiz (multiple choice)
+function QuizTask({ task, onComplete }) {
+  const [selected, setSelected] = React.useState(null);
+  const [answered, setAnswered] = React.useState(false);
+
+  const submitAnswer = () => {
+    if (selected === task.correctOption) {
+      onComplete(true);  // răspuns corect
+    } else {
+      onComplete(false); // răspuns greșit
+    }
+    setAnswered(true);
+  };
+
+  return (
+    <div className="quiz-task">
+      <p><strong>{task.intrebare}</strong></p>
+      {task.optiuni.map((opt, idx) => (
+        <div key={idx}>
+          <label>
+            <input 
+              type="radio" 
+              name="quiz" 
+              checked={selected === idx} 
+              onChange={() => setSelected(idx)} 
+            />
+            {opt}
+          </label>
+        </div>
+      ))}
+      <button onClick={submitAnswer}>Verifică</button>
+      {/* Feedback imediat */}
+      {answered && (
+        <p>
+          {selected === task.correctOption 
+            ? "Corect! 🟢" 
+            : "Răspuns greșit. Încearcă din nou. 🔴"}
+        </p>
+      )}
+    </div>
+  );
+}
 // =============================
 // 2. OPTIONAL "BOOKSHELF" (BOXES)
 // =============================
@@ -737,6 +808,20 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
   <boxGeometry args={[0.5,0.5,0.5]} />
   <meshStandardMaterial color="red" />
 </mesh>
+{/* Zona de măsurare (Multimetru) */}
+<mesh
+  position={[-4.5, 1.3, -1.5]}  // ajustează poziția după caz
+  rotation={[-Math.PI / 2, 0, 0]}
+  onPointerDown={(e) => {
+    e.stopPropagation();
+    alert("Tensiune măsurată: 3.3V");
+    completeTask(5);
+  }}
+>
+  <boxGeometry args={[0.6, 0.1, 0.3]} />
+  <meshStandardMaterial color="black" />
+</mesh>
+
       {/* MOUSE (blue) */}
       {/* Teleportare cu personajul (roșu) */}
       <TeleportButton characterRef={characterRef} />
@@ -845,7 +930,9 @@ const Environment = () => {
       });
       return null;
     }
-    
+    const [showQuiz, setShowQuiz] = useState(false);
+    const [lightOn, setLightOn] = useState(false);
+    const toggleLight = () => setLightOn(prev => !prev); 
   const [savedCameraPosition, setSavedCameraPosition] = useState(null);
   // 1) tasks state
   const [tasks, setTasks] = useState([
@@ -853,7 +940,9 @@ const Environment = () => {
       { id: 1, description: "Apasă pe LCD", completed: false },
       { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false },
       { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
-      { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false }
+      { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false },
+      { id: 5, description: "Verifică tensiunea în zona de măsurare", completed: false },
+      { id: 6, description: 'Rezolvă întrebarea quiz', completed: false }
       
     // … you could add more later
   ]);
@@ -863,7 +952,12 @@ const Environment = () => {
       prev.map(t => t.id === taskId ? { ...t, completed: true } : t)
     );
   };
-
+  const handleQuizComplete = (correct) => {
+    if (correct) {
+      completeTask(6);
+      setShowQuiz(false);
+    }
+  };
   // 2) whenever *all* tasks are done, navigate
  // useEffect(() => {
    // if (tasks.every(t => t.completed)) {
@@ -902,7 +996,23 @@ const handleRedClick = () => {
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       {/* 1) TASK PANEL */}
       <TaskList tasks={tasks} />
-      +   {/* 2) BUTTON TO RETURN CAMERA */}
+      {showQuiz && (
+        <QuizTask
+          task={{
+            intrebare: 'Care este tensiunea standard a unui pin digital HIGH pe Arduino?',
+            optiuni: ['3.3V', '1.8V', '5V', '0V'],
+            correctOption: 2,
+          }}
+          onComplete={handleQuizComplete}
+        />
+      )}
+      <button
+        onClick={() => setShowQuiz(true)}
+        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1000 }}
+      >
+        Deschide Quiz
+      </button>
+         {/* 2) BUTTON TO RETURN CAMERA */}
    <button
      onClick={() => setFreeCamera(false)}
      style={{
@@ -956,6 +1066,7 @@ const handleRedClick = () => {
             setFreeCamera={setFreeCamera}
             completeTask={completeTask}
           />
+          <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
   <ProjectorScreen monitorImage={monitorImage} />
           {/* orbit liber, pivot pe caracter */}
           <OrbitControls
