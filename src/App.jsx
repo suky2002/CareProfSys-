@@ -9,6 +9,8 @@ import SoundManager from "./components/SoundManager";
 import Level1 from "./scenes/Level1";
 import QuizLevel from "./scenes/QuizLevel";
 import QuizResults from "./components/QuizResults";
+import { Result } from "postcss";
+import ResultsScreen from "./components/ResultsScreen";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -35,6 +37,7 @@ const AppContent = () => {
         <Route path="/level1" element={<Level1 />} />
         <Route path="/quiz" element={<QuizLevel />} />
         <Route path="/quiz-results" element={<QuizResults />} />
+        <Route path="/results" element={<ResultsScreen />} />
         {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"
