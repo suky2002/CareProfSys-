@@ -54,7 +54,7 @@ function KeyboardTeleport({ controlsRef, setFreeCamera, setSavedCameraPosition }
         }
 
         // 4. setează camera într-o poziție fixă
-        camera.position.set(0, 1, -14);
+        camera.position.set(0, 5, -15);
         camera.lookAt(0, 0, 0);
       }
     };
@@ -430,7 +430,7 @@ function CameraTeleportButton({ setFreeCamera }) {
   const handlePointerDown = (e) => {
     e.stopPropagation();
     // Mutăm camera mai jos
-    camera.position.set(0, -1, -13);  
+    camera.position.set(1, 0, -13);  
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     setFreeCamera(true);
   };
@@ -442,6 +442,29 @@ function CameraTeleportButton({ setFreeCamera }) {
     </mesh>
   );
 }
+function ProjectorScreen({ monitorImage }) {
+  const dekstopTex = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
+  const woodTex = useLoader(TextureLoader, '/Imagini/wood.jpeg');
+
+  if (!monitorImage) return null; // 🔥 nu afișa nimic dacă monitorul e oprit
+
+  const texture = monitorImage === 'wood.jpeg' ? woodTex : dekstopTex;
+
+  return (
+    <mesh
+      position={[9.49, 3.2, 0.5]}
+      rotation={[0, -Math.PI / 2, 0]}
+    >
+      <planeGeometry args={[5, 3]} />
+      <meshStandardMaterial
+        map={texture}
+        side={THREE.DoubleSide}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
 
 // =============================
 // BOARD MODEL - PUS PE MASA2
@@ -460,7 +483,7 @@ function BoardModel({ onLCDClick }) {
       {/* Modelul BoardV2 */}
       <primitive
         object={boardObj}
-        position={[-1, 2.6, -11]}
+        position={[0, 2.6, -11]}
         scale={[0.025, 0.025, 0.025]}
         rotation={[3.15, 0, 3.15]}
       />
@@ -470,9 +493,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* Potentiometru */}
       <mesh
-        position={[-5, -6, -37]}
+        position={[-1.7, 2.4, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[2, 2, 2]}
+        scale={[0.7, 0.7, 1]}
         onClick={() => alert("Potentiometru")}
       >
         <planeGeometry args={[1, 1]} />
@@ -481,9 +504,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* US */}
       <mesh
-        position={[-4, -9, -37]}
-        rotation={[3, 0, 0]}
-        scale={[4, 2, 1]}
+         position={[-1.3, 1.2, -11.5]}
+         rotation={[3, 0, 0]}
+         scale={[1.3, 0.7, 1]}
         onClick={() => alert("US")}
       >
         <planeGeometry args={[1, 1]} />
@@ -492,9 +515,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* Arduino */}
       <mesh
-        position={[1, -8.5, -37]}
+       position={[0.5, 1.6, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[4, 5, 1]}
+        scale={[1.5, 1.8, 1]}
         onClick={() => alert("Arduino")}
       >
         <planeGeometry args={[1, 1]} />
@@ -503,9 +526,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* LCD */}
       <mesh
-        position={[0, -3.5, -37]}
-        rotation={[3, 0, 0]}
-        scale={[6, 3, 1]}
+       position={[0, 3, -11.5]}
+       rotation={[3, 0, 0]}
+        scale={[2, 1, 1]}
         onPointerDown={(e) => { 
                     e.stopPropagation();
                     console.log("LCD clicked");   // ← for debugging
@@ -518,9 +541,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* LSR */}
       <mesh
-        position={[-2, -7, -37]}
+        position={[-0.58, 2, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[1, 1, 1]}
+        scale={[0.3, 0.3, 1]}
         onClick={() => alert("LSR")}
       >
         <planeGeometry args={[1, 1]} />
@@ -529,9 +552,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* Nano */}
       <mesh
-        position={[-5, 0, -37]}
-        rotation={[3, 0, 0]}
-        scale={[3.2, 2, 1]}
+           position={[-1.5, 4.3, -11.5]}
+           rotation={[3, 0, 0]}
+        scale={[1, 0.5, 1]}
         onClick={() => alert("Nano")}
       >
         <planeGeometry args={[1, 1]} />
@@ -540,9 +563,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* Joystick */}
       <mesh
-        position={[-1, 0, -37]}
+        position={[-0.25, 4.3, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[3, 6, 3]}
+        scale={[1, 2, 1]}
         onClick={() => alert("Joystick")}
       >
         <planeGeometry args={[1, 0.5]} />
@@ -551,20 +574,20 @@ function BoardModel({ onLCDClick }) {
 
       {/* ESP32 */}
       <mesh
-        position={[2.8, 0, -37]}
+        position={[1, 4.2, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[3, 3, 3]}
+        scale={[1, 1, 1]}
         onClick={() => alert("ESP32")}
       >
         <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial transparent opacity={1} />
+        <meshStandardMaterial transparent opacity={0} />
       </mesh>
 
       {/* 7 Segment */}
       <mesh
-        position={[6, 0, -37]}
+        position={[2, 4, -11.5]}
         rotation={[3, 0, 0]}
-        scale={[2, 2, 2]}
+        scale={[0.5, 0.5, 0.5]}
         onClick={() => alert("7 Segment")}
       >
         <planeGeometry args={[1, 1]} />
@@ -573,9 +596,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* LED */}
       <mesh
-        position={[6, -4, -37]}
-        rotation={[3, 0, 0]}
-        scale={[2, 2, 2]}
+       position={[2, 3, -11.5]}
+       rotation={[3, 0, 0]}
+        scale={[0.5, 0.5, 0.5]}
         onClick={() => alert("LED")}
       >
         <planeGeometry args={[1, 1]} />
@@ -584,9 +607,9 @@ function BoardModel({ onLCDClick }) {
 
       {/* Servomotor */}
       <mesh
-        position={[5.5, -8, -37]}
-        rotation={[3, 0, 0]}
-        scale={[3, 3, 3]}
+       position={[1.8, 1.6, -11.5]}
+       rotation={[3, 0, 0]}
+        scale={[1, 1, 1]}
         onClick={() => alert("Servomotor")}
       >
         <planeGeometry args={[1, 1]} />
@@ -725,7 +748,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       <Text position={[0, 4.5, -9.5]} fontSize={0.5} color="black">
         Circuit Diagram
       </Text>
-      <Text position={[0, 6.5, -9]} rotation={[0,3.3,0]} fontSize={1} color="yellow">
+      <Text position={[0, 5.5, -9]} rotation={[0,Math.PI,0]} fontSize={1} color="yellow">
         Electronics Lab
       </Text>
 
@@ -818,6 +841,7 @@ const Environment = () => {
   // 1) tasks state
   const [tasks, setTasks] = useState([
     { id: 1, description: "Apasă pe LCD", completed: false },
+    { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false }
     // … you could add more later
   ]);
 
@@ -851,6 +875,7 @@ const Environment = () => {
  const handleComputerClick = () => {
   // setează prima imagine doar când apeși
   setMonitorImage('Dekstopfree.png');
+  completeTask(2); 
 };
 
 // buton roșu — a doua imagine
@@ -918,7 +943,7 @@ const handleRedClick = () => {
             setFreeCamera={setFreeCamera}
             completeTask={completeTask}
           />
-  
+  <ProjectorScreen monitorImage={monitorImage} />
           {/* orbit liber, pivot pe caracter */}
           <OrbitControls
             ref={controlsRef}
