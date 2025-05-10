@@ -38,7 +38,29 @@ const useKeyControls = () => {
   }, []);
   return keys.current;
 };
+function KeyboardTeleport({ controlsRef, setFreeCamera }) {
+  const { camera } = useThree();
 
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key.toLowerCase() === 'm') {
+        // 1) flip into free-camera mode
+        setFreeCamera(true);
+
+        // 2) enable orbit controls so you can look around
+        if (controlsRef.current) controlsRef.current.enabled = true;
+
+        // 3) *now* teleport the camera
+        camera.position.set(0, 6, -50);
+        camera.lookAt(0, 0, 0);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [camera, controlsRef, setFreeCamera]);
+
+  return null;
+}
 function centerModelAtGround(scene) {
   scene.traverse((child) => {
     if (child.isMesh) {
@@ -214,7 +236,7 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
         setFreeCamera(false);
         if (characterRef.current) {
           const characterPosition = characterRef.current.position.clone();
-          camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 3, -5)));
+          camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 1, -1)));
           camera.lookAt(characterPosition);
         }
       }
@@ -224,10 +246,11 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera }) {
   }, [freeCamera, setFreeCamera, characterRef, camera]);
   return null;
 }
-function CameraBoundaryEnforcer() {
+function CameraBoundaryEnforcer({ freeCamera }) {
   
   const { camera } = useThree();
   useFrame(() => {
+    if (freeCamera) return;
     // horizontal limits (walls sit at ±10±0.5 → interior ±9.5)
     const xMin = -9.5, xMax =  9.5;
     const zMin = -9.5, zMax =  9.5;
@@ -888,7 +911,7 @@ const handleRedClick = () => {
             enableRotate
             enableZoom
             minDistance={5}
-            maxDistance={15}
+            maxDistance={50}
             minPolarAngle={Math.PI * 0.17}  /* ~30° */
             maxPolarAngle={Math.PI * 0.44}  /* ~80° */
             minAzimuthAngle={-Infinity}
@@ -896,8 +919,12 @@ const handleRedClick = () => {
            onStart={() => setFreeCamera(true)}
            onEnd={() => {/* nothing here; pressing “P” will re-attach */}}
          />
+          <KeyboardTeleport
+           controlsRef={controlsRef}
+           setFreeCamera={setFreeCamera}
+         />
          <ControlsUpdater />
-         <CameraBoundaryEnforcer />
+         <CameraBoundaryEnforcer freeCamera={freeCamera} />
         </XR>
       </Canvas>
     </div>
