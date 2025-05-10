@@ -11,6 +11,7 @@ import QuizLevel from "./scenes/QuizLevel";
 import QuizResults from "./components/QuizResults";
 import { Result } from "postcss";
 import ResultsScreen from "./components/ResultsScreen";
+import FixSignal from "./scenes/FixSignal";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -38,6 +39,7 @@ const AppContent = () => {
         <Route path="/quiz" element={<QuizLevel />} />
         <Route path="/quiz-results" element={<QuizResults />} />
         <Route path="/results" element={<ResultsScreen />} />
+        <Route path="/level2" element={<FixSignal />} />
         {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"
