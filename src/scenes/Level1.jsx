@@ -2,12 +2,16 @@ import InfoPopup from "../components/InfoPopup";
 import InstructionOverlay from "../components/InstructionOverlay";
 import MarzipanoViewer from "../components/MarzipanoViewer";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Level1() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const imagePath = isMobile
+    ? "http://192.168.1.147:5173/tv_studio_mobile_optimized_initial.jpg"
+    : "/tv_studio_16k.jpg";
 
   const hotspots = [
     {
@@ -41,13 +45,13 @@ export default function Level1() {
       model: "/assets/models/standerlight.glb",
       position: [5, -1, 2], // Spotlight position
       scale: [1, 1, 1] // Spotlight scale
-    }, 
-     {
-    yaw: 0.2,
-    pitch:-0.8,
-    type: "info",
-    label: "Floodlight / Spotlight",
-    description: `
+    },
+    {
+      yaw: 0.2,
+      pitch: -0.8,
+      type: "info",
+      label: "Floodlight / Spotlight",
+      description: `
     This spotlight is used in TV studios to light up specific areas of the set. It's often mounted on the ceiling and can be positioned precisely to illuminate presenters, guests, or key parts of the studio.
 
     Broadcast engineer tasks:
@@ -60,14 +64,14 @@ export default function Level1() {
     • Floodlight: Provides wide, even lighting across a large area.
     • Spotlight: Focused light used to highlight specific areas or objects.
     `,
-    model: "/assets/models/light.glb" // Adjust path to the appropriate model if available
-  }, 
-  {
-    yaw: 2.6,
-    pitch: 0,
-    type: "info",
-    label: "Studio Monitor Speaker",
-    description: `
+      model: "/assets/models/light.glb" // Adjust path to the appropriate model if available
+    },
+    {
+      yaw: 2.6,
+      pitch: 0,
+      type: "info",
+      label: "Studio Monitor Speaker",
+      description: `
     This is a high-performance studio monitor speaker, designed for accurate audio reproduction. It is commonly used in broadcast and recording studios to ensure that sound is heard with clarity and precision. These speakers are typically used for mixing, mastering, and sound checks to monitor the audio quality during production.
 
     Broadcast engineer tasks:
@@ -78,14 +82,14 @@ export default function Level1() {
 
     Studio monitors like this are essential for ensuring sound fidelity and preventing issues during live broadcasts.
     `,
-    model: "/assets/models/Speaker.glb" // Adjust path to the appropriate model if available
-  }, 
-  {
-    yaw: 3.1,
-    pitch: 0.3,
-    type: "info",
-    label: "Broadcast Studio Monitors",
-    description: `
+      model: "/assets/models/Speaker.glb" // Adjust path to the appropriate model if available
+    },
+    {
+      yaw: 3.1,
+      pitch: 0.3,
+      type: "info",
+      label: "Broadcast Studio Monitors",
+      description: `
     These are professional video monitors used in television studios or broadcasting environments. They allow technicians and crew to monitor the live feed, ensuring that the broadcast signal is transmitted clearly and accurately. The monitors are usually connected to video sources, such as cameras or video recorders, and display the output of the production.
 
     Broadcast engineer tasks:
@@ -97,14 +101,14 @@ export default function Level1() {
 
     Broadcast monitors are essential in any live broadcast or recording studio, as they ensure the video output is correct and clear for viewers at home.
     `,
-    model: "/assets/models/Floor Monitor.glb" // Adjust path to the appropriate model if available
-  },
-  {
-    yaw: -2.1,
-    pitch: 0.1,
-    type: "info",
-    label: "Camera Crane (Jib)",
-    description: `
+      model: "/assets/models/Floor Monitor.glb" // Adjust path to the appropriate model if available
+    },
+    {
+      yaw: -2.1,
+      pitch: 0.1,
+      type: "info",
+      label: "Camera Crane (Jib)",
+      description: `
     This piece of equipment allows for smooth, high-angle camera shots that can move vertically or horizontally, often used for sweeping views or dramatic transitions during live broadcasts, TV shows, or film productions. The camera is mounted at the end of the arm, and it can be controlled from the base, allowing the operator to capture wide or overhead shots.
 
     Broadcast engineer tasks:
@@ -115,14 +119,14 @@ export default function Level1() {
     • Ensure that the crane is moved smoothly without sudden jerks, which could cause shaky footage.
 
     Camera cranes are essential in production studios to capture shots that would be difficult or impossible with fixed-position cameras.    `,
-    model: "/assets/models/light.glb" // Adjust path to the appropriate model if available
-  }, 
-  {
-    yaw: -1.0,
-    pitch: -0.22,
-    type: "info",
-    label: "Green Screen",
-    description: `
+      model: "/assets/models/light.glb" // Adjust path to the appropriate model if available
+    },
+    {
+      yaw: -1.0,
+      pitch: -0.22,
+      type: "info",
+      label: "Green Screen",
+      description: `
     This is a green screen, used in television and film production for chroma keying. The green background is replaced with digital imagery or video in post-production, creating the illusion of different environments or settings.
 
     Broadcast engineer tasks:
@@ -133,28 +137,28 @@ export default function Level1() {
 
     Green screens are commonly used for weather reports, movies, or news broadcasts.
   `,
-    model: "/assets/models/greenscreen.obj"
-  }
+      model: "/assets/models/greenscreen.obj"
+    }
   ];
 
   return (
-  <div className="w-full h-screen relative">
-    <MarzipanoViewer
-      image="/tv_studio_16k.jpg"
-      hotspots={hotspots}
-      onHotspotClick={(hotspot) => {
-        if (hotspot.type === "info") setShowPopup(hotspot);
-        if (hotspot.type === "navigation") navigate(hotspot.targetScene);
-      }}
-    />
-    <InfoPopup show={!!showPopup} onClose={() => setShowPopup(null)} hotspot={showPopup} />
-    {showInstructions && <InstructionOverlay onClose={() => setShowInstructions(false)} />}
-    <button
-      onClick={() => navigate("/quiz")}
-      className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow"
-    >
-      Are you ready? Start Quiz
-    </button>
-  </div>
-);
+    <div className="w-full h-screen relative">
+      <MarzipanoViewer
+        image={imagePath}
+        hotspots={hotspots}
+        onHotspotClick={(hotspot) => {
+          if (hotspot.type === "info") setShowPopup(hotspot);
+          if (hotspot.type === "navigation") navigate(hotspot.targetScene);
+        }}
+      />
+      <InfoPopup show={!!showPopup} onClose={() => setShowPopup(null)} hotspot={showPopup} />
+      {showInstructions && <InstructionOverlay onClose={() => setShowInstructions(false)} />}
+      <button
+        onClick={() => navigate("/quiz")}
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow"
+      >
+        Are you ready? Start Quiz
+      </button>
+    </div>
+  );
 }
