@@ -469,7 +469,7 @@ function ProjectorScreen({ monitorImage }) {
 // =============================
 // BOARD MODEL - PUS PE MASA2
 // =============================
-function BoardModel({ onLCDClick }) {
+function BoardModel({ onLCDClick, onComplete }) {
   // Încărcăm materialele din BoardV2.mtl din folderul "Imagini"
   const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
   materials.preload();
@@ -518,7 +518,10 @@ function BoardModel({ onLCDClick }) {
        position={[0.5, 1.6, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1.5, 1.8, 1]}
-        onClick={() => alert("Arduino")}
+        onClick={() => {
+          alert("Arduino");
+          onComplete?.(3);
+        }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -544,7 +547,10 @@ function BoardModel({ onLCDClick }) {
         position={[-0.58, 2, -11.5]}
         rotation={[3, 0, 0]}
         scale={[0.3, 0.3, 1]}
-        onClick={() => alert("LSR")}
+        onClick={() => {
+          alert("Arduino");
+          onComplete?.(4);
+        }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -762,7 +768,10 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
 
       {/* BOARD MODEL PUS PE MASA2 */}
-      <BoardModel onLCDClick={() => completeTask(1)} />
+      <BoardModel
+  onLCDClick={() => completeTask(1)}
+  onComplete={completeTask}
+/>
     </group>
   );
 };
@@ -840,8 +849,12 @@ const Environment = () => {
   const [savedCameraPosition, setSavedCameraPosition] = useState(null);
   // 1) tasks state
   const [tasks, setTasks] = useState([
-    { id: 1, description: "Apasă pe LCD", completed: false },
-    { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false }
+   
+      { id: 1, description: "Apasă pe LCD", completed: false },
+      { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false },
+      { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
+      { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false }
+      
     // … you could add more later
   ]);
 
