@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { XR } from '@react-three/xr'
+import JobSimulator from './JobSimulator';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -257,15 +258,15 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera, savedCam
   return null;
 }
 function CameraBoundaryEnforcer({ freeCamera }) {
-  
+
   const { camera } = useThree();
   useFrame(() => {
     if (freeCamera) return;
     // horizontal limits (walls sit at ±10±0.5 → interior ±9.5)
-    const xMin = -9.5, xMax =  9.5;
-    const zMin = -9.5, zMax =  9.5;
+    const xMin = -9.5, xMax = 9.5;
+    const zMin = -9.5, zMax = 9.5;
     // vertical limits: floor at y=0, ceiling collider runs y∈[5,6]
-    const yMin =  0.0, yMax = 4.5;
+    const yMin = 0.0, yMax = 4.5;
 
     camera.position.x = MathUtils.clamp(camera.position.x, xMin, xMax);
     camera.position.y = MathUtils.clamp(camera.position.y, yMin, yMax);
@@ -275,10 +276,10 @@ function CameraBoundaryEnforcer({ freeCamera }) {
 }
 const Ground = ({ setTargetPosition }) => (
   <mesh
-  rotation={[-Math.PI / 2, 0, 0]}
+    rotation={[-Math.PI / 2, 0, 0]}
     position={[0, 0, 0]}
     receiveShadow
-   onPointerDown={(e) => {
+    onPointerDown={(e) => {
       e.stopPropagation();
       // e.point conține coordonatele 3D ale punctului de impact
       setTargetPosition(e.point.clone());
@@ -340,11 +341,11 @@ function QuizTask({ task, onComplete }) {
       {task.optiuni.map((opt, idx) => (
         <div key={idx}>
           <label>
-            <input 
-              type="radio" 
-              name="quiz" 
-              checked={selected === idx} 
-              onChange={() => setSelected(idx)} 
+            <input
+              type="radio"
+              name="quiz"
+              checked={selected === idx}
+              onChange={() => setSelected(idx)}
             />
             {opt}
           </label>
@@ -354,8 +355,8 @@ function QuizTask({ task, onComplete }) {
       {/* Feedback imediat */}
       {answered && (
         <p>
-          {selected === task.correctOption 
-            ? "Corect! 🟢" 
+          {selected === task.correctOption
+            ? "Corect! 🟢"
             : "Răspuns greșit. Încearcă din nou. 🔴"}
         </p>
       )}
@@ -431,7 +432,7 @@ const roomColliders = [
 const Monitor = ({ monitorImage }) => {
   // Încarci texturile o singură dată
   const dekstopTex = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
-  const woodTex    = useLoader(TextureLoader, '/Imagini/wood.jpeg');
+  const woodTex = useLoader(TextureLoader, '/Imagini/wood.jpeg');
 
   // Alege textura potrivită
   const texture = monitorImage === 'wood.jpeg'
@@ -489,7 +490,7 @@ function TeleportButton({ characterRef }) {
     }
   };
 
- 
+
 }
 
 // =============================
@@ -501,7 +502,7 @@ function CameraTeleportButton({ setFreeCamera }) {
   const handlePointerDown = (e) => {
     e.stopPropagation();
     // Mutăm camera mai jos
-    camera.position.set(1, 0, -13);  
+    camera.position.set(1, 0, -13);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     setFreeCamera(true);
   };
@@ -575,9 +576,9 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* US */}
       <mesh
-         position={[-1.3, 1.2, -11.5]}
-         rotation={[3, 0, 0]}
-         scale={[1.3, 0.7, 1]}
+        position={[-1.3, 1.2, -11.5]}
+        rotation={[3, 0, 0]}
+        scale={[1.3, 0.7, 1]}
         onClick={() => alert("US")}
       >
         <planeGeometry args={[1, 1]} />
@@ -586,7 +587,7 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* Arduino */}
       <mesh
-       position={[0.5, 1.6, -11.5]}
+        position={[0.5, 1.6, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1.5, 1.8, 1]}
         onClick={() => {
@@ -600,14 +601,14 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* LCD */}
       <mesh
-       position={[0, 3, -11.5]}
-       rotation={[3, 0, 0]}
+        position={[0, 3, -11.5]}
+        rotation={[3, 0, 0]}
         scale={[2, 1, 1]}
-        onPointerDown={(e) => { 
-                    e.stopPropagation();
-                    console.log("LCD clicked");   // ← for debugging
-                    onLCDClick();
-                  }}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          console.log("LCD clicked");   // ← for debugging
+          onLCDClick();
+        }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -629,8 +630,8 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* Nano */}
       <mesh
-           position={[-1.5, 4.3, -11.5]}
-           rotation={[3, 0, 0]}
+        position={[-1.5, 4.3, -11.5]}
+        rotation={[3, 0, 0]}
         scale={[1, 0.5, 1]}
         onClick={() => alert("Nano")}
       >
@@ -673,8 +674,8 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* LED */}
       <mesh
-       position={[2, 3, -11.5]}
-       rotation={[3, 0, 0]}
+        position={[2, 3, -11.5]}
+        rotation={[3, 0, 0]}
         scale={[0.5, 0.5, 0.5]}
         onClick={() => alert("LED")}
       >
@@ -684,8 +685,8 @@ function BoardModel({ onLCDClick, onComplete }) {
 
       {/* Servomotor */}
       <mesh
-       position={[1.8, 1.6, -11.5]}
-       rotation={[3, 0, 0]}
+        position={[1.8, 1.6, -11.5]}
+        rotation={[3, 0, 0]}
         scale={[1, 1, 1]}
         onClick={() => alert("Servomotor")}
       >
@@ -702,7 +703,7 @@ function BoardModel({ onLCDClick, onComplete }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -794,33 +795,33 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
       {/* MOUSE (red) */}
       <mesh
-  position={[2.2,1.7,-3.1]}
-  onPointerDown={e => { e.stopPropagation(); handleComputerClick() }}
->
-  <boxGeometry args={[0.5,0.5,0.5]} />
-  <meshStandardMaterial color="blue" />
-</mesh>
+        position={[2.2, 1.7, -3.1]}
+        onPointerDown={e => { e.stopPropagation(); handleComputerClick() }}
+      >
+        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <meshStandardMaterial color="blue" />
+      </mesh>
 
-<mesh
-  position={[-1.8,1.25,-2]}
-  onPointerDown={e => { e.stopPropagation(); handleRedClick() }}
->
-  <boxGeometry args={[0.5,0.5,0.5]} />
-  <meshStandardMaterial color="red" />
-</mesh>
-{/* Zona de măsurare (Multimetru) */}
-<mesh
-  position={[-4.5, 1.3, -1.5]}  // ajustează poziția după caz
-  rotation={[-Math.PI / 2, 0, 0]}
-  onPointerDown={(e) => {
-    e.stopPropagation();
-    alert("Tensiune măsurată: 3.3V");
-    completeTask(5);
-  }}
->
-  <boxGeometry args={[0.6, 0.1, 0.3]} />
-  <meshStandardMaterial color="black" />
-</mesh>
+      <mesh
+        position={[-1.8, 1.25, -2]}
+        onPointerDown={e => { e.stopPropagation(); handleRedClick() }}
+      >
+        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <meshStandardMaterial color="red" />
+      </mesh>
+      {/* Zona de măsurare (Multimetru) */}
+      <mesh
+        position={[-4.5, 1.3, -1.5]}  // ajustează poziția după caz
+        rotation={[-Math.PI / 2, 0, 0]}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          alert("Tensiune măsurată: 3.3V");
+          completeTask(5);
+        }}
+      >
+        <boxGeometry args={[0.6, 0.1, 0.3]} />
+        <meshStandardMaterial color="black" />
+      </mesh>
 
       {/* MOUSE (blue) */}
       {/* Teleportare cu personajul (roșu) */}
@@ -829,7 +830,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       {/* Teleportare doar a camerei (verde) */}
       <CameraTeleportButton setFreeCamera={setFreeCamera} />
 
-      
+
 
       {/* POSTER */}
       <mesh position={[0, 4, -9.51]}>
@@ -839,7 +840,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       <Text position={[0, 4.5, -9.5]} fontSize={0.5} color="black">
         Circuit Diagram
       </Text>
-      <Text position={[0, 5.5, -9]} rotation={[0,Math.PI,0]} fontSize={1} color="yellow">
+      <Text position={[0, 5.5, -9]} rotation={[0, Math.PI, 0]} fontSize={1} color="yellow">
         Electronics Lab
       </Text>
 
@@ -854,9 +855,20 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
       {/* BOARD MODEL PUS PE MASA2 */}
       <BoardModel
-  onLCDClick={() => completeTask(1)}
-  onComplete={completeTask}
-/>
+        onLCDClick={() => completeTask(1)}
+        onComplete={completeTask}
+      />
+      {/* Job Simulator Hotspot */}
+      <mesh
+        position={[5, 1, 5]}
+        onPointerDown={e => {
+          e.stopPropagation();
+          openJobSimulator();
+        }}
+      >
+        <boxGeometry args={[1, 1, 0.2]} />
+        <meshStandardMaterial color="orange" />
+      </mesh>
     </group>
   );
 };
@@ -918,32 +930,33 @@ const TaskList = ({ tasks }) => {
   );
 };
 const Environment = () => {
-    const navigate = useNavigate();
-    const controlsRef = useRef(null);
-    function ControlsUpdater({ freeCamera }) {
-      const { camera } = useThree();
-      useFrame(() => {
-        if (freeCamera) return; // ✅ Blochează actualizarea target-ului când e în mod liber
-        if (controlsRef.current && characterRef.current) {
-          controlsRef.current.target.copy(characterRef.current.position);
-        }
-      });
-      return null;
-    }
-    const [showQuiz, setShowQuiz] = useState(false);
-    const [lightOn, setLightOn] = useState(false);
-    const toggleLight = () => setLightOn(prev => !prev); 
+  const navigate = useNavigate();
+  const controlsRef = useRef(null);
+  function ControlsUpdater({ freeCamera }) {
+    const { camera } = useThree();
+    useFrame(() => {
+      if (freeCamera) return; // ✅ Blochează actualizarea target-ului când e în mod liber
+      if (controlsRef.current && characterRef.current) {
+        controlsRef.current.target.copy(characterRef.current.position);
+      }
+    });
+    return null;
+  }
+
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [lightOn, setLightOn] = useState(false);
+  const toggleLight = () => setLightOn(prev => !prev);
   const [savedCameraPosition, setSavedCameraPosition] = useState(null);
   // 1) tasks state
   const [tasks, setTasks] = useState([
-   
-      { id: 1, description: "Apasă pe LCD", completed: false },
-      { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false },
-      { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
-      { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false },
-      { id: 5, description: "Verifică tensiunea în zona de măsurare", completed: false },
-      { id: 6, description: 'Rezolvă întrebarea quiz', completed: false }
-      
+
+    { id: 1, description: "Apasă pe LCD", completed: false },
+    { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false },
+    { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
+    { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false },
+    { id: 5, description: "Verifică tensiunea în zona de măsurare", completed: false },
+    { id: 6, description: 'Rezolvă întrebarea quiz', completed: false }
+
     // … you could add more later
   ]);
 
@@ -952,6 +965,12 @@ const Environment = () => {
       prev.map(t => t.id === taskId ? { ...t, completed: true } : t)
     );
   };
+  const handleJobSimComplete = (finalScore) => {
+    setShowJobSim(false);
+    setJobSimScore(finalScore);
+    // Poți marca un task, de ex. completeTask(7);
+    console.log('JobSimulator scor:', finalScore);
+  };
   const handleQuizComplete = (correct) => {
     if (correct) {
       completeTask(6);
@@ -959,12 +978,14 @@ const Environment = () => {
     }
   };
   // 2) whenever *all* tasks are done, navigate
- // useEffect(() => {
-   // if (tasks.every(t => t.completed)) {
-      // small delay so the user sees the UI update
-    //  setTimeout(() => navigate("/course-recommendations"), 500);
-   // }
- // }, [tasks, navigate]);
+  // useEffect(() => {
+  // if (tasks.every(t => t.completed)) {
+  // small delay so the user sees the UI update
+  //  setTimeout(() => navigate("/course-recommendations"), 500);
+  // }
+  // }, [tasks, navigate]);
+  const [showJobSim, setShowJobSim] = useState(false);
+  const [jobSimScore, setJobSimScore] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
   const keys = useKeyControls();
   const characterRef = useRef();
@@ -978,17 +999,17 @@ const Environment = () => {
   const [freeCamera, setFreeCamera] = useState(false);
 
   // Blue button => setează "Dekstopfree.png"
- // buton albastru — setează întotdeauna prima imagine
- const handleComputerClick = () => {
-  // setează prima imagine doar când apeși
-  setMonitorImage('Dekstopfree.png');
-  completeTask(2); 
-};
+  // buton albastru — setează întotdeauna prima imagine
+  const handleComputerClick = () => {
+    // setează prima imagine doar când apeși
+    setMonitorImage('Dekstopfree.png');
+    completeTask(2);
+  };
 
-// buton roșu — a doua imagine
-const handleRedClick = () => {
-  setMonitorImage('wood.jpeg');
-};
+  // buton roșu — a doua imagine
+  const handleRedClick = () => {
+    setMonitorImage('wood.jpeg');
+  };
   if (showTutorial) {
     return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
   }
@@ -996,6 +1017,12 @@ const handleRedClick = () => {
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       {/* 1) TASK PANEL */}
       <TaskList tasks={tasks} />
+      {showJobSim && (
+        <JobSimulator
+          onClose={() => setShowJobSim(false)}
+          onComplete={handleJobSimComplete}
+        />
+      )}
       {showQuiz && (
         <QuizTask
           task={{
@@ -1012,31 +1039,31 @@ const handleRedClick = () => {
       >
         Deschide Quiz
       </button>
-         {/* 2) BUTTON TO RETURN CAMERA */}
-   <button
-     onClick={() => setFreeCamera(false)}
-     style={{
-       position: "absolute",
-       top: 120,
-       right: 10,
-       zIndex: 1000,
-       padding: "6px 12px",
-       background: "#4caf50",
-       color: "#fff",
-       border: "none",
-       borderRadius: 4,
-       cursor: "pointer",
-     }}
-   >
-     Revenire Cameră
-   </button>
+      {/* 2) BUTTON TO RETURN CAMERA */}
+      <button
+        onClick={() => setFreeCamera(false)}
+        style={{
+          position: "absolute",
+          top: 120,
+          right: 10,
+          zIndex: 1000,
+          padding: "6px 12px",
+          background: "#4caf50",
+          color: "#fff",
+          border: "none",
+          borderRadius: 4,
+          cursor: "pointer",
+        }}
+      >
+        Revenire Cameră
+      </button>
       {/* 2) 3D SCENE */}
       <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <XR>
           <Sky />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-  
+
           <Character
             ref={characterRef}
             keys={keys}
@@ -1045,19 +1072,19 @@ const handleRedClick = () => {
             clearTarget={clearTarget}
             freeCamera={freeCamera}
           />
-  <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
+          <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
 
-       {/* listen for P to return the cam to follow‐mode */}
-       <CameraReturnHandler
-  characterRef={characterRef}
-  freeCamera={freeCamera}
-  setFreeCamera={setFreeCamera}
-  savedCameraPosition={savedCameraPosition}
-/>
-  
+          {/* listen for P to return the cam to follow‐mode */}
+          <CameraReturnHandler
+            characterRef={characterRef}
+            freeCamera={freeCamera}
+            setFreeCamera={setFreeCamera}
+            savedCameraPosition={savedCameraPosition}
+          />
+
           {/* Ground invizibil, care primește click-urile */}
           <Ground setTargetPosition={setTargetPosition} />
-  
+
           <Room
             characterRef={characterRef}
             monitorImage={monitorImage}
@@ -1065,9 +1092,10 @@ const handleRedClick = () => {
             handleRedClick={handleRedClick}
             setFreeCamera={setFreeCamera}
             completeTask={completeTask}
+            openJobSimulator={() => setShowJobSim(true)}
           />
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
-  <ProjectorScreen monitorImage={monitorImage} />
+          <ProjectorScreen monitorImage={monitorImage} />
           {/* orbit liber, pivot pe caracter */}
           <OrbitControls
             ref={controlsRef}
@@ -1080,22 +1108,22 @@ const handleRedClick = () => {
             minPolarAngle={Math.PI * 0.17}  /* ~30° */
             maxPolarAngle={Math.PI * 0.44}  /* ~80° */
             minAzimuthAngle={-Infinity}
-           maxAzimuthAngle={ Infinity }
-           onStart={() => setFreeCamera(true)}
-           onEnd={() => {/* nothing here; pressing “P” will re-attach */}}
-         />
-        <KeyboardTeleport
-  controlsRef={controlsRef}
-  setFreeCamera={setFreeCamera}
-  setSavedCameraPosition={setSavedCameraPosition}
-/>
-         <ControlsUpdater />
-         <CameraBoundaryEnforcer freeCamera={freeCamera} />
+            maxAzimuthAngle={Infinity}
+            onStart={() => setFreeCamera(true)}
+            onEnd={() => {/* nothing here; pressing “P” will re-attach */ }}
+          />
+          <KeyboardTeleport
+            controlsRef={controlsRef}
+            setFreeCamera={setFreeCamera}
+            setSavedCameraPosition={setSavedCameraPosition}
+          />
+          <ControlsUpdater />
+          <CameraBoundaryEnforcer freeCamera={freeCamera} />
         </XR>
       </Canvas>
     </div>
   );
-  
+
 };
 
 export default Environment;
