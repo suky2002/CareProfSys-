@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { Sky, useGLTF, Text } from '@react-three/drei';
+import { Sky, useGLTF, Text, useAnimations  } from '@react-three/drei';
 import { MathUtils } from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import TutorialOverlay from './TutorialOverlay2';
@@ -76,7 +77,37 @@ function centerModelAtGround(scene) {
   const yOffset = box.min.y;
   scene.position.y -= yOffset;
 }
+function OfficeChair(props) {
+  const chair = useLoader(FBXLoader, '/models/officechair.fbx')
+  useEffect(() => {
+    if (chair) centerModelAtGround(chair)
+  }, [chair])
+  return <primitive object={chair} {...props} />
+}
 
+const SittingCuteBoy = (props) => {
+  const fbx = useLoader(FBXLoader, '/models/fatguy.fbx');
+  const { actions, mixer } = useAnimations(fbx.animations, fbx);
+  
+  useEffect(() => {
+   if (fbx) centerModelAtGround(fbx);
+  }, [fbx]);
+  
+  useEffect(() => {
+   const clipNames = Object.keys(actions);
+   if (clipNames.length) {
+     actions[clipNames[0]]
+       .reset()
+       .setLoop(THREE.LoopRepeat)
+       .fadeIn(0.2)
+       .play();
+   }
+  }, [actions]);
+  
+  useFrame((_, delta) => mixer.update(delta));
+  
+  return <primitive object={fbx} {...props} />;
+  }
 const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget, freeCamera }, ref) => {
 
   const standingModel = useGLTF('/models/Asian_IT_Standing.glb');
@@ -403,12 +434,20 @@ function ShelvesObj(props) {
   const shelvesObj = useLoader(OBJLoader, '/models/shelves.obj');
   shelvesObj.traverse((child) => {
     if (child.isMesh) {
-      child.material = new THREE.MeshStandardMaterial({ color: 'black' });
+      child.material = new THREE.MeshStandardMaterial({ color: 'brown' });
     }
   });
   return <primitive object={shelvesObj} {...props} />;
 }
-
+function BoxObj(props) {
+  const BoxOBJ = useLoader(OBJLoader, '/models/BoxObj.obj');
+  BoxOBJ.traverse((child) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({ color: 'brown' });
+    }
+  });
+  return <primitive object={BoxOBJ} {...props} />;
+}
 // =============================
 // 4. ROOM (with blue wall)
 // =============================
@@ -789,6 +828,27 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
         <boxGeometry args={[4, 0.5, 2]} />
         <meshStandardMaterial color="#654321" />
       </mesh>
+{/* Sitting CuteBoy lângă masa 2 */}
+ {/* SCĂUN & OAMENIȚĂ */}
+{/* SCĂUN & OAMENIȚĂ */}
+{/* SCĂUN & OAMENIȚĂ */}
+<group position={[8, 1.5, 7]}>
+  {/* Scaunul, rotit spre masă */}
+  <OfficeChair
+    position={[0, 1, 0]}
+    rotation={[0, Math.PI / 2, 0]}
+    scale={[0.002, 0.002, 0.002]}
+  />
+
+  {/* Omuletul, ridicat cu +0.3 faţă de înainte */}
+  <SittingCuteBoy
+    position={[0, 3, -0.1]}      // 2.3 în loc de 2.0
+    rotation={[0, Math.PI / 1, 0]}  // unghi spre masa
+    scale={[0.012, 0.012, 0.012]}
+  />
+</group>
+
+
 
       {/* MONITOR */}
       <Monitor monitorImage={monitorImage} />
@@ -852,6 +912,9 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
       {/* SHELVES.OBJ */}
       <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
+
+       {/* BoxObj.OBJ */}
+       <BoxObj position={[-8, 0.9, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
 
       {/* BOARD MODEL PUS PE MASA2 */}
       <BoardModel

@@ -126,7 +126,7 @@ const HomePage = ({ skills, onRecommend }) => {
   const navigate = useNavigate();
   return (
     <div className={styles["home-container"]}>
-      <h1 className={styles["app-title"]}>Select between 2 and 100 skills</h1>
+      <h1 className={styles["app-title"]}>Select between 2 and 10 skills</h1>
       <div className={styles["skill-form-container"]}>
         <SkillForm
           skills={skills}
