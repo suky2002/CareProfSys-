@@ -13,6 +13,7 @@ import { OrbitControls } from '@react-three/drei';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { XR } from '@react-three/xr'
 import JobSimulator from './JobSimulator';
+import TaskList from './TaskList';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -978,58 +979,7 @@ const handleBuzzerClick = (e) => {
   // dacă ai vreun sunet de redat:
   // new Audio("/sounds/buzzer.wav").play();
 };
-const TaskList = ({ tasks }) => {
-  const navigate = useNavigate();
-  const allDone = tasks.every(t => t.completed);
 
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: 10,
-        right: 10,
-        backgroundColor: "rgba(0,0,0,0.7)",
-        color: "#fff",
-        padding: 12,
-        borderRadius: 6,
-        zIndex: 1000,
-        fontSize: 14,
-      }}
-    >
-      <h3 style={{ margin: "0 0 8px", textAlign: "center" }}>Task-uri</h3>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {tasks.map(t => (
-          <li
-            key={t.id}
-            style={{
-              marginBottom: 6,
-              color: t.completed ? "#4caf50" : "#f44336",
-              textDecoration: t.completed ? "line-through" : "none"
-            }}
-          >
-            {t.description}
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={() => navigate("/course-recommendations")}
-        disabled={!allDone}
-        style={{
-          marginTop: 8,
-          width: "100%",
-          padding: "6px 0",
-          background: allDone ? "#4caf50" : "#777",
-          color: "#fff",
-          border: "none",
-          borderRadius: 4,
-          cursor: allDone ? "pointer" : "not-allowed",
-        }}
-      >
-        {allDone ? "Continuă la recomandări" : "Finalizați task-urile întâi"}
-      </button>
-    </div>
-  );
-};
 const Environment = () => {
   const navigate = useNavigate();
   const controlsRef = useRef(null);
@@ -1122,102 +1072,127 @@ const Environment = () => {
   if (showTutorial) {
     return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
   }
+
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      {/* 1) TASK PANEL */}
-      <TaskList tasks={tasks} />
+      {/* ────── BUTONUL “Revenire Cameră” ────── */}
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,        // Butonul verde stă în colțul STÂNGA-SUS
+          zIndex: 1000
+        }}
+      >
+        <button
+          onClick={() => setFreeCamera(false)}
+          style={{
+            background: "#4caf50",
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            padding: "6px 12px",
+            cursor: "pointer",
+            fontSize: "0.9rem"
+          }}
+        >
+          Revenire Cameră
+        </button>
+      </div>
+        {/* ────── DROPDOWN-UL “Task-uri” ────── */}
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,       // Dropdown-ul stă în colțul DREAPTA-SUS
+          zIndex: 1000
+        }}
+      >
+        <TaskList tasks={tasks} />
+      </div>
+
+      {/* ────── JobSimulator și Quiz ────── */}
       {showJobSim && (
-        <JobSimulator
-          onClose={() => setShowJobSim(false)}
-          onComplete={handleJobSimComplete}
-        />
+        <JobSimulator onClose={() => setShowJobSim(false)} onComplete={handleJobSimComplete} />
       )}
       {showQuiz && (
         <QuizTask
           task={{
-            intrebare: 'Care este tensiunea standard a unui pin digital HIGH pe Arduino?',
-            optiuni: ['3.3V', '1.8V', '5V', '0V'],
+            intrebare: "Care este tensiunea standard a unui pin digital HIGH pe Arduino?",
+            optiuni: ["3.3V", "1.8V", "5V", "0V"],
             correctOption: 2,
           }}
           onComplete={handleQuizComplete}
         />
       )}
+
+      {/* Butonul “Deschide Quiz” în colțul dreapta-jos */}
       <button
         onClick={() => setShowQuiz(true)}
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1000 }}
-      >
-        Deschide Quiz
-      </button>
-      {/* 2) BUTTON TO RETURN CAMERA */}
-      <button
-        onClick={() => setFreeCamera(false)}
         style={{
           position: "absolute",
-          top: 120,
-          right: 10,
+          bottom: 20,
+          right: 20,
           zIndex: 1000,
-          padding: "6px 12px",
-          background: "#4caf50",
+          background: "#1976d2",
           color: "#fff",
           border: "none",
           borderRadius: 4,
+          padding: "6px 12px",
           cursor: "pointer",
+          fontSize: "0.9rem"
         }}
       >
-        Revenire Cameră
+        Deschide Quiz
       </button>
- {/* 4) If showDiagram is true, render a full-screen overlay with the image + close button */}
- {showDiagram && (
+
+      {/* Overlay pentru diagramă (showDiagram) */}
+      {showDiagram && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.85)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             zIndex: 2000,
           }}
         >
-          {/* Close button (×) */}
           <button
             onClick={() => setShowDiagram(false)}
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 20,
               right: 20,
               fontSize: 28,
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              cursor: 'pointer',
+              background: "transparent",
+              border: "none",
+              color: "#fff",
+              cursor: "pointer",
               zIndex: 2100,
             }}
           >
             &times;
           </button>
-
-          {/* The diagram image */}
           <img
             src="/Imagini/buzzer_electricaldiagram.jpg"
             alt="Buzzer Electrical Diagram"
             style={{
-              maxWidth: '90%',
-              maxHeight: '90%',
-              objectFit: 'contain',
-              boxShadow: '0 0 16px rgba(0,0,0,0.5)',
+              maxWidth: "90%",
+              maxHeight: "90%",
+              objectFit: "contain",
+              boxShadow: "0 0 16px rgba(0,0,0,0.5)",
               borderRadius: 8,
             }}
           />
         </div>
       )}
 
-
-
-      {/* 2) 3D SCENE */}
+      {/* ────── CANVAS 3D ────── */}
       <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <XR>
           <Sky />
@@ -1231,11 +1206,9 @@ const Environment = () => {
             target={targetPosition}
             clearTarget={clearTarget}
             freeCamera={freeCamera}
-          
           />
           <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
 
-          {/* listen for P to return the cam to follow‐mode */}
           <CameraReturnHandler
             characterRef={characterRef}
             freeCamera={freeCamera}
@@ -1243,7 +1216,6 @@ const Environment = () => {
             savedCameraPosition={savedCameraPosition}
           />
 
-          {/* Ground invizibil, care primește click-urile */}
           <Ground setTargetPosition={setTargetPosition} />
 
           <Room
@@ -1256,9 +1228,10 @@ const Environment = () => {
             openJobSimulator={() => setShowJobSim(true)}
             handleShowDiagram={setShowDiagram}
           />
+
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
           <ProjectorScreen monitorImage={monitorImage} />
-          {/* orbit liber, pivot pe caracter */}
+
           <OrbitControls
             ref={controlsRef}
             makeDefault
@@ -1267,12 +1240,10 @@ const Environment = () => {
             enableZoom
             minDistance={5}
             maxDistance={50}
-            minPolarAngle={Math.PI * 0.17}  /* ~30° */
-            maxPolarAngle={Math.PI * 0.44}  /* ~80° */
-            minAzimuthAngle={-Infinity}
-            maxAzimuthAngle={Infinity}
+            minPolarAngle={Math.PI * 0.17}
+            maxPolarAngle={Math.PI * 0.44}
             onStart={() => setFreeCamera(true)}
-            onEnd={() => {/* nothing here; pressing “P” will re-attach */ }}
+            onEnd={() => {}}
           />
           <KeyboardTeleport
             controlsRef={controlsRef}
@@ -1285,7 +1256,6 @@ const Environment = () => {
       </Canvas>
     </div>
   );
-
 };
 
 export default Environment;
