@@ -79,19 +79,31 @@ function centerModelAtGround(scene) {
 }
 function OfficeChair(props) {
   const chair = useLoader(FBXLoader, '/models/officechair.fbx')
-  useEffect(() => {
-    if (chair) centerModelAtGround(chair)
-  }, [chair])
+ 
   return <primitive object={chair} {...props} />
 }
+function Papers(props) {
+  const Papers = useLoader(FBXLoader, '/models/Papers_V2.fbx')
+ 
+  return <primitive object={Papers} {...props} />
+}
+function BuzzerFBX(props) {
+  const buzzerScene = useLoader(FBXLoader, '/models/Buzzer.fbx');
 
+  // Aplică un material simplu pe toate mesh-urile
+  buzzerScene.traverse((child) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({ color: 'brown' });
+    }
+  });
+
+  return <primitive object={buzzerScene} {...props} />;
+
+}
 const SittingCuteBoy = (props) => {
   const fbx = useLoader(FBXLoader, '/models/fatguy.fbx');
   const { actions, mixer } = useAnimations(fbx.animations, fbx);
-  
-  useEffect(() => {
-   if (fbx) centerModelAtGround(fbx);
-  }, [fbx]);
+
   
   useEffect(() => {
    const clipNames = Object.keys(actions);
@@ -448,6 +460,7 @@ function BoxObj(props) {
   });
   return <primitive object={BoxOBJ} {...props} />;
 }
+
 // =============================
 // 4. ROOM (with blue wall)
 // =============================
@@ -742,7 +755,7 @@ function BoardModel({ onLCDClick, onComplete }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -832,27 +845,33 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
  {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
-<group position={[8, 1.5, 7]}>
+
   {/* Scaunul, rotit spre masă */}
   <OfficeChair
-    position={[0, 1, 0]}
+    position={[8, 0.1, 7]}
     rotation={[0, Math.PI / 2, 0]}
     scale={[0.002, 0.002, 0.002]}
   />
 
+
+
   {/* Omuletul, ridicat cu +0.3 faţă de înainte */}
   <SittingCuteBoy
-    position={[0, 3, -0.1]}      // 2.3 în loc de 2.0
+    position={[8, .2, ]}      // 2.3 în loc de 2.0
     rotation={[0, Math.PI / 1, 0]}  // unghi spre masa
     scale={[0.012, 0.012, 0.012]}
   />
-</group>
 
+<Papers
+    position={[7, 1.25, 5.6]}      // 2.3 în loc de 2.0
+    rotation={[0, Math.PI / 5, 0]}  // unghi spre masa
+    scale={[0.012, 0.012, 0.012]}
+  />
 
 
       {/* MONITOR */}
       <Monitor monitorImage={monitorImage} />
-
+    
       {/* MOUSE (red) */}
       <mesh
         position={[2.2, 1.7, -3.1]}
@@ -915,6 +934,13 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
        {/* BoxObj.OBJ */}
        <BoxObj position={[-8, 0.9, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
+      {/* BuzzerFBX */}
+      <BuzzerFBX
+          position={[8, 1.24, 5.7]}        // poziția relativă în interiorul grupului
+          rotation={[0, Math.PI, 0]}  // rotit spre camera sau spre jucător
+          scale={[0.001, 0.001, 0.001]}   // ajustează după dimensiunea reală a modelului
+          onPointerDown={handleBuzzerClick}
+        />
 
       {/* BOARD MODEL PUS PE MASA2 */}
       <BoardModel
@@ -939,7 +965,13 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 // =============================
 // 5. MAIN ENVIRONMENT
 // =============================
-
+const handleBuzzerClick = (e) => {
+  e.stopPropagation();
+  completeTask(7);
+  console.log("Buzzer apăsat! Task #7 e complet.");
+  // dacă ai vreun sunet de redat:
+  // new Audio("/sounds/buzzer.wav").play();
+};
 const TaskList = ({ tasks }) => {
   const navigate = useNavigate();
   const allDone = tasks.every(t => t.completed);
@@ -1018,8 +1050,8 @@ const Environment = () => {
     { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
     { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false },
     { id: 5, description: "Verifică tensiunea în zona de măsurare", completed: false },
-    { id: 6, description: 'Rezolvă întrebarea quiz', completed: false }
-
+    { id: 6, description: 'Rezolvă întrebarea quiz', completed: false },
+    { id: 7, description: 'buzzer', completed: false }
     // … you could add more later
   ]);
 
@@ -1060,7 +1092,14 @@ const Environment = () => {
 
   // Stare pentru free camera: false = camera urmărește personajul; true = camera e în mod "free"
   const [freeCamera, setFreeCamera] = useState(false);
-
+  const handleBuzzerClick = (e) => {
+    e.stopPropagation();
+    // Exemplu: marchează task-ul 7 ca și complet
+    completeTask(7);
+    console.log("Buzzer apăsat! Task #7 e complet.");
+    // Dacă ai un fișier audio buzzer.wav, l-ai putea reda astfel:
+    // new Audio("/sounds/buzzer.wav").play();
+  };
   // Blue button => setează "Dekstopfree.png"
   // buton albastru — setează întotdeauna prima imagine
   const handleComputerClick = () => {
