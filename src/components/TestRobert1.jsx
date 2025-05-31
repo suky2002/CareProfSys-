@@ -224,7 +224,8 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
   });
 
   return (
-    <group ref={ref} position={[0, 0, 0]}>
+    <group ref={ref} position={[0, 0, 0]} scale={[1.15, 1.15, 1.15]}>
+      
       {isWalking ? (
         <primitive object={walkingModel.scene} dispose={null} />
       ) : (
@@ -293,7 +294,7 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera, savedCam
         if (characterRef.current) {
           camera.lookAt(characterRef.current.position);
         }
-      }
+      } 
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -755,7 +756,7 @@ function BoardModel({ onLCDClick, onComplete }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram }) => {
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -857,16 +858,21 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
 
   {/* Omuletul, ridicat cu +0.3 faţă de înainte */}
   <SittingCuteBoy
-    position={[8, .2, ]}      // 2.3 în loc de 2.0
+    position={[8, .2, 6.8]}      // 2.3 în loc de 2.0
     rotation={[0, Math.PI / 1, 0]}  // unghi spre masa
     scale={[0.012, 0.012, 0.012]}
   />
 
-<Papers
-    position={[7, 1.25, 5.6]}      // 2.3 în loc de 2.0
-    rotation={[0, Math.PI / 5, 0]}  // unghi spre masa
-    scale={[0.012, 0.012, 0.012]}
-  />
+ {/* PAPERS – când apeși pe ele, se apelează handleShowDiagram */}
+ <Papers
+        position={[7, 1.25, 5.6]}
+        rotation={[0, Math.PI / 5, 0]}
+        scale={[0.012, 0.012, 0.012]}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          handleShowDiagram(true);
+        }}
+      />
 
 
       {/* MONITOR */}
@@ -1092,6 +1098,7 @@ const Environment = () => {
 
   // Stare pentru free camera: false = camera urmărește personajul; true = camera e în mod "free"
   const [freeCamera, setFreeCamera] = useState(false);
+  const [showDiagram, setShowDiagram] = useState(false);
   const handleBuzzerClick = (e) => {
     e.stopPropagation();
     // Exemplu: marchează task-ul 7 ca și complet
@@ -1159,6 +1166,57 @@ const Environment = () => {
       >
         Revenire Cameră
       </button>
+ {/* 4) If showDiagram is true, render a full-screen overlay with the image + close button */}
+ {showDiagram && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+          }}
+        >
+          {/* Close button (×) */}
+          <button
+            onClick={() => setShowDiagram(false)}
+            style={{
+              position: 'absolute',
+              top: 20,
+              right: 20,
+              fontSize: 28,
+              background: 'transparent',
+              border: 'none',
+              color: '#fff',
+              cursor: 'pointer',
+              zIndex: 2100,
+            }}
+          >
+            &times;
+          </button>
+
+          {/* The diagram image */}
+          <img
+            src="/Imagini/buzzer_electricaldiagram.jpg"
+            alt="Buzzer Electrical Diagram"
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              boxShadow: '0 0 16px rgba(0,0,0,0.5)',
+              borderRadius: 8,
+            }}
+          />
+        </div>
+      )}
+
+
+
       {/* 2) 3D SCENE */}
       <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <XR>
@@ -1173,6 +1231,7 @@ const Environment = () => {
             target={targetPosition}
             clearTarget={clearTarget}
             freeCamera={freeCamera}
+          
           />
           <CameraFollow characterRef={characterRef} freeCamera={freeCamera} />
 
@@ -1195,6 +1254,7 @@ const Environment = () => {
             setFreeCamera={setFreeCamera}
             completeTask={completeTask}
             openJobSimulator={() => setShowJobSim(true)}
+            handleShowDiagram={setShowDiagram}
           />
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
           <ProjectorScreen monitorImage={monitorImage} />
