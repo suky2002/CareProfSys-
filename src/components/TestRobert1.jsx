@@ -8,6 +8,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import TutorialOverlay from './TutorialOverlay2';
 import { TextureLoader } from 'three';
+import { RepeatWrapping } from 'three';
 import { useNavigate } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
@@ -79,10 +80,16 @@ function centerModelAtGround(scene) {
   scene.position.y -= yOffset;
 }
 function OfficeChair(props) {
-  const chair = useLoader(FBXLoader, '/models/officechair.fbx')
- 
-  return <primitive object={chair} {...props} />
+  // Încarcă o singură dată modelul în cache
+  const chair = useLoader(FBXLoader, '/models/officechair.fbx');
+  
+  // Clonează la fiecare redare, astfel încât să poți avea mai multe instanțe simultan:
+  const cloned = chair.clone();
+
+  return <primitive object={cloned} {...props} />;
 }
+
+
 function Papers(props) {
   const Papers = useLoader(FBXLoader, '/models/Papers_V2.fbx')
  
@@ -120,6 +127,33 @@ const SittingCuteBoy = (props) => {
   useFrame((_, delta) => mixer.update(delta));
   
   return <primitive object={fbx} {...props} />;
+  }
+
+
+  function PointingModel(props) {
+    // încarcă FBX-ul
+    const fbx = useLoader(FBXLoader, '/models/Pointing.fbx');
+    // setup pentru animații
+    const { actions, mixer } = useAnimations(fbx.animations, fbx);
+  
+    useEffect(() => {
+      // dacă există cel puțin o animație, o pornim pe prima
+      const clipNames = Object.keys(actions);
+      if (clipNames.length) {
+        actions[clipNames[0]]
+          .reset()
+          .setLoop(THREE.LoopRepeat)
+          .fadeIn(0.2)
+          .play();
+      }
+    }, [actions]);
+  
+    // actualizăm mixer-ul în fiecare frame
+    useFrame((_, delta) => {
+      mixer.update(delta);
+    });
+  
+    return <primitive object={fbx} {...props} />;
   }
 const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTarget, freeCamera }, ref) => {
 
@@ -758,6 +792,26 @@ function BoardModel({ onLCDClick, onComplete }) {
 // ROOM
 // =============================
 const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram }) => {
+
+
+// 3) textura pentru tavan
+const ceilingTexture = useLoader(TextureLoader, '/Imagini/Blue_wall.jpg');
+ceilingTexture.wrapS = RepeatWrapping;
+ceilingTexture.wrapT = RepeatWrapping;
+ceilingTexture.repeat.set(4, 4); 
+// ───── Încarcă și configurează textura pentru pereți ─────
+const wallTexture = useLoader(TextureLoader, '/Imagini/Walls_texture.jpg');
+wallTexture.wrapS = RepeatWrapping;
+wallTexture.wrapT = RepeatWrapping;
+// Ajustează numărul de repetări pe fiecare pereți (de ex. 4×2)
+wallTexture.repeat.set(4, 2);
+
+
+const parquetTexture = useLoader(TextureLoader, '/Imagini/2145.jpg');
+parquetTexture.wrapS = RepeatWrapping;
+parquetTexture.wrapT = RepeatWrapping;
+// Alege câte repetări (de exemplu 10×10)
+parquetTexture.repeat.set(10, 10);
   const doorRef = useRef();
   const [doorOpen, setDoorOpen] = useState(false);
 
@@ -785,33 +839,33 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#333" side={THREE.DoubleSide} />
+        <meshStandardMaterial map={parquetTexture} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Front wall */}
       <mesh position={[0, 2.5, -10]}>
-        <boxGeometry args={[20, 5, 1]} />
-        <meshStandardMaterial color="#ccc" />
+      <boxGeometry args={[20, 5, 1]} />
+      <meshStandardMaterial map={wallTexture} />
       </mesh>
 
       {/* LEFT WALL => blue */}
       <mesh position={[-10, 2.5, 0]}>
         <boxGeometry args={[1, 5, 20]} />
-        <meshStandardMaterial color="blue" />
+        <meshStandardMaterial map={wallTexture} />
       </mesh>
 
       {/* RIGHT WALL */}
       <mesh position={[10, 2.5, 0]}>
         <boxGeometry args={[1, 5, 20]} />
-        <meshStandardMaterial color="#ccc" />
+        <meshStandardMaterial map={wallTexture} />
       </mesh>
       <mesh position={[-5.5, 2.5, 10]}>
         <boxGeometry args={[9, 5, 1]} />
-        <meshStandardMaterial color="#ccc" />
+        <meshStandardMaterial map={wallTexture} />
       </mesh>
       <mesh position={[5.5, 2.5, 10]}>
         <boxGeometry args={[9, 5, 1]} />
-        <meshStandardMaterial color="#ccc" />
+        <meshStandardMaterial map={wallTexture} />
       </mesh>
 
       {/* DOOR */}
@@ -829,7 +883,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       {/* CEILING */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#888" side={THREE.DoubleSide} />
+        <meshStandardMaterial map={ceilingTexture} side={THREE.DoubleSide} />
       </mesh>
 
       {/* TABLE */}
@@ -847,14 +901,29 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
  {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
-
+     {/* Adaugă modelul animat de pointing la [1,0,0] */}
+     <PointingModel
+       position={[0, 0.2, 3]}
+       rotation={[0, 2, 0]}
+       scale={[0.012, 0.012, 0.012]} // ajustează după mărime
+     />
   {/* Scaunul, rotit spre masă */}
   <OfficeChair
     position={[8, 0.1, 7]}
     rotation={[0, Math.PI / 2, 0]}
     scale={[0.002, 0.002, 0.002]}
   />
+   <OfficeChair
+        position={[ 8, 0.1, 3 ]}
+        rotation={[ 0, -Math.PI / 4, 0 ]}
+        scale={[ 0.002, 0.002, 0.002 ]}
+      />
 
+<OfficeChair
+        position={[ 0, 0.1,  -4 ]}
+        rotation={[ 0, -Math.PI / 4, 0 ]}
+        scale={[ 0.002, 0.002, 0.002 ]}
+      />
 
 
   {/* Omuletul, ridicat cu +0.3 faţă de înainte */}
