@@ -186,77 +186,82 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
   };
 
   useFrame((_, delta) => {
-    if (ref.current && mixer.current) {
-      let moved = false;
-      const speed = 0.1;
-      const rotationSpeed = 0.1;
-
-      // Keyboard movement
-      if (keys.forward || keys.backward || keys.left || keys.right) {
-        if (target && clearTarget) clearTarget();
-
-        const direction = new THREE.Vector3();
-        ref.current.getWorldDirection(direction);
-        direction.y = 0;
-        direction.normalize();
-
-        let moveVector = new THREE.Vector3();
-        if (keys.forward) {
-          moveVector.add(direction.clone().multiplyScalar(speed));
-          moved = true;
-        }
-        if (keys.backward) {
-          moveVector.add(direction.clone().multiplyScalar(-speed));
-          moved = true;
-        }
-        if (keys.left) {
-          ref.current.rotation.y += 0.05;
-          moved = true;
-        }
-        if (keys.right) {
-          ref.current.rotation.y -= 0.05;
-          moved = true;
-        }
-
-        const newPosition = ref.current.position.clone().add(moveVector);
+    let moved = false;
+    const speed = 0.1;
+    const rotationSpeed = 0.1;
+  
+    // 1) Dacă suntem în freeCamera, blocăm doar mișcarea cu WASD, 
+    //    dar permitem point‐and‐click (target există și poate fi procesat).
+    if (!freeCamera && (keys.forward || keys.backward || keys.left || keys.right)) {
+      // ── Mișcarea prin taste (doar când freeCamera === false) ──
+      if (target && clearTarget) clearTarget();
+  
+      const direction = new THREE.Vector3();
+      ref.current.getWorldDirection(direction);
+      direction.y = 0;
+      direction.normalize();
+  
+      let moveVector = new THREE.Vector3();
+      if (keys.forward) {
+        moveVector.add(direction.clone().multiplyScalar(speed));
+        moved = true;
+      }
+      if (keys.backward) {
+        moveVector.add(direction.clone().multiplyScalar(-speed));
+        moved = true;
+      }
+      if (keys.left) {
+        ref.current.rotation.y += 0.05;
+        moved = true;
+      }
+      if (keys.right) {
+        ref.current.rotation.y -= 0.05;
+        moved = true;
+      }
+  
+      const newPosition = ref.current.position.clone().add(moveVector);
+      if (!checkCollision(newPosition)) {
+        ref.current.position.copy(newPosition);
+      }
+    }
+    // 2) Point‐and‐click: îl procesăm indiferent de freeCamera
+    else if (target) {
+      const currentPos = ref.current.position.clone();
+      const moveDir = new THREE.Vector3().subVectors(target, currentPos);
+      const distance = moveDir.length();
+      if (distance > 0.1 && distance <= 10) {
+        moveDir.normalize();
+        const targetRotation = Math.atan2(moveDir.x, moveDir.z);
+        ref.current.rotation.y = THREE.MathUtils.lerp(
+          ref.current.rotation.y,
+          targetRotation,
+          rotationSpeed
+        );
+        const newPosition = ref.current.position.clone().add(moveDir.clone().multiplyScalar(speed));
         if (!checkCollision(newPosition)) {
           ref.current.position.copy(newPosition);
         }
+        moved = true;
+      } else if (distance > 10) {
+        clearTarget();
       }
-      // Point & click movement (≤ 10 units)
-      else if (target) {
-        const currentPos = ref.current.position.clone();
-        const moveDir = new THREE.Vector3().subVectors(target, currentPos);
-        const distance = moveDir.length();
-        if (distance > 0.1 && distance <= 10) {
-          moveDir.normalize();
-          const targetRotation = Math.atan2(moveDir.x, moveDir.z);
-          ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, targetRotation, rotationSpeed);
-          const newPosition = ref.current.position.clone().add(moveDir.clone().multiplyScalar(speed));
-          if (!checkCollision(newPosition)) {
-            ref.current.position.copy(newPosition);
-          }
-          moved = true;
-        } else if (distance > 10) {
-          clearTarget();
-        }
-      }
-
-      // Switch animations
-      if (actions.current.idle && actions.current.walk) {
-        if (moved && !isWalking) {
-          actions.current.idle.stop();
-          actions.current.walk.play();
-          setIsWalking(true);
-        } else if (!moved && isWalking) {
-          actions.current.walk.stop();
-          actions.current.idle.play();
-          setIsWalking(false);
-        }
-      }
-      mixer.current.update(delta);
     }
+  
+    // 3) Schimbă animația în funcție de moved
+    if (actions.current.idle && actions.current.walk) {
+      if (moved && !isWalking) {
+        actions.current.idle.stop();
+        actions.current.walk.play();
+        setIsWalking(true);
+      } else if (!moved && isWalking) {
+        actions.current.walk.stop();
+        actions.current.idle.play();
+        setIsWalking(false);
+      }
+    }
+    mixer.current.update(delta);
   });
+  
 
   return (
     <group ref={ref} position={[0, 0, 0]} scale={[1.15, 1.15, 1.15]}>
@@ -275,7 +280,7 @@ const Character = React.forwardRef(({ keys, wallColliders = [], target, clearTar
 // =============================
 const CameraFollow = ({ characterRef, freeCamera }) => {
   const { camera, gl } = useThree();
-  const zoomRef = useRef(5);
+  const zoomRef = useRef(3);
 
   useEffect(() => {
     const handleWheel = (e) => {
@@ -297,7 +302,7 @@ const CameraFollow = ({ characterRef, freeCamera }) => {
       forward.normalize();
 
       const distanceBehind = zoomRef.current;
-      const verticalOffset = 3;
+      const verticalOffset = 2.5;
       const offset = forward.clone().multiplyScalar(-distanceBehind);
       offset.y += verticalOffset;
 
@@ -324,7 +329,7 @@ function CameraReturnHandler({ characterRef, freeCamera, setFreeCamera, savedCam
           camera.position.copy(savedCameraPosition); // ← revenim la poziția anterioară
         } else if (characterRef.current) {
           const characterPosition = characterRef.current.position.clone();
-          camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 1, -1)));
+          camera.position.copy(characterPosition.clone().add(new THREE.Vector3(0, 1.5, -3)));
         }
         if (characterRef.current) {
           camera.lookAt(characterRef.current.position);
@@ -584,19 +589,27 @@ function TeleportButton({ characterRef }) {
 // =============================
 // TELEPORTARE DOAR CAMERA (alb)
 // =============================
-function CameraTeleportButton({ setFreeCamera }) {
+function CameraTeleportButton({ setFreeCamera, lcdRef }) {
   const { camera } = useThree();
 
   const handlePointerDown = (e) => {
     e.stopPropagation();
-    // Mutăm camera mai jos
-    camera.position.set(1, 0, -13);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    // 1) Mutăm camera exact unde vrei:
+    camera.position.set(1, 5, -18);
+
+    // 2) Citim poziția World (Globală) a mesh-ului LCD
+    if (lcdRef.current) {
+      const worldPos = new THREE.Vector3();
+      lcdRef.current.getWorldPosition(worldPos);
+      camera.lookAt(worldPos);
+    }
+
     setFreeCamera(true);
   };
 
   return (
-    <mesh position={[7.7, 1.1, 4.5]} onPointerDown={handlePointerDown}>
+    <mesh position={[0, 1.1, 4.5]} onPointerDown={handlePointerDown}>
       <boxGeometry args={[1, 0.1, 0.5]} />
       <meshStandardMaterial color="white" />
     </mesh>
@@ -629,7 +642,7 @@ function ProjectorScreen({ monitorImage }) {
 // =============================
 // BOARD MODEL - PUS PE MASA2
 // =============================
-function BoardModel({ onLCDClick, onComplete, onShowComponent }) {
+function BoardModel({ onLCDClick, onComplete, onShowComponent, lcdRef }) {
   // Încărcăm materialele din BoardV2.mtl din folderul "Imagini"
   const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
   materials.preload();
@@ -690,6 +703,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent }) {
 
       {/* LCD */}
       <mesh
+      ref={lcdRef}
         position={[0, 3, -11.5]}
         rotation={[3, 0, 0]}
         scale={[2, 1, 1]}
@@ -793,7 +807,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, lcdRef}) => {
 
   // State pentru a ține imaginea componentei care trebuie afișată în overlay
 
@@ -914,14 +928,12 @@ parquetTexture.repeat.set(10, 10);
   <boxGeometry args={[0.2, 1, 0.2]} />
   <meshStandardMaterial color="#654321" />
 </mesh>
-
 {/* TABLE 2 */}
 <mesh position={[8, 1, 5]}>
   <boxGeometry args={[4, 0.1, 2]} />
   <meshStandardMaterial color="#654321" />
 </mesh>
 {/* Picioarele pentru TABLE 2 */}
-{/* Fiecare picior are înălțimea 1 și o secțiune 0.2×0.2 */}
 <mesh position={[  9.4, 0.5,  4.1 ]}>
   <boxGeometry args={[0.2, 1, 0.2]} />
   <meshStandardMaterial color="#654321" />
@@ -939,13 +951,43 @@ parquetTexture.repeat.set(10, 10);
   <meshStandardMaterial color="#654321" />
 </mesh>
 
+{/* ============================= */}
+{/*      TABLE 3 – plasată unde e personajul, la [0, 1, 0] */}
+{/* ============================= */}
+
+{/* 1) Suprafața mesei 3 */}
+<mesh position={[0, 1, 5]}>
+  <boxGeometry args={[4, 0.1, 2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+
+{/* 2) Picioarele mesei 3 (blatul are dimensiunea 4×2, deci picioarele stau la ±1.9 pe X și ±0.9 pe Z față de centru) */}
+<mesh position={[  1.9, 0.5,  5 + 0.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[  1.9, 0.5,  5 - 0.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[ -1.9, 0.5,  5 + 0.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[ -1.9, 0.5,  5 - 0.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+
+
+
 {/* Sitting CuteBoy lângă masa 2 */}
  {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
      {/* Adaugă modelul animat de pointing la [1,0,0] */}
      <PointingModel
-       position={[0, 0.2, 3]}
+       position={[5, 0.2, 3]}
        rotation={[0, 2, 0]}
        scale={[0.012, 0.012, 0.012]} // ajustează după mărime
      />
@@ -1008,15 +1050,15 @@ parquetTexture.repeat.set(10, 10);
       </mesh>
       {/* Zona de măsurare (Multimetru) */}
       <mesh
-        position={[-4.5, 1.3, -1.5]}  // ajustează poziția după caz
-        rotation={[-Math.PI / 2, 0, 0]}
+        position={[-8.0, 1.7, 9]}  // ajustează poziția după caz
+        rotation={[0, 0, 0]}
         onPointerDown={(e) => {
           e.stopPropagation();
           alert("Tensiune măsurată: 3.3V");
           completeTask(5);
         }}
       >
-        <boxGeometry args={[0.6, 0.1, 0.3]} />
+        <boxGeometry args={[0.5, 0.2, 0.2]} />
         <meshStandardMaterial color="black" />
       </mesh>
 
@@ -1025,7 +1067,7 @@ parquetTexture.repeat.set(10, 10);
       <TeleportButton characterRef={characterRef} />
 
       {/* Teleportare doar a camerei (verde) */}
-      <CameraTeleportButton setFreeCamera={setFreeCamera} />
+      <CameraTeleportButton setFreeCamera={setFreeCamera} lcdRef={lcdRef}  />
 
 
 
@@ -1065,10 +1107,11 @@ parquetTexture.repeat.set(10, 10);
         onLCDClick={() => completeTask(1)}
         onComplete={completeTask}
         onShowComponent={onShowComponent} 
+        lcdRef={lcdRef}
       />
       {/* Job Simulator Hotspot */}
       <mesh
-        position={[5, 1, 5]}
+        position={[7, 1, 5]}
         onPointerDown={e => {
           e.stopPropagation();
           openJobSimulator();
@@ -1096,6 +1139,7 @@ const Environment = () => {
   const [componentImage, setComponentImage] = useState(null);
   const navigate = useNavigate();
   const controlsRef = useRef(null);
+  
   function ControlsUpdater({ freeCamera }) {
     const { camera } = useThree();
     useFrame(() => {
@@ -1162,6 +1206,7 @@ const Environment = () => {
   // Stare pentru free camera: false = camera urmărește personajul; true = camera e în mod "free"
   const [freeCamera, setFreeCamera] = useState(false);
   const [showDiagram, setShowDiagram] = useState(false);
+  const lcdRef = useRef();
   const handleBuzzerClick = (e) => {
     e.stopPropagation();
     // Exemplu: marchează task-ul 7 ca și complet
@@ -1392,6 +1437,7 @@ const Environment = () => {
             openJobSimulator={() => setShowJobSim(true)}
             handleShowDiagram={setShowDiagram}
             onShowComponent={setComponentImage}
+            lcdRef={lcdRef} 
           />
 
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
