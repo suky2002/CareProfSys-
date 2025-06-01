@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { Sky, useGLTF, Text, useAnimations  } from '@react-three/drei';
+import { Sky, useGLTF, Text, useAnimations } from '@react-three/drei';
 import { MathUtils } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -597,7 +597,7 @@ function CameraTeleportButton({ setFreeCamera }) {
 
   return (
     <mesh position={[7.7, 1.1, 4.5]} onPointerDown={handlePointerDown}>
-      <boxGeometry args={[1, 0.5, 0.5]} />
+      <boxGeometry args={[1, 0.1, 0.5]} />
       <meshStandardMaterial color="white" />
     </mesh>
   );
@@ -629,7 +629,7 @@ function ProjectorScreen({ monitorImage }) {
 // =============================
 // BOARD MODEL - PUS PE MASA2
 // =============================
-function BoardModel({ onLCDClick, onComplete }) {
+function BoardModel({ onLCDClick, onComplete, onShowComponent }) {
   // Încărcăm materialele din BoardV2.mtl din folderul "Imagini"
   const materials = useLoader(MTLLoader, '/Imagini/BoardV2.mtl');
   materials.preload();
@@ -656,7 +656,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[-1.7, 2.4, -11.5]}
         rotation={[3, 0, 0]}
         scale={[0.7, 0.7, 1]}
-        onClick={() => alert("Potentiometru")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/potentiometer.png'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -667,7 +667,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[-1.3, 1.2, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1.3, 0.7, 1]}
-        onClick={() => alert("US")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/US.png'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -678,10 +678,11 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[0.5, 1.6, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1.5, 1.8, 1]}
-        onClick={() => {
-          alert("Arduino");
-          onComplete?.(3);
-        }}
+                onClick={(e) => { 
+                    e.stopPropagation(); 
+                    onShowComponent('/Imagini/arduino_board.png'); 
+                    onComplete?.(3); 
+                  }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -707,10 +708,11 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[-0.58, 2, -11.5]}
         rotation={[3, 0, 0]}
         scale={[0.3, 0.3, 1]}
-        onClick={() => {
-          alert("Arduino");
-          onComplete?.(4);
-        }}
+        onClick={(e) => { 
+                    e.stopPropagation(); 
+                    onShowComponent('/Imagini/led.jpg'); 
+                    onComplete?.(4); 
+                  }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -721,7 +723,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[-1.5, 4.3, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1, 0.5, 1]}
-        onClick={() => alert("Nano")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/nano.png'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -732,7 +734,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[-0.25, 4.3, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1, 2, 1]}
-        onClick={() => alert("Joystick")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/Joystick.png'); }}
       >
         <planeGeometry args={[1, 0.5]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -743,7 +745,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[1, 4.2, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1, 1, 1]}
-        onClick={() => alert("ESP32")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/ESP32.jpg'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -754,7 +756,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[2, 4, -11.5]}
         rotation={[3, 0, 0]}
         scale={[0.5, 0.5, 0.5]}
-        onClick={() => alert("7 Segment")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/7-segment.png'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -765,7 +767,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[2, 3, -11.5]}
         rotation={[3, 0, 0]}
         scale={[0.5, 0.5, 0.5]}
-        onClick={() => alert("LED")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/led.jpg'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -776,7 +778,7 @@ function BoardModel({ onLCDClick, onComplete }) {
         position={[1.8, 1.6, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1, 1, 1]}
-        onClick={() => alert("Servomotor")}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/electromotor.jpg'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -791,8 +793,9 @@ function BoardModel({ onLCDClick, onComplete }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram }) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, }) => {
 
+  // State pentru a ține imaginea componentei care trebuie afișată în overlay
 
 // 3) textura pentru tavan
 const ceilingTexture = useLoader(TextureLoader, '/Imagini/Blue_wall.jpg');
@@ -836,6 +839,8 @@ parquetTexture.repeat.set(10, 10);
 
   return (
     <group position={[0, 0.1, 0]}>
+    
+    
       {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[20, 20]} />
@@ -886,17 +891,54 @@ parquetTexture.repeat.set(10, 10);
         <meshStandardMaterial map={ceilingTexture} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* TABLE */}
-      <mesh position={[0, 1, -2]}>
-        <boxGeometry args={[6, 0.5, 2]} />
-        <meshStandardMaterial color="#654321" />
-      </mesh>
+     {/* TABLE 1 */}
+<mesh position={[0, 1, -2]}>
+  <boxGeometry args={[6, 0.1, 2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+{/* Picioarele pentru TABLE 1 */}
+{/* Fiecare picior are înălțimea 1 și o secțiune 0.2×0.2 */}
+<mesh position={[  2.9, 0.5,  -2.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[  2.9, 0.5,   -1.1 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[ -2.9, 0.5,  -2.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[ -2.9, 0.5,   -1.1 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
 
-      {/* TABLE2 */}
-      <mesh position={[8, 1, 5]}>
-        <boxGeometry args={[4, 0.5, 2]} />
-        <meshStandardMaterial color="#654321" />
-      </mesh>
+{/* TABLE 2 */}
+<mesh position={[8, 1, 5]}>
+  <boxGeometry args={[4, 0.1, 2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+{/* Picioarele pentru TABLE 2 */}
+{/* Fiecare picior are înălțimea 1 și o secțiune 0.2×0.2 */}
+<mesh position={[  9.4, 0.5,  4.1 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[  9.9, 0.5,  5.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[  6.1, 0.5,  4.1 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+<mesh position={[  6.1, 0.5,  5.9 ]}>
+  <boxGeometry args={[0.2, 1, 0.2]} />
+  <meshStandardMaterial color="#654321" />
+</mesh>
+
 {/* Sitting CuteBoy lângă masa 2 */}
  {/* SCĂUN & OAMENIȚĂ */}
 {/* SCĂUN & OAMENIȚĂ */}
@@ -915,13 +957,13 @@ parquetTexture.repeat.set(10, 10);
   />
    <OfficeChair
         position={[ 8, 0.1, 3 ]}
-        rotation={[ 0, -Math.PI / 4, 0 ]}
+        rotation={[ 0, -Math.PI / 1, 0 ]}
         scale={[ 0.002, 0.002, 0.002 ]}
       />
 
 <OfficeChair
         position={[ 0, 0.1,  -4 ]}
-        rotation={[ 0, -Math.PI / 4, 0 ]}
+        rotation={[ 0, -Math.PI / 1, 0 ]}
         scale={[ 0.002, 0.002, 0.002 ]}
       />
 
@@ -935,7 +977,7 @@ parquetTexture.repeat.set(10, 10);
 
  {/* PAPERS – când apeși pe ele, se apelează handleShowDiagram */}
  <Papers
-        position={[7, 1.25, 5.6]}
+        position={[7, 1.1, 5.6]}
         rotation={[0, Math.PI / 5, 0]}
         scale={[0.012, 0.012, 0.012]}
         onPointerDown={(e) => {
@@ -948,20 +990,20 @@ parquetTexture.repeat.set(10, 10);
       {/* MONITOR */}
       <Monitor monitorImage={monitorImage} />
     
-      {/* MOUSE (red) */}
+      {/* Computer */}
       <mesh
-        position={[2.2, 1.7, -3.1]}
+        position={[2.2, 1.55, -2.1]}
         onPointerDown={e => { e.stopPropagation(); handleComputerClick() }}
       >
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <boxGeometry args={[0.4, 0.8, 0.9]} />
         <meshStandardMaterial color="blue" />
       </mesh>
-
+ {/* Mouse */}
       <mesh
-        position={[-1.8, 1.25, -2]}
+        position={[-1.8, 1.1, -2.3]}
         onPointerDown={e => { e.stopPropagation(); handleRedClick() }}
       >
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
+        <boxGeometry args={[0.5, 0.1, 0.5]} />
         <meshStandardMaterial color="red" />
       </mesh>
       {/* Zona de măsurare (Multimetru) */}
@@ -992,15 +1034,15 @@ parquetTexture.repeat.set(10, 10);
         <planeGeometry args={[4, 2]} />
         <meshStandardMaterial color="white" />
       </mesh>
-      <Text position={[0, 4.5, -9.5]} fontSize={0.5} color="black">
-        Circuit Diagram
+      <Text position={[0.2, 4.5, -9.4]} fontSize={0.5} color="black">
+      Electronics Lab
       </Text>
       <Text position={[0, 5.5, -9]} rotation={[0, Math.PI, 0]} fontSize={1} color="yellow">
         Electronics Lab
       </Text>
 
       {/* COMPUTER (OBJ) */}
-      <Computer position={[2.2, 1.3, -2.1]} scale={[0.025, 0.025, 0.025]} rotation={[-Math.PI / 2, 0, Math.PI]} />
+      <Computer position={[2.2, 1, -2.1]} scale={[0.025, 0.025, 0.025]} rotation={[-Math.PI / 2, 0, Math.PI]} />
 
       {/* BOX-BASED BOOKSHELF */}
       <BookShelf position={[-9.4, 0, 0]} />
@@ -1012,7 +1054,7 @@ parquetTexture.repeat.set(10, 10);
        <BoxObj position={[-8, 0.9, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
       {/* BuzzerFBX */}
       <BuzzerFBX
-          position={[8, 1.24, 5.7]}        // poziția relativă în interiorul grupului
+          position={[8, 1.1, 5.7]}        // poziția relativă în interiorul grupului
           rotation={[0, Math.PI, 0]}  // rotit spre camera sau spre jucător
           scale={[0.001, 0.001, 0.001]}   // ajustează după dimensiunea reală a modelului
           onPointerDown={handleBuzzerClick}
@@ -1022,6 +1064,7 @@ parquetTexture.repeat.set(10, 10);
       <BoardModel
         onLCDClick={() => completeTask(1)}
         onComplete={completeTask}
+        onShowComponent={onShowComponent} 
       />
       {/* Job Simulator Hotspot */}
       <mesh
@@ -1050,6 +1093,7 @@ const handleBuzzerClick = (e) => {
 };
 
 const Environment = () => {
+  const [componentImage, setComponentImage] = useState(null);
   const navigate = useNavigate();
   const controlsRef = useRef(null);
   function ControlsUpdater({ freeCamera }) {
@@ -1260,7 +1304,58 @@ const Environment = () => {
           />
         </div>
       )}
-
+ {componentImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,          // on top of everything
+            pointerEvents: 'auto', // allow clicking
+          }}
+          onClick={() => setComponentImage(null)}
+        >
+          {/* A large “×” in the corner to close */}
+          <button
+            style={{
+              position: 'absolute',
+              top: 20,
+              right: 20,
+              fontSize: 32,
+              background: 'transparent',
+              border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+              zIndex: 10000,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setComponentImage(null);
+            }}
+          >
+            &times;
+          </button>
+          {/* The actual component image */}
+          <img
+            src={componentImage}
+            alt="Component Detail"
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              boxShadow: '0 0 24px rgba(0,0,0,0.6)',
+              borderRadius: 8,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
       {/* ────── CANVAS 3D ────── */}
       <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <XR>
@@ -1296,6 +1391,7 @@ const Environment = () => {
             completeTask={completeTask}
             openJobSimulator={() => setShowJobSim(true)}
             handleShowDiagram={setShowDiagram}
+            onShowComponent={setComponentImage}
           />
 
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
