@@ -18,6 +18,7 @@ import TaskList from './TaskList';
 import V2BookShelfModel from './V2BookShelfModel.jsx';
 import ElectricalQuiz from './ElectricalQuiz';
 import Monitor from './Monitor.jsx';
+import QuizIOT from './QuizIOT.jsx';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -860,7 +861,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent, lcdRef }) {
 // =============================
 // ROOM
 // =============================
-const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, lcdRef}) => {
+const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, lcdRef, onOpenIotQuiz}) => {
 
   // State pentru a ține imaginea componentei care trebuie afișată în overlay
 const logoTexture = useLoader(TextureLoader, '/Imagini/logo-upb.png');
@@ -1056,10 +1057,14 @@ parquetTexture.repeat.set(10, 10);
 {/* SCĂUN & OAMENIȚĂ */}
      {/* Adaugă modelul animat de pointing la [1,0,0] */}
      <PointingModel
-       position={[5, 0.2, 3]}
-       rotation={[0, 2, 0]}
-       scale={[0.012, 0.012, 0.012]} // ajustează după mărime
-     />
+  position={[5, 0.2, 3]}
+  rotation={[0, 2, 0]}
+  scale={[0.012, 0.012, 0.012]}
+  onPointerDown={(e) => {
+    e.stopPropagation();
+    onOpenIotQuiz();          // ← call the prop instead
+  }}
+/>
   {/* Scaunul, rotit spre masă */}
   <OfficeChair
     position={[8, 0.1, 7]}
@@ -1222,9 +1227,11 @@ const Environment = () => {
     });
     return null;
   }
+
+const [iotScore, setIotScore] = useState(null);
   const [jobSimScore, setJobSimScore] = useState(null);
   const [electricalScore, setElectricalScore] = useState(null);
- 
+  const [showIotQuiz,      setShowIotQuiz]      = useState(false);
   const [showElectricalQuiz, setShowElectricalQuiz] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [lightOn, setLightOn] = useState(false);
@@ -1242,6 +1249,12 @@ const Environment = () => {
     { id: 7, description: 'buzzer', completed: false }
     // … you could add more later
   ]);
+  const handleIotQuizComplete = (finalScore) => {
+    // Save IoT score and close overlay
+    setIotScore(finalScore);
+    setShowIotQuiz(false);
+    console.log('IoT Quiz score:', finalScore);
+  };
   const handleElectricalQuizComplete = (finalScore) => {
     // 1) marchezi task‐ul de quiz ca fiind complet
     completeTask(6);
@@ -1356,9 +1369,10 @@ const Environment = () => {
   }}
 >
   {/* Afișăm mereu scorurile, chiar și când sunt 0 */}
-  <div>🏆 Scor Total: <strong>{(jobSimScore || 0) + (electricalScore || 0)}</strong></div>
+  <div>🏆 Total Score: <strong>{(jobSimScore || 0) + (electricalScore || 0) + (iotScore || 0)}</strong></div>
   <div>🏢 JobSimulator: <strong>{jobSimScore ?? 0}</strong></div>
-  <div>⚡ Quiz Electric: <strong>{electricalScore ?? 0}</strong></div>
+  <div>⚡ Electrical Quiz: <strong>{electricalScore ?? 0}</strong></div>
+  <div>🌐 IoT Quiz: <strong>{iotScore ?? 0}</strong></div>
 </div>
       {/* ────── BUTONUL “Revenire Cameră” ────── */}
       <div
@@ -1412,7 +1426,13 @@ const Environment = () => {
           onComplete={(score) => handleElectricalQuizComplete(score)}
         />
       )}
-    
+    {showIotQuiz && (
+  <QuizIOT
+    onClose={() => setShowIotQuiz(false)}
+    onComplete={handleIotQuizComplete}
+  />
+)}
+
 
 
       {/* Overlay pentru diagramă (showDiagram) */}
@@ -1550,6 +1570,7 @@ const Environment = () => {
          handleShowDiagram={setShowDiagram}
          onShowComponent={setComponentImage}
          lcdRef={lcdRef} 
+         onOpenIotQuiz={() => setShowIotQuiz(true)}
        />
 
        {/* Plasăm Panel în scenă, cu onClick ce deschide quiz */}
