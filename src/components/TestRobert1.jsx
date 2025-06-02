@@ -7,7 +7,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import TutorialOverlay from './TutorialOverlay2';
-import { TextureLoader } from 'three';
+import { DoubleSide, TextureLoader } from 'three'
 import { RepeatWrapping } from 'three';
 import { useNavigate } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei';
@@ -16,6 +16,8 @@ import { XR } from '@react-three/xr'
 import JobSimulator from './JobSimulator';
 import TaskList from './TaskList';
 import V2BookShelfModel from './V2BookShelfModel.jsx';
+import ElectricalQuiz from './ElectricalQuiz';
+import Monitor from './Monitor.jsx';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -378,7 +380,7 @@ const Ground = ({ setTargetPosition }) => (
 );
 const ElectricPanel = ({ lightOn, toggleLight }) => {
   return (
-    <group position={[-8, 1, -5]}>
+    <group position={[-8, 2, -5]}>
       {/* Cutie electrică */}
       <mesh>
         <boxGeometry args={[1, 2, 0.3]} />
@@ -387,7 +389,7 @@ const ElectricPanel = ({ lightOn, toggleLight }) => {
 
       {/* Buton de comutare */}
       <mesh
-        position={[0, 0.5, 0.15]}
+        position={[0, 0.5, 0.55]}
         onClick={(e) => {
           e.stopPropagation();
           toggleLight();
@@ -449,34 +451,25 @@ function QuizTask({ task, onComplete }) {
   );
 }
 // =============================
-// 2. OPTIONAL "BOOKSHELF" (BOXES)
+// 2. OPTIONAL "Panel" COMPONENT
 // =============================
-function BookShelf(props) {
+function Panel({ onClick, ...props }) {
   return (
     <group {...props}>
-      {/* Back board */}
-      <mesh position={[0, 1, 0]}>
+      <mesh position={[0, 2, 0]} onPointerDown={(e) => { e.stopPropagation(); onClick?.(); }}>
         <boxGeometry args={[0.1, 2, 2]} />
         <meshStandardMaterial color="brown" />
       </mesh>
-      {/* Shelves */}
-      <mesh position={[0, 0.3, 0]}>
-        <boxGeometry args={[0.1, 0.05, 1.8]} />
-        <meshStandardMaterial color="brown" />
-      </mesh>
-      <mesh position={[0, 0.9, 0]}>
-        <boxGeometry args={[0.1, 0.05, 1.8]} />
-        <meshStandardMaterial color="brown" />
-      </mesh>
-      <mesh position={[0, 1.5, 0]}>
-        <boxGeometry args={[0.1, 0.05, 1.8]} />
-        <meshStandardMaterial color="brown" />
-      </mesh>
-      {/* Exemplu "carte" */}
-      <mesh position={[0.15, 0.35, 0]}>
-        <boxGeometry args={[0.1, 0.1, 0.1]} />
-        <meshStandardMaterial color="red" />
-      </mesh>
+      <Text
+        position={[0.06, 2, 0]}
+        rotation={[0, Math.PI / 2, 0]}
+        fontSize={0.2}
+        color="white"
+        anchorX="center"
+        anchorY="middle"
+      >
+        Electrical Panel
+      </Text>
     </group>
   );
 }
@@ -519,11 +512,23 @@ function createBoxCollider(center, size) {
 const roomColliders = [
   // 1) Pereți (exact cum aveai deja)
   createBoxCollider([0, 2.5, -10], [20, 5, 1]),    // peretele din față
-  createBoxCollider([-10, 2.5, 0], [1, 5, 20]),    // peretele din stânga
-  createBoxCollider([10, 2.5, 0], [1, 5, 20]),     // peretele din dreapta
+  createBoxCollider([-10, 2.5, 0], [2, 5, 20]),    // peretele din stânga
+  createBoxCollider([10, 2.5, 0], [2, 5, 20]),     // peretele din dreapta
   createBoxCollider([-5.5, 2.5, 10], [9, 5, 1]),   // peretele din spate stânga
   createBoxCollider([5.5, 2.5, 10], [9, 5, 1]),    // peretele din spate dreapta
-  createBoxCollider([0, 5.5, 0], [20, 1, 20]),     // tavanul
+  createBoxCollider([0, 5.5, 0], [20, 1, 20]),
+  createBoxCollider(
+    /* center */ [ -9.5, 5/2, -8.5 ], 
+    /* size   */ [ 10,   5,   1   ]
+  ),
+
+  // ─── COLIZOR LATERAL DREAPTA (3 unităţi în interior, înălţime 5, lăţime 1) ───
+  // ‣ Ocupă X ∈ [ +9 , +10],  Y ∈ [0 , 5],  Z ∈ [−10 , −7]
+  createBoxCollider(
+    /* center */ [ +9.5, 5/2, -8.5 ],
+    /* size   */ [ 10,   5,   1     ]
+  ),
+   // tavanul
   // 2) Ușă / prag (opțional, dacă vrei să nu treci prin ușă când e închisă)
   // (aici, dacă vrei să blochezi întreg spațiul din fața ușii când e închisă, ar trebui să ajustezi dinamic)
   // createBoxCollider([ -1, 1.5, 9.51 ], [ 2, 3, 0.2 ]),
@@ -549,39 +554,39 @@ const roomColliders = [
   createBoxCollider([0, 1, -4], [1, 2, 1]),
 ];
 
-const Monitor = ({ monitorImage }) => {
-  // Încarci texturile o singură dată
+const MultiImageMonitor  = ({ monitorImage }) => {
   const dekstopTex = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
-  const woodTex = useLoader(TextureLoader, '/Imagini/wood.jpeg');
+  const numberedTextures = useLoader(TextureLoader, [
+    '/Imagini/1.jpg',
+    '/Imagini/2.jpg',
+    '/Imagini/3.jpg',
+    '/Imagini/4.jpg',
+    '/Imagini/5.jpg'
+  ]);
 
-  // Alege textura potrivită
-  const texture = monitorImage === 'wood.jpeg'
-    ? woodTex
-    : dekstopTex;
+  let currentTexture = null;
+  if (monitorImage === 'Dekstopfree.png') {
+    currentTexture = dekstopTex;
+  } else {
+    const idx = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg'].indexOf(monitorImage);
+    if (idx >= 0) currentTexture = numberedTextures[idx];
+  }
 
   return (
     <group position={[0, 1.9, -1.5]}>
-      {/* Rama monitorului e mereu neagră */}
       <mesh>
         <boxGeometry args={[2, 1.2, 0.1]} />
         <meshStandardMaterial color="black" />
       </mesh>
-
-      {/* Ecranul: afișăm plane doar dacă avem o imagine setată */}
-      {monitorImage && (
+      {currentTexture && (
         <mesh position={[0, 0, -0.055]}>
           <planeGeometry args={[1.8, 1.0]} />
-          <meshStandardMaterial
-            map={texture}
-            side={THREE.DoubleSide}
-            toneMapped={false}
-          />
+          <meshStandardMaterial map={currentTexture} side={THREE.DoubleSide} toneMapped={false} />
         </mesh>
       )}
     </group>
   );
 };
-
 
 
 const Computer = (props) => {
@@ -643,22 +648,43 @@ function CameraTeleportButton({ setFreeCamera, lcdRef }) {
   );
 }
 function ProjectorScreen({ monitorImage }) {
+  // 1) Încarcă textura fixă pentru "Dekstopfree.png"
   const dekstopTex = useLoader(TextureLoader, '/Imagini/Dekstopfree.png');
-  const woodTex = useLoader(TextureLoader, '/Imagini/wood.jpeg');
 
-  if (!monitorImage) return null; // 🔥 nu afișa nimic dacă monitorul e oprit
+  // 2) Încarcă cele 5 imagini numerotate într-un array
+  const numberedTextures = useLoader(TextureLoader, [
+    '/Imagini/1.jpg',
+    '/Imagini/2.jpg',
+    '/Imagini/3.jpg',
+    '/Imagini/4.jpg',
+    '/Imagini/5.jpg'
+  ]);
 
-  const texture = monitorImage === 'wood.jpeg' ? woodTex : dekstopTex;
+  // 3) Dacă nu există niciun monitorImage, nu afișa nimic
+  if (!monitorImage) return null;
+
+  // 4) Alege textura curentă după valoarea monitorImage
+  let currentTexture = null;
+  if (monitorImage === 'Dekstopfree.png') {
+    currentTexture = dekstopTex;
+  } else {
+    // array cu aceleași nume exact cum le setezi în state-ul principal
+    const names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
+    const idx = names.indexOf(monitorImage);
+    if (idx >= 0) {
+      currentTexture = numberedTextures[idx];
+    }
+  }
+
+  // 5) Dacă nicio textură nu a fost găsită, nu afișa nimic
+  if (!currentTexture) return null;
 
   return (
-    <mesh
-      position={[9.49, 3.2, 0.5]}
-      rotation={[0, -Math.PI / 2, 0]}
-    >
+    <mesh position={[9.49, 3.2, 0.5]} rotation={[0, -Math.PI / 2, 0]}>
       <planeGeometry args={[5, 3]} />
       <meshStandardMaterial
-        map={texture}
-        side={THREE.DoubleSide}
+        map={currentTexture}
+        side={DoubleSide}
         toneMapped={false}
       />
     </mesh>
@@ -884,18 +910,20 @@ parquetTexture.repeat.set(10, 10);
     
      {/** PLACĂM RAFTURILE în faţa acestui perete, câte unul la stânga și unul la dreapta **/}
      {/* Colţ stânga: x ≈ −9.5, z puţin mai mare ca −10 (ex: −9.4), pentru a nu „clip” pe perete */}
-     <V2BookShelfModel
-       position={[-9.5, 0, -9.4]}
-       rotation={[0, Math.PI / 2, 0]}  // rotit ca să fie paralel cu peretele și să „privească” în cameră
-       scale={[0.01, 0.01, 0.01]}       // adaptează scala după cum ai nevoie
-     />
+    
+      {/** Raftul din colț STÂNGA (orientat către interior) */}
+      <V2BookShelfModel
+        position={[-7, 0, -9]}
+        rotation={[0, Math.PI / 2, 0]}   // +90° pe axa Y
+        scale={[0.049, 0.049, 0.049]}       // aceeași scară pentru ambele
+      />
 
-     {/* Colţ dreapta: x ≈ +9.5, z ≈ −9.4 */}
-     <V2BookShelfModel
-       position={[9.5, 0, -9.4]}
-       rotation={[0, -Math.PI / 2, 0]} // oglindă pe axa Y, ca să fie orientat spre interior
-       scale={[0.01, 0.01, 0.01]}
-     />
+      {/** Raftul din colț DREAPTA (orientat către interior) */}
+      <V2BookShelfModel
+        position={[7, 0, -9]}
+        rotation={[0, Math.PI / 2, 0]}  // −90° pe axa Y
+        scale={[0.049, 0.049, 0.049]}       // aceeași scală
+      />
       {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[20, 20]} />
@@ -1131,8 +1159,7 @@ parquetTexture.repeat.set(10, 10);
       {/* COMPUTER (OBJ) */}
       <Computer position={[2.2, 1, -2.1]} scale={[0.025, 0.025, 0.025]} rotation={[-Math.PI / 2, 0, Math.PI]} />
 
-      {/* BOX-BASED BOOKSHELF */}
-      <BookShelf position={[-9.4, 0, 0]} />
+ 
 
       {/* SHELVES.OBJ */}
       <ShelvesObj position={[-8, 0, 9]} scale={[0.02, 0.02, 0.02]} rotation={[0, Math.PI, 0]} />
@@ -1195,7 +1222,10 @@ const Environment = () => {
     });
     return null;
   }
-
+  const [jobSimScore, setJobSimScore] = useState(null);
+  const [electricalScore, setElectricalScore] = useState(null);
+ 
+  const [showElectricalQuiz, setShowElectricalQuiz] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [lightOn, setLightOn] = useState(false);
   const toggleLight = () => setLightOn(prev => !prev);
@@ -1212,7 +1242,15 @@ const Environment = () => {
     { id: 7, description: 'buzzer', completed: false }
     // … you could add more later
   ]);
-
+  const handleElectricalQuizComplete = (finalScore) => {
+    // 1) marchezi task‐ul de quiz ca fiind complet
+    completeTask(6);
+    // 2) salvezi în state scorul primit
+    setElectricalScore(finalScore);
+    // 3) închizi overlay‐ul
+    setShowElectricalQuiz(false);
+    console.log("Scor ElectricQuiz:", finalScore);
+  };
   const completeTask = (taskId) => {
     setTasks((prev) =>
       prev.map(t => t.id === taskId ? { ...t, completed: true } : t)
@@ -1220,14 +1258,15 @@ const Environment = () => {
   };
   const handleJobSimComplete = (finalScore) => {
     setShowJobSim(false);
-    setJobSimScore(finalScore);
-    // Poți marca un task, de ex. completeTask(7);
+    setJobSimScore(finalScore); // ✅ salvăm scorul JobSimulator
     console.log('JobSimulator scor:', finalScore);
+    // Dacă vrem să marcăm un task:
+    // completeTask(7);
   };
   const handleQuizComplete = (correct) => {
     if (correct) {
       completeTask(6);
-      setShowQuiz(false);
+      setShowElectricalQuiz(false);
     }
   };
   // 2) whenever *all* tasks are done, navigate
@@ -1237,8 +1276,9 @@ const Environment = () => {
   //  setTimeout(() => navigate("/course-recommendations"), 500);
   // }
   // }, [tasks, navigate]);
+  
   const [showJobSim, setShowJobSim] = useState(false);
-  const [jobSimScore, setJobSimScore] = useState(0);
+
   const [showTutorial, setShowTutorial] = useState(true);
   const keys = useKeyControls();
   const characterRef = useRef();
@@ -1246,8 +1286,16 @@ const Environment = () => {
   const clearTarget = () => setTargetPosition(null);
 
   // Stare pentru monitor (imagini)
+ 
+  const imageList = [
+    '1.jpg',
+    '2.jpg',
+    '3.jpg',
+    '4.jpg',
+    '5.jpg'
+  ];
+  const [imageIndex, setImageIndex] = useState(0);
   const [monitorImage, setMonitorImage] = useState(null);
-
   // Stare pentru free camera: false = camera urmărește personajul; true = camera e în mod "free"
   const [freeCamera, setFreeCamera] = useState(false);
   const [showDiagram, setShowDiagram] = useState(false);
@@ -1270,14 +1318,48 @@ const Environment = () => {
 
   // buton roșu — a doua imagine
   const handleRedClick = () => {
-    setMonitorImage('wood.jpeg');
+    // Avansăm indexul ciclic
+    setImageIndex(prevIndex => {
+      const nextIndex = (prevIndex + 1) % imageList.length;
+      // Setăm monitorImage pe baza listei
+      setMonitorImage(imageList[nextIndex]);
+      return nextIndex;
+    });
   };
   if (showTutorial) {
     return <TutorialOverlay onClose={() => setShowTutorial(false)} />;
   }
-
+  const totalScore = (jobSimScore || 0) + (electricalScore || 0);
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+    <div
+  style={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+  }}
+>
+          {/* ─── Aici adăugăm un <div> fixat în colțul stânga-jos pentru afișarea scorurilor ─── */}
+          <div
+  style={{
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    background: "rgba(0,0,0,0.6)",
+    color: "#fff",
+    padding: "0.5rem 1rem",
+    borderRadius: "4px",
+    fontFamily: "sans-serif",
+    zIndex: 1000,
+  }}
+>
+  {/* Afișăm mereu scorurile, chiar și când sunt 0 */}
+  <div>🏆 Scor Total: <strong>{(jobSimScore || 0) + (electricalScore || 0)}</strong></div>
+  <div>🏢 JobSimulator: <strong>{jobSimScore ?? 0}</strong></div>
+  <div>⚡ Quiz Electric: <strong>{electricalScore ?? 0}</strong></div>
+</div>
       {/* ────── BUTONUL “Revenire Cameră” ────── */}
       <div
         style={{
@@ -1316,38 +1398,22 @@ const Environment = () => {
 
       {/* ────── JobSimulator și Quiz ────── */}
       {showJobSim && (
-        <JobSimulator onClose={() => setShowJobSim(false)} onComplete={handleJobSimComplete} />
-      )}
-      {showQuiz && (
-        <QuizTask
-          task={{
-            intrebare: "Care este tensiunea standard a unui pin digital HIGH pe Arduino?",
-            optiuni: ["3.3V", "1.8V", "5V", "0V"],
-            correctOption: 2,
-          }}
-          onComplete={handleQuizComplete}
+  <JobSimulator
+    onClose={() => setShowJobSim(false)}
+    onComplete={handleJobSimComplete}
+  />
+)}
+
+      
+      {/* ElectricalQuiz overlay */}
+      {showElectricalQuiz && (
+        <ElectricalQuiz
+          onClose={(score) => handleElectricalQuizComplete(score)}
+          onComplete={(score) => handleElectricalQuizComplete(score)}
         />
       )}
+    
 
-      {/* Butonul “Deschide Quiz” în colțul dreapta-jos */}
-      <button
-        onClick={() => setShowQuiz(true)}
-        style={{
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-          zIndex: 1000,
-          background: "#1976d2",
-          color: "#fff",
-          border: "none",
-          borderRadius: 4,
-          padding: "6px 12px",
-          cursor: "pointer",
-          fontSize: "0.9rem"
-        }}
-      >
-        Deschide Quiz
-      </button>
 
       {/* Overlay pentru diagramă (showDiagram) */}
       {showDiagram && (
@@ -1472,18 +1538,25 @@ const Environment = () => {
 
           <Ground setTargetPosition={setTargetPosition} />
 
-          <Room
-            characterRef={characterRef}
-            monitorImage={monitorImage}
-            handleComputerClick={handleComputerClick}
-            handleRedClick={handleRedClick}
-            setFreeCamera={setFreeCamera}
-            completeTask={completeTask}
-            openJobSimulator={() => setShowJobSim(true)}
-            handleShowDiagram={setShowDiagram}
-            onShowComponent={setComponentImage}
-            lcdRef={lcdRef} 
-          />
+        {/* ROOM + Panel (panelul înlocuiește butonul “Deschide Quiz”) */}
+       <Room
+         characterRef={characterRef}
+         monitorImage={monitorImage}
+         handleComputerClick={handleComputerClick}
+         handleRedClick={handleRedClick}
+         setFreeCamera={setFreeCamera}
+         completeTask={completeTask}
+         openJobSimulator={() => setShowJobSim(true)}
+         handleShowDiagram={setShowDiagram}
+         onShowComponent={setComponentImage}
+         lcdRef={lcdRef} 
+       />
+
+       {/* Plasăm Panel în scenă, cu onClick ce deschide quiz */}
+       <Panel
+         position={[-9.4, 0, 0]}
+         onClick={() => setShowElectricalQuiz(true)}
+       />
 
           <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
           <ProjectorScreen monitorImage={monitorImage} />

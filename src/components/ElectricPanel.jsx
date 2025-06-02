@@ -12,7 +12,7 @@ function ElectricPanel({ lightOn, toggleLight }) {
 
       {/* Indicator luminos (bec) */}
       <mesh position={[0, 1.2, 0.15]}>
-        <sphereGeometry args={[0.1, 16, 16]} />
+        <sphereGeometry args={[.1, 16, 16]} />
         <meshStandardMaterial color={lightOn ? 'lime' : 'black'} emissive={lightOn ? 'lime' : 'black'} />
       </mesh>
 
