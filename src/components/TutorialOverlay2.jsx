@@ -1,18 +1,25 @@
-import "./css/TutorialOverlay.css";
-import React, { useState } from "react";
+// src/components/TutorialOverlay2.jsx
 
-const TutorialOverlay = ({ onClose }) => {
+import React, { useState } from "react";
+import "./css/TutorialOverlay.css";
+
+const TutorialOverlay2 = ({ onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      title: "Welcome to the Broadcasting Studio!",
-      beforeImage: (
+      title: "Welcome to the Electronics Lab!",
+      content: (
         <>
-          <p>You are in a professional broadcasting engineering studio simulator.</p>
           <p>
-            Use the <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> keys to move around.
-            Use the mouse to interact with objects by clicking on them.
+            You have entered a simulated electronics laboratory. Use the{" "}
+            <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and{" "}
+            <strong>D</strong> keys to move around. Click on objects to interact.
+          </p>
+          <p>
+            Point‐and‐click anywhere on the floor to have your character walk there.
+            Press <strong>M</strong> at any time to switch to free‐camera mode,
+            then rotate/zoom with the mouse.
           </p>
         </>
       ),
@@ -25,31 +32,40 @@ const TutorialOverlay = ({ onClose }) => {
       ),
     },
     {
-      title: "Your Mission",
+      title: "Your Tasks",
       content: (
         <>
           <p>
-            There are <strong>5 tasks</strong> you need to complete to understand the work of an engineer in a broadcasting studio.
-            Each task simulates real-world challenges.
+            There are <strong>7 tasks</strong> you need to complete to learn how
+            an electronics engineer works:
           </p>
+          <ul>
+            <li>1. Press the LCD screen (Task 1)</li>
+            <li>2. Turn on the computer (blue button) (Task 2)</li>
+            <li>3. Examine the Arduino board (Task 3)</li>
+            <li>4. Interact with the light sensor (LSR) (Task 4)</li>
+            <li>5. Measure voltage at the multimeter area (Task 5)</li>
+            <li>6. Answer the Arduino quiz question (Task 6)</li>
+            <li>7. Press the buzzer (Task 7)</li>
+          </ul>
           <p>
-            Completing tasks will unlock new features and advance the studio simulation.
-            Keep an eye out for instructions and hints as you explore.
+            Completing all tasks will unlock extra features and let you freely
+            explore the lab.
           </p>
         </>
       ),
     },
     {
-      title: "Gamification System",
+      title: "Rewards & Progress",
       content: (
         <>
-          <p>Completing tasks will grant you rewards such as:</p>
+          <p>By completing tasks, you will:</p>
           <ul>
-            <li>Unlocking new equipment.</li>
-            <li>Increasing studio performance metrics.</li>
-            <li>Receiving badges and achievements.</li>
+            <li>Unlock the circuit diagram overlay</li>
+            <li>Receive a congratulatory message when all tasks are done</li>
+            <li>Gain full free‐camera control without restrictions</li>
           </ul>
-          <p>Can you complete all tasks and optimize the studio setup?</p>
+          <p>Can you finish them all? Good luck!</p>
         </>
       ),
     },
@@ -67,24 +83,17 @@ const TutorialOverlay = ({ onClose }) => {
     <div className="tutorial-overlay">
       <h1>{slides[currentSlide].title}</h1>
 
-      {currentSlide === 0 ? (
-        <>
-          <div>{slides[0].beforeImage}</div>
-          <button className="tutorial-button" onClick={nextSlide}>
-            Next
-          </button>
-          <div>{slides[0].image}</div>
-        </>
-      ) : (
-        <>
-          <div>{slides[currentSlide].content}</div>
-          <button className="tutorial-button" onClick={nextSlide}>
-            {currentSlide < slides.length - 1 ? "Next" : "Start Exploring"}
-          </button>
-        </>
+      <div>{slides[currentSlide].content}</div>
+
+      {slides[currentSlide].image && (
+        <div>{slides[currentSlide].image}</div>
       )}
+
+      <button className="tutorial-button" onClick={nextSlide}>
+        {currentSlide < slides.length - 1 ? "Next" : "Start Exploring"}
+      </button>
     </div>
   );
 };
 
-export default TutorialOverlay;
+export default TutorialOverlay2;

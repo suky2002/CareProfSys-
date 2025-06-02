@@ -1,3 +1,4 @@
+// utils/skills.js
 import Papa from 'papaparse';
 
 // Funcție pentru clasificarea manuală a industriei pe baza titlului jobului
@@ -34,8 +35,9 @@ function classifyIndustry(jobTitle, originalIndustry) {
     return "Hospitality";
   }
 
-  // Folosește industria originală dacă niciuna dintre regulile de mai sus nu se aplică
-  return originalIndustry || "Altele";
+  // Dacă nu s-a potrivit niciuna dintre regulile de mai sus, folosim industria originală,
+  // iar dacă nici ea nu e definită, clasificăm ca "Others"
+  return originalIndustry || "Others";
 }
 
 export async function fetchSkills() {
@@ -51,7 +53,8 @@ export async function fetchSkills() {
   const skills = new Set();
   parsedData.data.forEach((row) => {
     if (row.Skills) {
-      const skillList = row.Skills.split(',')
+      const skillList = row.Skills
+        .split(',')
         .map(skill => skill.replace(/['"\[\]]/g, '').trim());
       skillList.forEach(skill => skills.add(skill));
     }
@@ -71,19 +74,25 @@ export async function fetchJobs() {
   const text = await response.text();
   const parsedData = Papa.parse(text, { header: true, skipEmptyLines: true });
 
-  const jobs = parsedData.data.map((row) => {
+  // Mapăm fiecare rând într-un obiect job, apoi filtrăm pe cele cu industrie validă (nu "Others").
+  const allJobs = parsedData.data.map((row) => {
     const title = row.JobTitle;
     const originalIndustry = row.IndustryCluster;
     const industry = classifyIndustry(title, originalIndustry);
 
     return {
       title: title,
-      skills: row.Skills ? row.Skills.split(',').map(skill => skill.replace(/['"\[\]]/g, '').trim()) : [],
+      skills: row.Skills
+        ? row.Skills.split(',').map(skill => skill.replace(/['"\[\]]/g, '').trim())
+        : [],
       matchScore: row.MatchScore,
-      industry: industry, // Folosim industria reclasificată
+      industry: industry,
     };
   });
 
-  console.log("Joburi procesate din CSV:", jobs);
-  return jobs;
+  // Excludem job-urile clasificate drept "Others" și pe cele fără industrie definită
+  const filteredJobs = allJobs.filter(job => job.industry && job.industry !== "Others");
+
+  console.log("Joburi procesate din CSV (fără Others):", filteredJobs);
+  return filteredJobs;
 }

@@ -15,6 +15,7 @@ import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { XR } from '@react-three/xr'
 import JobSimulator from './JobSimulator';
 import TaskList from './TaskList';
+import V2BookShelfModel from './V2BookShelfModel.jsx';
 // =============================
 // 1. CHARACTER & CAMERA SETUP
 // =============================
@@ -512,14 +513,40 @@ function createBoxCollider(center, size) {
   return new THREE.Box3(min, max);
 }
 
+// =============================
+// 4. ROOM (with blue wall + mese + scaune)
+// =============================
 const roomColliders = [
-  createBoxCollider([0, 2.5, -10], [20, 5, 1]),
-  createBoxCollider([-10, 2.5, 0], [1, 5, 20]),
-  createBoxCollider([10, 2.5, 0], [1, 5, 20]),
-  createBoxCollider([-5.5, 2.5, 10], [9, 5, 1]),
-  createBoxCollider([5.5, 2.5, 10], [9, 5, 1]),
-  createBoxCollider([0, 5.5, 0], [20, 1, 20]),
-  createBoxCollider([0, 1, -2], [6, 2, 2])
+  // 1) Pereți (exact cum aveai deja)
+  createBoxCollider([0, 2.5, -10], [20, 5, 1]),    // peretele din față
+  createBoxCollider([-10, 2.5, 0], [1, 5, 20]),    // peretele din stânga
+  createBoxCollider([10, 2.5, 0], [1, 5, 20]),     // peretele din dreapta
+  createBoxCollider([-5.5, 2.5, 10], [9, 5, 1]),   // peretele din spate stânga
+  createBoxCollider([5.5, 2.5, 10], [9, 5, 1]),    // peretele din spate dreapta
+  createBoxCollider([0, 5.5, 0], [20, 1, 20]),     // tavanul
+  // 2) Ușă / prag (opțional, dacă vrei să nu treci prin ușă când e închisă)
+  // (aici, dacă vrei să blochezi întreg spațiul din fața ușii când e închisă, ar trebui să ajustezi dinamic)
+  // createBoxCollider([ -1, 1.5, 9.51 ], [ 2, 3, 0.2 ]),
+
+  // ───────────────────────────────
+  // 3) Mese (plăcile)
+  //     – TABLE 1 la [0,1,-2], blat 6×2 (înălțimea platoului e 0.1, dar extindem la total 2 ca să cuprindem și picioarele)
+  createBoxCollider([0, 1, -2], [6, 2, 2]),
+
+  //     – TABLE 2 la [8,1,5], blat 4×2
+  createBoxCollider([8, 1, 5], [4, 2, 2]),
+
+  //     – TABLE 3 la [0,1,5], blat 4×2
+  createBoxCollider([0, 1, 5], [4, 2, 2]),
+
+  // ───────────────────────────────
+  // 4) Scaune (estimăm footprint aproximativ 1×1 și înălțime de 2)
+  //     – Scaun 1 la [8,0.1,7]
+  createBoxCollider([8, 1, 7], [1, 2, 1]),
+  //     – Scaun 2 la [8,0.1,3]
+  createBoxCollider([8, 1, 3], [1, 2, 1]),
+  //     – Scaun 3 la [0,0.1,-4]
+  createBoxCollider([0, 1, -4], [1, 2, 1]),
 ];
 
 const Monitor = ({ monitorImage }) => {
@@ -810,7 +837,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent, lcdRef }) {
 const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick, setFreeCamera, completeTask, openJobSimulator,handleBuzzerClick, handleShowDiagram, onShowComponent, lcdRef}) => {
 
   // State pentru a ține imaginea componentei care trebuie afișată în overlay
-
+const logoTexture = useLoader(TextureLoader, '/Imagini/logo-upb.png');
 // 3) textura pentru tavan
 const ceilingTexture = useLoader(TextureLoader, '/Imagini/Blue_wall.jpg');
 ceilingTexture.wrapS = RepeatWrapping;
@@ -855,6 +882,20 @@ parquetTexture.repeat.set(10, 10);
     <group position={[0, 0.1, 0]}>
     
     
+     {/** PLACĂM RAFTURILE în faţa acestui perete, câte unul la stânga și unul la dreapta **/}
+     {/* Colţ stânga: x ≈ −9.5, z puţin mai mare ca −10 (ex: −9.4), pentru a nu „clip” pe perete */}
+     <V2BookShelfModel
+       position={[-9.5, 0, -9.4]}
+       rotation={[0, Math.PI / 2, 0]}  // rotit ca să fie paralel cu peretele și să „privească” în cameră
+       scale={[0.01, 0.01, 0.01]}       // adaptează scala după cum ai nevoie
+     />
+
+     {/* Colţ dreapta: x ≈ +9.5, z ≈ −9.4 */}
+     <V2BookShelfModel
+       position={[9.5, 0, -9.4]}
+       rotation={[0, -Math.PI / 2, 0]} // oglindă pe axa Y, ca să fie orientat spre interior
+       scale={[0.01, 0.01, 0.01]}
+     />
       {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[20, 20]} />
@@ -1082,7 +1123,11 @@ parquetTexture.repeat.set(10, 10);
       <Text position={[0, 5.5, -9]} rotation={[0, Math.PI, 0]} fontSize={1} color="yellow">
         Electronics Lab
       </Text>
-
+ {/* LOGO-UPB – plasat la 0.1m în faţa peretelui, sub text */}
+    <mesh position={[0, 2.5, -9.4]}>
+       <planeGeometry args={[2, 2]} />
+       <meshBasicMaterial map={logoTexture} transparent />
+     </mesh>
       {/* COMPUTER (OBJ) */}
       <Computer position={[2.2, 1, -2.1]} scale={[0.025, 0.025, 0.025]} rotation={[-Math.PI / 2, 0, Math.PI]} />
 

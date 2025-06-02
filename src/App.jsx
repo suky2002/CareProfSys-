@@ -52,9 +52,7 @@ const App = () => {
         );
         const score = matchingSkills.length / normalizedSelectedSkills.length;
 
-        let route = "/environment-two";
-        if (job.industry === "Information Technology") route = "/environment-two";
-        if (job.industry === "Education") route = "/env3";
+        const route = "/robert";
 
         return { ...job, score, route };
       })
