@@ -18,7 +18,7 @@ const CourseRecommendations = () => {
       name: "Faculty of Engineering in Foreign Languages (FILS)",
       description:
         "Programs in English, French, and German, focusing on engineering fields like telecommunications and computer science.",
-      link: "https://ing.pub.ro/en/",
+      link: "https://fils.upb.ro/ro/home/",
       image: "https://fils.upb.ro/wp-content/uploads/2022/02/cropped-cropped-cropped-fils.png",
     },
     {

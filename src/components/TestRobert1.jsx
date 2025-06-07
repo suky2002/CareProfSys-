@@ -1049,12 +1049,6 @@ parquetTexture.repeat.set(10, 10);
   <meshStandardMaterial color="#654321" />
 </mesh>
 
-
-
-{/* Sitting CuteBoy lângă masa 2 */}
- {/* SCĂUN & OAMENIȚĂ */}
-{/* SCĂUN & OAMENIȚĂ */}
-{/* SCĂUN & OAMENIȚĂ */}
      {/* Adaugă modelul animat de pointing la [1,0,0] */}
      <PointingModel
   position={[5, 0.2, 3]}
@@ -1239,14 +1233,11 @@ const [iotScore, setIotScore] = useState(null);
   const [savedCameraPosition, setSavedCameraPosition] = useState(null);
   // 1) tasks state
   const [tasks, setTasks] = useState([
-
-    { id: 1, description: "Apasă pe LCD", completed: false },
-    { id: 2, description: "Deschide calculatorul (buton albastru)", completed: false },
-    { id: 3, description: "Examinează Arduino-ul de pe masă", completed: false },
-    { id: 4, description: "Interacționează cu senzorul de lumină (LSR)", completed: false },
-    { id: 5, description: "Verifică tensiunea în zona de măsurare", completed: false },
-    { id: 6, description: 'Rezolvă întrebarea quiz', completed: false },
-    { id: 7, description: 'buzzer', completed: false }
+    { id: 2, description: "Open the PC", completed: false },
+    { id: 5, description: "Check the objects from shelf", completed: false },
+    { id: 6, description: 'Verify the Electric Panel', completed: false },
+    { id: 3, description: "Go to your desk and verify your table", completed: false },
+    { id: 1, description: "Examinează Arduino-ul de pe masă", completed: false }
     // … you could add more later
   ]);
   const handleIotQuizComplete = (finalScore) => {
