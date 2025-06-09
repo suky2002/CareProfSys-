@@ -139,7 +139,8 @@ app.post("/trigger", async (req, res) => {
         const savedPath = path.join(UPLOAD_DIR, file.name);
         await file.mv(savedPath);
 
-        const triggerUrl = `${process.env.UIPATH_TRIGGER_URL}?cvName=${encodeURIComponent(file.name)}`;
+        const fullPath = path.resolve(UPLOAD_DIR, file.name);
+        const triggerUrl = `${process.env.UIPATH_TRIGGER_URL}?cvPath=${encodeURIComponent(fullPath)}`;
 
         const triggerRes = await axios.post(
             triggerUrl,
