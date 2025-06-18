@@ -6,7 +6,7 @@ function JobIntroPortalContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const matchScore = location.state?.matchScore ?? null;
-  const isMatch = matchScore !== null && matchScore >= 60;
+  const isMatch = matchScore !== null && matchScore >= 80;
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
@@ -59,8 +59,8 @@ function JobIntroPortalContent() {
         >
           <div
             className={`relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 ${isMatch
-                ? 'bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm'
-                : 'bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-gray-600 hover:shadow-lg cursor-pointer backdrop-blur-sm'
+              ? 'bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm'
+              : 'bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-gray-600 hover:shadow-lg cursor-pointer backdrop-blur-sm'
               }`}
             onClick={() => navigate('/level1')}
           >
