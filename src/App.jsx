@@ -12,6 +12,7 @@ import { Result } from "postcss";
 import ResultsScreen from "./components/ResultsScreen";
 import FixSignal from "./scenes/FixSignal";
 import ControlRoomScene from "./scenes/ControlRoomScene";
+import ReviewHub from "./components/ReviewHub";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -41,6 +42,7 @@ const AppContent = () => {
         <Route path="/results" element={<ResultsScreen />} />
         <Route path="/level2" element={<FixSignal />} />
         <Route path="/control-room" element={<ControlRoomScene />} />
+        <Route path="/review" element={<ReviewHub />} />
         {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"
