@@ -8,7 +8,8 @@ import { motion } from "framer-motion";
 import { Menu, X, ArrowRightCircle } from "lucide-react";
 import emailjs from "emailjs-com";
 import styles from "./css/LandingPage.module.css";
-
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "./firebaseConfig"; 
 // Initialize EmailJS with your Public Key
 emailjs.init("OQ7jKakPsDW33JA0g");
 
@@ -37,35 +38,52 @@ export default function LandingPage() {
   // --- EmailJS subscription state & handler ---
   const [email, setEmail] = useState("");
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-
+  
     const serviceID         = "service_628799u";
-    const ownerTemplateID   = "template_2xx0mld";     // notificare către tine
-    const confirmTemplateID = "template_b2it3ht";     // confirmare abonat
+    const ownerTemplateID   = "template_2xx0mld";     // notification to you
+    const confirmTemplateID = "template_b2it3ht";     // confirmation to subscriber
     const publicKey         = "OQ7jKakPsDW33JA0g";
-
-    // 1) Trimite notificarea către tine
-    emailjs
-      .send(serviceID, ownerTemplateID, { user_email: email }, publicKey)
-      .then(() => {
-        // 2) Apoi trimite emailul de bun-venit către abonat
-        return emailjs.send(
-          serviceID,
-          confirmTemplateID,
-          { user_email: email },
-          publicKey
-        );
-      })
-      .then(() => {
-        alert("Mulțumim pentru abonare! Vei primi un email de confirmare.");
-        setEmail("");
-      })
-      .catch((err) => {
-        console.error("EmailJS error:", err);
-        alert("Ceva nu a mers. Te rog încearcă din nou.");
+  
+    const trimmedEmail = email.trim();
+  
+    if (trimmedEmail === "") {
+      alert("Email is empty. Please enter a valid address.");
+      return;
+    }
+  
+    try {
+      console.log("📤 Sending confirmation to subscriber:", trimmedEmail);
+      await emailjs.send(serviceID, confirmTemplateID, {
+        user_email: trimmedEmail
+      }, publicKey);
+  
+      console.log("📥 Sending notification to owner:", trimmedEmail);
+      await emailjs.send(serviceID, ownerTemplateID, {
+        user_email: trimmedEmail
+      }, publicKey);
+  
+      console.log("💾 Saving to Firestore:", trimmedEmail);
+      await addDoc(collection(db, "subscribers"), {
+        email: trimmedEmail,
+        subscribedAt: Timestamp.now()
       });
+  
+      alert("Thank you for subscribing! A confirmation email has been sent to you.");
+      setEmail("");
+    } catch (err) {
+      console.error("❌ Subscription error:", err);
+  
+      if (err?.text) {
+        alert("EmailJS error: " + err.text);
+      } else {
+        alert("An unknown error occurred. Please try again.");
+      }
+    }
   };
+  
+  
   // ----------------------------------------------
 
   const features = [
@@ -94,9 +112,7 @@ export default function LandingPage() {
           <a href="#features"  className={styles.navLink}>Features</a>
           <a href="#experience" className={styles.navLink}>Experience</a>
           <a href="#faqs"      className={styles.navLink}>FAQs</a>
-          <button className={styles.signIn} onClick={() => navigate("/login")}>
-            Sign In
-          </button>
+      
         </nav>
         <button className={styles.mobileToggle} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X /> : <Menu />}

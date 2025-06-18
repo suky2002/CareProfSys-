@@ -553,6 +553,7 @@ const roomColliders = [
   createBoxCollider([8, 1, 3], [1, 2, 1]),
   //     – Scaun 3 la [0,0.1,-4]
   createBoxCollider([0, 1, -4], [1, 2, 1]),
+  createBoxCollider([-1, 1.5, 9.5], [2, 3, 0.2]),
 ];
 
 const MultiImageMonitor  = ({ monitorImage }) => {

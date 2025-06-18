@@ -3,9 +3,6 @@ import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-route
 import { fetchJobs, fetchSkills } from "./utils/skills";
 import TestRobert1 from "./components/TestRobert1";
 import CourseRecommendations from "./components/CourseRecommendations.jsx";
-import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
-import EnvironmentTwoScene from "./components/EnvironmentTwoScene";
-import ProfessionVRScene from "./components/ProfessionVRScene";
 import RecommendationStyles from "./components/css/Recommendation.module.css";
 import SkillForm from "./components/SkillForm";
 import styles from "./components/css/App.module.css";
@@ -92,9 +89,7 @@ const App = () => {
             element={<Recommendations recommendedJobs={recommendedJobs} />}
           />
           <Route path="/robert" element={<TestRobert1 />} />
-          <Route path="/vr" element={<ProfessionVRScene />} />
-          <Route path="/environment-two" element={<EnvironmentTwoScene />} />
-          <Route path="/env3" element={<EnvironmentThreeScene />} />
+        
           <Route
             path="/course-recommendations"
             element={
