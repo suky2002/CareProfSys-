@@ -63,15 +63,33 @@ function ControlRoomResults({ badges, results, onGoToHub, onAutoRecommend }) {
                             <li key={idx} className="p-3 rounded bg-gray-100 mb-2">
                                 <div className="font-bold">{res.task}</div>
                                 <div>
-                                    <span className="font-semibold">Your answer:</span>{" "}
+                                    <span className="font-semibold">
+                                        {res.answerLabel === "Unknown" ? "Your first answer:" : "Your answer:"}
+                                    </span>{" "}
                                     <span className={res.correct ? "text-green-600" : "text-red-600"}>
-                                        {res.answer}
+                                        {res.answerLabel}
                                     </span>
                                 </div>
-                                {!res.correct && (
+                                {res.correct ? (
+                                    <div className="text-green-700 font-semibold">✔ Correct</div>
+                                ) : (
                                     <div>
+                                        <div className="text-red-700 font-semibold">✘ Incorrect</div>
                                         <span className="font-semibold">Correct answer:</span>{" "}
-                                        <span className="text-green-600">{res.correctAnswer}</span>
+                                        <span className="text-green-600">{res.correctLabel}</span>
+                                    </div>
+                                )}
+                                {/* Optional: afișează imaginile dacă există */}
+                                {res.answerImg && (
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <span className="text-xs">Your image:</span>
+                                        <img src={res.answerImg} alt="Your answer" className="w-16 h-10 object-contain border" />
+                                    </div>
+                                )}
+                                {res.correctImg && (
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <span className="text-xs">Correct image:</span>
+                                        <img src={res.correctImg} alt="Correct answer" className="w-16 h-10 object-contain border" />
                                     </div>
                                 )}
                             </li>
@@ -101,7 +119,12 @@ function ReviewHub({ onGoToLevel1, onGoToLevel2, onGoToLevel3 }) {
                 <div className="flex flex-col gap-4">
                     <button onClick={onGoToLevel1} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-bold">Level 1: Studio</button>
                     <button onClick={onGoToLevel2} className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 font-bold">Level 2: Fix the Signal</button>
-                    <button onClick={onGoToLevel3} className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 font-bold">Level 3: Control Room</button>
+                    <button
+                        onClick={() => onGoToLevel3(true)}
+                        className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 font-bold"
+                    >
+                        Level 3: Control Room
+                    </button>
                 </div>
             </div>
         </div>
@@ -155,16 +178,59 @@ export default function ControlRoomScene() {
     const [badges, setBadges] = useState([]);
     const [results, setResults] = useState([]);
 
-    // Simulare taskuri și rezultate (înlocuiește cu logica reală după caz)
-    const handleAllTasksDone = () => {
+    // --- Hotspoturi extra pentru Marzipano ---
+    const extraHotspots = [
+        {
+            yaw: -2.2,
+            pitch: 0.1,
+            type: "coffee",
+            label: "Coffee Machine",
+            description: "A must-have for long live broadcasts. Keeps the crew awake!"
+        },
+        {
+            yaw: 2.5,
+            pitch: -0.1,
+            type: "clock",
+            label: "Studio Clock",
+            description: "Precise timing is crucial for live TV. Never miss a cue!"
+        },
+        {
+            yaw: -1.2,
+            pitch: 0.2,
+            type: "whiteboard",
+            label: "Whiteboard",
+            description: "Used for quick notes, schedules, and troubleshooting diagrams."
+        }
+    ];
+
+    // --- Simulare taskuri și rezultate (înlocuiește cu logica reală după caz) ---
+    const handleAllTasksDone = (surveillanceResult) => {
         setBadges([
             { label: "Expert", image: "/Imagini/badge3.png" }
         ]);
         setResults([
-            { task: "Wiring Task", answer: "Correct", correct: true, correctAnswer: "Correct" },
-            { task: "Surveillance Task", answer: "Wrong", correct: false, correctAnswer: "Correct" }
+            {
+                task: "Wiring Task",
+                answerLabel: "Correct",
+                correct: true,
+                correctLabel: "Correct"
+            },
+            {
+                task: "Surveillance Task",
+                answerLabel: surveillanceResult?.userLabel || "Unknown",
+                correct: surveillanceResult?.isCorrect,
+                correctLabel: surveillanceResult?.correctLabel || "Breaking news",
+                answerImg: surveillanceResult?.userImg,
+                correctImg: surveillanceResult?.correctImg
+            }
         ]);
         setStage("results");
+    };
+
+    // --- Pentru SurveillanceTask: colectează și imaginea aleasă de utilizator ---
+    const handleSurveillanceClose = (result) => {
+        setShowSurveillanceTask(false);
+        handleAllTasksDone(result);
     };
 
     useEffect(() => {
@@ -201,7 +267,19 @@ export default function ControlRoomScene() {
             <ReviewHub
                 onGoToLevel1={() => navigate("/level1")}
                 onGoToLevel2={() => navigate("/fix-signal")}
-                onGoToLevel3={() => setStage("main")}
+                onGoToLevel3={(reset) => {
+                    // Dacă reset === true, pornește de la început
+                    if (reset) {
+                        setShowWiringTask(false);
+                        setShowSurveillanceTask(false);
+                        setTaskDone(false);
+                        setBadges([]);
+                        setResults([]);
+                        setStage("start");
+                    } else {
+                        setStage("main");
+                    }
+                }}
             />
         );
     }
@@ -219,10 +297,9 @@ export default function ControlRoomScene() {
                     setShowSurveillanceTask(true);
                 }} />
             ) : showSurveillanceTask ? (
-                <SurveillanceTask onClose={() => {
-                    setShowSurveillanceTask(false);
-                    handleAllTasksDone(); // Simulează finalizarea taskurilor
-                }} />
+                <SurveillanceTask
+                    onClose={(result) => handleSurveillanceClose(result)}
+                />
             ) : (
                 <>
                     <MarzipanoViewer
@@ -249,19 +326,22 @@ Broadcast engineer tasks:
 • Trigger video graphics or overlays.
 • Maintain signal quality and troubleshoot issues in real-time.`
                             },
-                            ...(taskDone
-                                ? [
-                                    {
-                                        yaw: -0.6,
-                                        pitch: 0.1,
-                                        type: "surveillance",
-                                        label: "Surveillance System",
-                                    },
-                                ]
-                                : []),
+                            ...extraHotspots,
+                            // Adaugă hotspotul pentru Surveillance doar când nu rulează taskurile
+                            ...(!showWiringTask && !showSurveillanceTask ? [{
+                                yaw: -0.6,
+                                pitch: 0.1,
+                                type: "surveillance",
+                                label: "Surveillance System"
+                            }] : [])
                         ]}
                         onHotspotClick={(hotspot) => {
-                            if (hotspot.type === "info") setShowPopup(hotspot);
+                            if (
+                                hotspot.type === "info" ||
+                                hotspot.type === "coffee" ||
+                                hotspot.type === "clock" ||
+                                hotspot.type === "whiteboard"
+                            ) setShowPopup(hotspot);
                             if (hotspot.type === "navigation") navigate(hotspot.targetScene);
                             if (hotspot.type === "surveillance") setShowSurveillanceTask(true);
                         }}
