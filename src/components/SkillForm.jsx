@@ -11,7 +11,6 @@ import {
 import { Canvas, useFrame } from "@react-three/fiber";
 import { fetchSkills } from "../utils/skills";
 
-// A simple laptop made from two thin boxes
 function Laptop({ width = 3, depth = 2, colorBase = "#555", colorScreen = "#888" }) {
   const ref = useRef();
   useFrame(() => {

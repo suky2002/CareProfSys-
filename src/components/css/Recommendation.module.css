@@ -1,10 +1,9 @@
-/* Pagina principală */
+
 .recommendations-page {
   padding: 20px;
   background-color: #f9f9f9;
 }
 
-/* Titlul aplicației */
 .app-title {
   font-size: 2.5rem;
   font-weight: bold;
@@ -13,27 +12,25 @@
   color: #333;
 }
 
-/* Containerul principal */
 .recommendations-container {
   display: grid;
-  grid-template-columns: repeat(1, 1fr); /* Începe cu 1 coloană pentru ecrane mici */
+  grid-template-columns: repeat(1, 1fr); 
   gap: 20px;
   padding: 20px;
 }
 
 @media (min-width: 768px) {
   .recommendations-container {
-    grid-template-columns: repeat(2, 1fr); /* 2 coloane pentru tablete */
+    grid-template-columns: repeat(2, 1fr); 
   }
 }
 
 @media (min-width: 1024px) {
   .recommendations-container {
-    grid-template-columns: repeat(4, 1fr); /* 4 coloane pentru desktop */
+    grid-template-columns: repeat(4, 1fr); 
   }
 }
 
-/* Secțiunea industriei */
 .industry-section {
   text-align: center;
   margin-bottom: 20px;
@@ -46,7 +43,6 @@
   margin-bottom: 10px;
 }
 
-/* Grid pentru joburi */
 .jobs-grid {
   display: flex;
   flex-wrap: wrap;
@@ -54,14 +50,13 @@
   gap: 20px;
 }
 
-/* Cardurile joburilor */
 .job-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 15px;
-  width: 100%; /* Cardurile ocupă întreaga lățime pe mobil */
-  max-width: 250px; /* Dimensiune maximă pentru card */
+  width: 100%; 
+  max-width: 250px; 
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -91,7 +86,6 @@
   font-weight: bold;
 }
 
-/* Buton pentru mai multe detalii */
 .view-more-button {
   margin-top: 15px;
   background: none;
@@ -107,13 +101,11 @@
   color: black;
 }
 
-/* Buton centrat în secțiuni */
 .industry-section .view-more-button {
   margin: 15px auto 0;
   display: block;
 }
 
-/* Slider Buttons */
 .slider-nav-button {
   background-color: #007bff;
   color: #fff;
