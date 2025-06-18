@@ -1,12 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from 'framer-motion';
 
 function JobIntroPortalContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const matchScore = location.state?.matchScore ?? null;
-  const isMatch = matchScore !== null && matchScore >= 80;
+  const isMatch = matchScore !== null && matchScore >= 60;
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
@@ -58,10 +58,7 @@ function JobIntroPortalContent() {
           className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl px-4"
         >
           <div
-            className={`relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 ${isMatch
-              ? 'bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm'
-              : 'bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-gray-600 hover:shadow-lg cursor-pointer backdrop-blur-sm'
-              }`}
+            className={`relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm`}
             onClick={() => navigate('/level1')}
           >
             <h2 className="text-4xl font-bold mb-4 text-white">Broadcasting Engineer</h2>
@@ -70,9 +67,14 @@ function JobIntroPortalContent() {
             </p>
           </div>
 
-          <div className="bg-gray-800/50 backdrop-blur-sm p-10 rounded-3xl shadow-inner opacity-40 cursor-not-allowed text-center border border-gray-700 min-h-[320px] flex flex-col justify-between">
+          <div
+            className="relative p-10 rounded-3xl transition-all duration-300 text-center border min-h-[320px] flex flex-col justify-between transform hover:scale-105 bg-gradient-to-br from-indigo-600/80 to-purple-700/80 shadow-2xl hover:shadow-purple-900/50 border-purple-500 cursor-pointer backdrop-blur-sm"
+            onClick={() => navigate('/sound-tech')}
+          >
             <h2 className="text-4xl font-bold mb-4 text-white">Sound Technician</h2>
-            <p className="text-lg text-white/60">Coming soon</p>
+            <p className="text-white text-opacity-90 text-lg">
+              Explore the new studio and take on the Sound Technician role!
+            </p>
           </div>
 
           <div className="bg-gray-800/50 backdrop-blur-sm p-10 rounded-3xl shadow-inner opacity-40 cursor-not-allowed text-center border border-gray-700 min-h-[320px] flex flex-col justify-between">

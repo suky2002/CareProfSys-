@@ -13,6 +13,7 @@ import ResultsScreen from "./components/ResultsScreen";
 import FixSignal from "./scenes/FixSignal";
 import ControlRoomScene from "./scenes/ControlRoomScene";
 import ReviewHub from "./components/ReviewHub";
+import SoundTech from "./scenes/SoundTech";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Route path="/level2" element={<FixSignal />} />
         <Route path="/control-room" element={<ControlRoomScene />} />
         <Route path="/review" element={<ReviewHub />} />
+        <Route path="/sound-tech" element={<SoundTech />} />
         {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"
