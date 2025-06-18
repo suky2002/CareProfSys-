@@ -62,48 +62,48 @@ Broadcast engineer tasks:
     ];
 
     return (
-        <div className= "w-full h-screen relative" >
-        {
-            showWiringTask?(
-        <WiringTask onTaskFinished = {() => setShowWiringTask(false)
-} />
-      ) : (
-    <>
-    <MarzipanoViewer
-            image= "/assets/images/8457178419_0d665f1afc_6k.jpg"
-hotspots = { hotspots }
-onHotspotClick = {(hotspot) => {
-    if (hotspot.type === "info") setShowPopup(hotspot);
-    if (hotspot.type === "navigation") navigate(hotspot.targetScene);
-    if (hotspot.type === "surveillance") setShowSurveillanceTask(true);
-}}
-          />
-    < InfoPopup show = {!!showPopup} onClose = {() => setShowPopup(null)} hotspot = { showPopup } />
-        { showInstructions && <InstructionOverlay onClose={ () => setShowInstructions(false) } />}
-</>
-      )}
+        <div className="w-full h-screen relative" >
+            {
+                showWiringTask ? (
+                    <WiringTask onTaskFinished={() => setShowWiringTask(false)
+                    } />
+                ) : (
+                    <>
+                        <MarzipanoViewer
+                            image="/Imagini/8457178419_0d665f1afc_6k.jpg"
+                            hotspots={hotspots}
+                            onHotspotClick={(hotspot) => {
+                                if (hotspot.type === "info") setShowPopup(hotspot);
+                                if (hotspot.type === "navigation") navigate(hotspot.targetScene);
+                                if (hotspot.type === "surveillance") setShowSurveillanceTask(true);
+                            }}
+                        />
+                        < InfoPopup show={!!showPopup} onClose={() => setShowPopup(null)} hotspot={showPopup} />
+                        {showInstructions && <InstructionOverlay onClose={() => setShowInstructions(false)} />}
+                    </>
+                )}
 
-{
-    showSurveillanceTask && (
-        <SurveillanceTask onClose={ () => setShowSurveillanceTask(false) } />
-      )
-}
+            {
+                showSurveillanceTask && (
+                    <SurveillanceTask onClose={() => setShowSurveillanceTask(false)} />
+                )
+            }
 
-{
-    taskDone && (
-        <button
-          onClick={
-        () => {
-            localStorage.removeItem("task_done");
-            window.location.reload();
-        }
-    }
-    className = "absolute bottom-4 right-4 z-50 bg-red-600 text-white px-4 py-2 rounded"
-        >
-        RESET TASK
-            </button>
-      )
-}
-</div>
-  );
+            {
+                taskDone && (
+                    <button
+                        onClick={
+                            () => {
+                                localStorage.removeItem("task_done");
+                                window.location.reload();
+                            }
+                        }
+                        className="absolute bottom-4 right-4 z-50 bg-red-600 text-white px-4 py-2 rounded"
+                    >
+                        RESET TASK
+                    </button>
+                )
+            }
+        </div>
+    );
 }

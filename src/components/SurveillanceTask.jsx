@@ -1,19 +1,19 @@
 import { useState } from "react";
 
 const videos = [
-    { id: 1, src: "/assets/sounds/cam1.mp4", isCorrupted: false, label: "Channel 1", description: "Entertainment program" },
-    { id: 2, src: "/assets/sounds/cam2.mp4", isCorrupted: false, label: "Channel 2", description: "Documentary airing" },
-    { id: 3, src: "/assets/sounds/error.mp4", isCorrupted: true, label: "Channel 3", description: "" },
-    { id: 4, src: "/assets/sounds/cam4.mp4", isCorrupted: false, label: "Channel 4", description: "Marvel series in progress" },
+    { id: 1, src: "/audio/cam1.mp4", isCorrupted: false, label: "Channel 1", description: "Entertainment program" },
+    { id: 2, src: "/audio/cam2.mp4", isCorrupted: false, label: "Channel 2", description: "Documentary airing" },
+    { id: 3, src: "/audio/error.mp4", isCorrupted: true, label: "Channel 3", description: "" },
+    { id: 4, src: "/audio/cam4.mp4", isCorrupted: false, label: "Channel 4", description: "Marvel series in progress" },
 ];
 
 const programs = [
-    { id: "breaking", label: "Breaking news", img: "/assets/images/breaking.jpg" },
-    { id: "marvel", label: "Marvel movie", img: "/assets/images/marvel.jpg" },
-    { id: "doc", label: "Documentary", img: "/assets/images/doc.jpg" },
-    { id: "netflix", label: "Netflix style", img: "/assets/images/netflix.jpg" },
-    { id: "public", label: "Public viewing", img: "/assets/images/public.jpg" },
-    { id: "follow", label: "Follow this", img: "/assets/images/follow.jpg" },
+    { id: "breaking", label: "Breaking news", img: "/Imagini/breaking.jpg" },
+    { id: "marvel", label: "Marvel movie", img: "/Imagini/marvel.jpg" },
+    { id: "doc", label: "Documentary", img: "/Imagini/doc.jpg" },
+    { id: "netflix", label: "Netflix style", img: "/Imagini/netflix.jpg" },
+    { id: "public", label: "Public viewing", img: "/Imagini/public.jpg" },
+    { id: "follow", label: "Follow this", img: "/Imagini/follow.jpg" },
 ];
 
 const correctProgramId = "breaking"; // only one correct program for the corrupted channel

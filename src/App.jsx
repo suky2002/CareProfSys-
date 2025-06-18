@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import StartScreen from "./components/StartScreen";
 import CreateAvatar from "./components/CreateAvatar";
 import JobPortal from "./components/JobPortal";
-import EnvironmentThreeScene from "./components/EnvironmentThreeScene";
 import CourseRecommendations from "./components/CourseRecommendations";
 import SoundManager from "./components/SoundManager";
 import Level1 from "./scenes/Level1";
@@ -12,6 +11,7 @@ import QuizResults from "./components/QuizResults";
 import { Result } from "postcss";
 import ResultsScreen from "./components/ResultsScreen";
 import FixSignal from "./scenes/FixSignal";
+import ControlRoomScene from "./scenes/ControlRoomScene";
 
 const soundPages = ["/", "/create-avatar", "/job-portal"];
 
@@ -40,6 +40,7 @@ const AppContent = () => {
         <Route path="/quiz-results" element={<QuizResults />} />
         <Route path="/results" element={<ResultsScreen />} />
         <Route path="/level2" element={<FixSignal />} />
+        <Route path="/control-room" element={<ControlRoomScene />} />
         {/* <Route path="/env3" element={<EnvironmentThreeScene />} /> */}
         <Route
           path="/course-recommendations"

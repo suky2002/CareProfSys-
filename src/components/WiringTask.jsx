@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 
 const allCables = [
-    { id: 'red', img: '/assets/images/red.png' },
-    { id: 'green', img: '/assets/images/green.png' },
-    { id: 'yellow', img: '/assets/images/yellow.png' },
+    { id: 'red', img: '/Imagini/red.png' },
+    { id: 'green', img: '/Imagini/green.png' },
+    { id: 'yellow', img: '/Imagini/yellow.png' },
 ];
 
 const targets = [
-    { id: 'red', img: '/assets/images/rca-red.png' },
-    { id: 'yellow', img: '/assets/images/rca-yellow.png' },
-    { id: 'green', img: '/assets/images/rca-green.png' },
+    { id: 'red', img: '/Imagini/rca-red.png' },
+    { id: 'yellow', img: '/Imagini/rca-yellow.png' },
+    { id: 'green', img: '/Imagini/rca-green.png' },
 ];
 
 const WiringTask = ({ onTaskFinished }) => {
@@ -25,7 +25,7 @@ const WiringTask = ({ onTaskFinished }) => {
     const alarmRef = useRef(null);
 
     useEffect(() => {
-        alarmRef.current = new Audio('/assets/sounds/emergency-alarm-with-reverb-29431.mp3');
+        alarmRef.current = new Audio('/audio/emergency-alarm-with-reverb-29431.mp3');
         alarmRef.current.loop = true;
 
         const wasCompleted = localStorage.getItem('task_done');
@@ -65,7 +65,7 @@ const WiringTask = ({ onTaskFinished }) => {
     const handleDrop = (e, targetId) => {
         e.preventDefault();
         if (dragged === targetId) {
-            const successSound = new Audio('/assets/sounds/success.mp3');
+            const successSound = new Audio('/audio/success.mp3');
             successSound.play();
             setConnected((prev) => ({ ...prev, [targetId]: dragged }));
         } else {
