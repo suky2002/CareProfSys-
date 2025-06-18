@@ -1,47 +1,43 @@
-// src/components/ElectricalQuiz.jsx
-
 import React, { useState, useEffect } from 'react';
 
 const ELECTRICAL_QUESTIONS = [
   {
     id: 1,
-    question: "Ce unitate de măsură are intensitatea curentului electric?",
-    options: ["Amperi (A)", "Volți (V)", "Wați (W)", "Ohmi (Ω)"],
+    question: "What is the unit of electric current?",
+    options: ["Amperes (A)", "Volts (V)", "Watts (W)", "Ohms (Ω)"],
     correctOption: 0,
   },
   {
     id: 2,
-    question: "Cum se numește legea care leagă tensiunea U, curentul I și rezistența R?",
-    options: ["Legea lui Ohm", "Legea lui Kirchhoff", "Legea lui Joule", "Legea lui Faraday"],
+    question: "What is the name of the law that relates voltage (U), current (I), and resistance (R)?",
+    options: ["Ohm's Law", "Kirchhoff's Law", "Joule's Law", "Faraday's Law"],
     correctOption: 0,
   },
   {
     id: 3,
-    question: "Care este simbolul standard pentru rezistență în circuitele electrice?",
+    question: "What is the standard symbol for resistance in electric circuits?",
     options: ["R", "I", "U", "C"],
     correctOption: 0,
   },
   {
     id: 4,
-    question: "Ce se întâmplă cu curentul electric într-un conductor când rezistența crește, la aceeași tensiune?",
-    options: ["Curentul scade", "Curentul crește", "Curentul rămâne constant", "Curentul dispare complet"],
+    question: "What happens to the electric current in a conductor when resistance increases, assuming constant voltage?",
+    options: ["Current decreases", "Current increases", "Current remains constant", "Current disappears completely"],
     correctOption: 0,
   },
   {
     id: 5,
-    question: "Cum definiți puterea electrică într-un circuit (P)?",
+    question: "How is electric power (P) defined in a circuit?",
     options: ["P = U · I", "P = I / U", "P = U + I", "P = U^2 / R"],
     correctOption: 0,
   },
-  // … poți adăuga alte întrebări
 ];
 
 function ElectricalQuiz({ onClose, onComplete }) {
-  const [timeLeft, setTimeLeft] = useState(60);     // 60s pentru întreaga sesiune
+  const [timeLeft, setTimeLeft] = useState(60);
   const [score, setScore] = useState(0);
   const [currentIdx, setCurrentIdx] = useState(0);
 
-  // Timer global
   useEffect(() => {
     if (timeLeft <= 0) {
       onComplete(score);
@@ -51,7 +47,6 @@ function ElectricalQuiz({ onClose, onComplete }) {
     return () => clearTimeout(timer);
   }, [timeLeft]);
 
-  // Când termină întrebările
   useEffect(() => {
     if (currentIdx >= ELECTRICAL_QUESTIONS.length) {
       onComplete(score);
@@ -68,7 +63,6 @@ function ElectricalQuiz({ onClose, onComplete }) {
     setCurrentIdx((i) => i + 1);
   };
 
-  // Dacă s-a terminat timpul sau nu mai sunt întrebări, nu afișăm nimic
   if (timeLeft <= 0 || currentIdx >= ELECTRICAL_QUESTIONS.length) {
     return null;
   }
@@ -93,9 +87,9 @@ function ElectricalQuiz({ onClose, onComplete }) {
       }}
     >
       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-        <h2 style={{ margin: 0 }}>Quiz Electric</h2>
+        <h2 style={{ margin: 0 }}>Electrical Quiz</h2>
         <div>
-          ⏱️ Timp rămas: {timeLeft}s  🏆 Scor: {score} / {ELECTRICAL_QUESTIONS.length}
+          ⏱️ Time Left: {timeLeft}s  🏆 Score: {score} / {ELECTRICAL_QUESTIONS.length}
         </div>
       </div>
 
@@ -148,11 +142,10 @@ function ElectricalQuiz({ onClose, onComplete }) {
           cursor: 'pointer',
         }}
       >
-        X Închide
+        ✖ Close
       </button>
     </div>
   );
 }
 
-// **Exportul default este obligatoriu!**
 export default ElectricalQuiz;

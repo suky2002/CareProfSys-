@@ -1,5 +1,3 @@
-// src/components/LandingPage.jsx
-
 import React, { useState, Suspense, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
@@ -9,11 +7,11 @@ import { Menu, X, ArrowRightCircle } from "lucide-react";
 import emailjs from "emailjs-com";
 import styles from "./css/LandingPage.module.css";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "./firebaseConfig"; 
-// Initialize EmailJS with your Public Key
+import { db } from "./firebaseConfig";
+
 emailjs.init("OQ7jKakPsDW33JA0g");
 
-// Loader for 3D model
+
 const Loader = () => {
   const { progress } = useProgress();
   return (
@@ -23,7 +21,6 @@ const Loader = () => {
   );
 };
 
-// Placeholder VR model component
 const VRModel = () => (
   <mesh rotation={[0, Math.PI / 4, 0]}>
     <boxBufferGeometry args={[1.5, 1.5, 1.5]} />
@@ -35,46 +32,45 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // --- EmailJS subscription state & handler ---
   const [email, setEmail] = useState("");
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
-  
-    const serviceID         = "service_628799u";
-    const ownerTemplateID   = "template_2xx0mld";     // notification to you
-    const confirmTemplateID = "template_b2it3ht";     // confirmation to subscriber
-    const publicKey         = "OQ7jKakPsDW33JA0g";
-  
+
+    const serviceID = "service_628799u";
+    const ownerTemplateID = "template_2xx0mld";
+    const confirmTemplateID = "template_b2it3ht";
+    const publicKey = "OQ7jKakPsDW33JA0g";
+
     const trimmedEmail = email.trim();
-  
+
     if (trimmedEmail === "") {
       alert("Email is empty. Please enter a valid address.");
       return;
     }
-  
+
     try {
       console.log("📤 Sending confirmation to subscriber:", trimmedEmail);
       await emailjs.send(serviceID, confirmTemplateID, {
         user_email: trimmedEmail
       }, publicKey);
-  
+
       console.log("📥 Sending notification to owner:", trimmedEmail);
       await emailjs.send(serviceID, ownerTemplateID, {
         user_email: trimmedEmail
       }, publicKey);
-  
+
       console.log("💾 Saving to Firestore:", trimmedEmail);
       await addDoc(collection(db, "subscribers"), {
         email: trimmedEmail,
         subscribedAt: Timestamp.now()
       });
-  
+
       alert("Thank you for subscribing! A confirmation email has been sent to you.");
       setEmail("");
     } catch (err) {
       console.error("❌ Subscription error:", err);
-  
+
       if (err?.text) {
         alert("EmailJS error: " + err.text);
       } else {
@@ -82,56 +78,49 @@ export default function LandingPage() {
       }
     }
   };
-  
-  
-  // ----------------------------------------------
 
   const features = [
-    { icon: "🌐", title: "Immersive Simulations",    desc: "WebXR-powered environments for hands-on trials." },
-    { icon: "🧠", title: "AI Recommendations",        desc: "Match your skills to roles with intelligent guidance." },
-    { icon: "📚", title: "Education Integrations",   desc: "Seamless connection with courses & credentials." },
-    { icon: "🕹", title: "Gamified Trials",           desc: "Learn and test both hard and soft skills interactively." },
-    { icon: "📜", title: "Microcredentials",         desc: "Earn badges to showcase your competencies." },
-    { icon: "🌍", title: "Global Network",           desc: "Connect with mentors and peers worldwide." },
+    { icon: "🌐", title: "Immersive Simulations", desc: "WebXR-powered environments for hands-on trials." },
+    { icon: "🧠", title: "AI Recommendations", desc: "Match your skills to roles with intelligent guidance." },
+    { icon: "📚", title: "Education Integrations", desc: "Seamless connection with courses & credentials." },
+    { icon: "🕹", title: "Gamified Trials", desc: "Learn and test both hard and soft skills interactively." },
+    { icon: "📜", title: "Microcredentials", desc: "Earn badges to showcase your competencies." },
+    { icon: "🌍", title: "Global Network", desc: "Connect with mentors and peers worldwide." },
   ];
 
   const faqs = [
     { question: "How do I access the VR simulations?", answer: "Simply click 'Start Exploring' and follow the onboarding steps; no additional installs needed." },
-    { question: "Can I track my progress?",            answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
+    { question: "Can I track my progress?", answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
     { question: "Are educational credentials recognized?", answer: "We partner with accredited institutions to issue microcredentials that boost your portfolio." },
   ];
 
   return (
     <div className={styles.container}>
-      {/* Navbar */}
       <header className={styles.header}>
         <h1 className={styles.title} onClick={() => navigate("/")}>
           CareProfSys++
         </h1>
         <nav className={styles.nav}>
-          <a href="#features"  className={styles.navLink}>Features</a>
+          <a href="#features" className={styles.navLink}>Features</a>
           <a href="#experience" className={styles.navLink}>Experience</a>
-          <a href="#faqs"      className={styles.navLink}>FAQs</a>
-      
+          <a href="#faqs" className={styles.navLink}>FAQs</a>
+
         </nav>
         <button className={styles.mobileToggle} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X /> : <Menu />}
         </button>
       </header>
-
-      {/* Mobile nav */}
       {mobileOpen && (
         <nav className={styles.mobileNav}>
-          <a href="#features"  className={styles.navLinkBlock}>Features</a>
+          <a href="#features" className={styles.navLinkBlock}>Features</a>
           <a href="#experience" className={styles.navLinkBlock}>Experience</a>
-          <a href="#faqs"      className={styles.navLinkBlock}>FAQs</a>
+          <a href="#faqs" className={styles.navLinkBlock}>FAQs</a>
           <button className={styles.signInBlock} onClick={() => navigate("/login")}>
             Sign In
           </button>
         </nav>
       )}
 
-      {/* Hero Section */}
       <section className={styles.hero}>
         <motion.h2
           className={styles.heroTitle}
@@ -152,7 +141,6 @@ export default function LandingPage() {
         </button>
       </section>
 
-      {/* 3D Experience Preview */}
       <section id="experience" className={`${styles.section} ${styles.experience}`}>
         <Canvas>
           <ambientLight intensity={0.4} />
@@ -165,7 +153,6 @@ export default function LandingPage() {
         <div className={styles.modelHint}>Rotate the model to preview VR setup</div>
       </section>
 
-      {/* Platform Features */}
       <section id="features" className={`${styles.section} ${styles.featuresSection}`}>
         <h3 className={styles.sectionTitle}>Platform Features</h3>
         <div className={styles.featuresGrid}>
@@ -179,7 +166,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section id="faqs" className={`${styles.section} ${styles.faqSection}`}>
         <h3 className={styles.sectionTitle}>Frequently Asked Questions</h3>
         <div className={styles.faqList}>
@@ -192,7 +178,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Subscription Section */}
       <section className={`${styles.section} ${styles.subscription}`}>
         <h3 className={styles.sectionTitle}>Stay Updated</h3>
         <p className={styles.sectionText}>
@@ -215,7 +200,6 @@ export default function LandingPage() {
         </form>
       </section>
 
-      {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <div>

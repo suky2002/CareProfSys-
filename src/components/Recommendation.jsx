@@ -1,6 +1,6 @@
 
 
-import "./css/Recommendation.module.css"; // Fișier CSS pentru stiluri
+import "./css/Recommendation.module.css";
 
 import React from "react";
 
@@ -23,8 +23,8 @@ const Recommendation = ({ recommendedJobs }) => {
                         job.type === "vr"
                           ? "/vr"
                           : job.type === "environment-two"
-                          ? "/environment-two"
-                          : "#"
+                            ? "/environment-two"
+                            : "#"
                       }
                       className="recommendation-link"
                     >

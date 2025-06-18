@@ -19,7 +19,9 @@ import V2BookShelfModel from './V2BookShelfModel.jsx';
 import ElectricalQuiz from './ElectricalQuiz';
 import Monitor from './Monitor.jsx';
 import QuizIOT from './QuizIOT.jsx';
-
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const useKeyControls = () => {
   const keys = useRef({ forward: false, backward: false, left: false, right: false });
   useEffect(() => {
@@ -368,37 +370,55 @@ const Ground = ({ setTargetPosition }) => (
     <meshStandardMaterial transparent opacity={0} />
   </mesh>
 );
-const ElectricPanel = ({ lightOn, toggleLight }) => {
+const ElectricPanel = ({ lightOn, toggleLight, electricalQuizCompleted }) => {
+  const bulbRef = useRef();
+
+  useFrame(({ clock }) => {
+    if (lightOn && bulbRef.current) {
+      const intensity = 0.5 + 0.5 * Math.sin(clock.getElapsedTime() * 4);
+      bulbRef.current.emissiveIntensity = intensity;
+    }
+  });
+
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+    if (!electricalQuizCompleted) {
+      toast.warning("⚡ You must complete the Electrical Quiz before using the panel!", {
+        icon: "🧠",
+        autoClose: 3500,
+      });
+      return;
+    }
+    toggleLight();
+  };
+
   return (
     <group position={[-9.3, 1, -3]} rotation={[0, Math.PI / 2, 0]}>
-      {/* Cutia mare neagră */}
+      {/* Panel body */}
       <mesh>
         <boxGeometry args={[1, 2, 0.3]} />
         <meshStandardMaterial color="#222" />
       </mesh>
 
-      {/* Butonul de aprins/stins */}
-      <mesh
-        position={[0, 0.5, 0.15]}
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleLight();
-        }}
-      >
+      {/* Toggle button */}
+      <mesh position={[0, 0.5, 0.15]} onClick={handleButtonClick}>
         <boxGeometry args={[0.3, 0.3, 0.1]} />
         <meshStandardMaterial color={lightOn ? 'green' : 'red'} />
       </mesh>
 
-      {/* Becul de stare */}
+      {/* Light bulb */}
       <mesh position={[0, 1.2, 0]}>
         <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial color={lightOn ? 'yellow' : 'gray'} emissive={lightOn ? 'yellow' : 'black'} />
+        <meshStandardMaterial
+          ref={bulbRef}
+          color={lightOn ? 'yellow' : 'gray'}
+          emissive={lightOn ? 'yellow' : 'black'}
+          emissiveIntensity={1}
+        />
       </mesh>
     </group>
   );
 };
-
-
 
 function QuizTask({ task, onComplete }) {
   const [selected, setSelected] = React.useState(null);
@@ -520,6 +540,10 @@ const roomColliders = [
   createBoxCollider([-1, 1.5, 9.5], [2, 3, 0.2]),
   createBoxCollider([5, 0.2, 3], [1, 0.5, 1]),
   createBoxCollider([-8, 0, 9], [2, 2, 2]),
+  createBoxCollider(
+    [-1, 1.5, 9.51],  
+    [3, 3, 0.2]      
+  ),
 ];
 
 const MultiImageMonitor = ({ monitorImage }) => {
@@ -1431,7 +1455,7 @@ const Environment = () => {
           />
         </div>
       )}
-
+ <ToastContainer position="top-center" autoClose={3000} />
       <Canvas shadows style={{ width: "100%", height: "100%" }}>
         <XR>
           <Sky />
@@ -1478,7 +1502,7 @@ const Environment = () => {
             onClick={() => setShowElectricalQuiz(true)}
           />
 
-          <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} />
+          <ElectricPanel lightOn={lightOn} toggleLight={toggleLight} electricalQuizCompleted={electricalScore !== null}/>
           <ProjectorScreen monitorImage={monitorImage} />
 
           <OrbitControls

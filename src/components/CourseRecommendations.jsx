@@ -3,16 +3,14 @@ import React, { useEffect, useState } from "react";
 const CourseRecommendations = () => {
 
   const navigateToRecommendations = () => {
-    // Navighează către pagina de recomandări
     window.location.href = "/";
   };
 
   const navigateToPreviousVRExperience = () => {
-    // Navighează către experiența VR anterioară
     window.location.href = "/environment-two";
   };
 
-  
+
   const recommendedCourses = [
     {
       name: "Faculty of Engineering in Foreign Languages (FILS)",
@@ -86,7 +84,7 @@ const CourseRecommendations = () => {
     useEffect(() => {
       const interval = setInterval(() => {
         goToNext();
-      }, 3000); // Slide automatically every 3 seconds
+      }, 3000);
       return () => clearInterval(interval);
     }, []);
 
@@ -131,9 +129,9 @@ const CourseRecommendations = () => {
       <header style={headerStyle}>
         <h1 style={{ margin: "0", fontSize: "18px" }}>Explore Opportunities</h1>
         <div>
-        <button style={headerButtonStyle} onClick={navigateToPreviousVRExperience}>Explore Previous VR Experience</button>
-        <button style={headerButtonStyle} onClick={navigateToRecommendations}>Explore Another Experience</button>
-          
+          <button style={headerButtonStyle} onClick={navigateToPreviousVRExperience}>Explore Previous VR Experience</button>
+          <button style={headerButtonStyle} onClick={navigateToRecommendations}>Explore Another Experience</button>
+
         </div>
       </header>
       <main style={mainStyle}>
@@ -176,7 +174,7 @@ const containerStyle = {
   margin: "0",
   boxSizing: "border-box",
   overflow: "hidden",
-  backgroundColor: "#E8F5E9",           // light green background
+  backgroundColor: "#E8F5E9",
   "@media (max-width: 768px)": {
     padding: "0 10px",
   },
@@ -227,7 +225,7 @@ const imageStyle = {
 };
 
 const navButtonStyle = {
-  backgroundColor: "#4CAF50",        // green
+  backgroundColor: "#4CAF50",
   color: "#fff",
   border: "none",
   borderRadius: "50%",
@@ -249,7 +247,7 @@ const linkStyle = {
   display: "inline-block",
   marginTop: "10px",
   padding: "8px 12px",
-  backgroundColor: "#4CAF50",        // green
+  backgroundColor: "#4CAF50",
   color: "#fff",
   textDecoration: "none",
   borderRadius: "5px",
@@ -257,7 +255,7 @@ const linkStyle = {
 };
 
 const footerStyle = {
-  backgroundColor: "#388E3C",        // darker green
+  backgroundColor: "#388E3C",
   textAlign: "center",
   color: "#fff",
   fontSize: "12px",
@@ -279,7 +277,7 @@ const mainStyle = {
 };
 
 const headerStyle = {
-  backgroundColor: "#4CAF50",        // green
+  backgroundColor: "#4CAF50",
   color: "#fff",
   padding: "15px 50px 15px",
   fontSize: "16px",
@@ -334,7 +332,7 @@ const sectionTitleStyle = {
   fontSize: "20px",
   marginBottom: "10px",
   padding: "0 20px",
-  color: "#2E7D32",                   // deep green
+  color: "#2E7D32",
   "@media (max-width: 480px)": {
     fontSize: "16px",
     padding: "0 10px",
@@ -344,7 +342,7 @@ const sectionTitleStyle = {
 const cardTitleStyle = {
   fontSize: "14px",
   margin: "10px 0",
-  color: "#1B5E20",                   // darker green
+  color: "#1B5E20",
   "@media (max-width: 480px)": {
     fontSize: "12px",
   },

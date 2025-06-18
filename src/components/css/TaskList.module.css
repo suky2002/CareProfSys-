@@ -1,6 +1,3 @@
-/* src/components/TaskList.module.css */
-
-/* Reset de bază și box-sizing */
 *,
 *::before,
 *::after {
@@ -9,7 +6,6 @@
   padding: 0;
 }
 
-/* Containerul dropdown-ului */
 .taskContainer {
   position: absolute;
   top: 10px;
@@ -21,21 +17,18 @@
   font-family: sans-serif;
   overflow: hidden;
   transition: max-height 0.3s ease, width 0.3s ease;
-  max-height: 48px; /* În starea închisă, doar header-ul (48px) este vizibil */
+  max-height: 48px;
   z-index: 1000;
 }
 
-/* Când dropdown-ul este deschis, extinde în jos */
 .taskContainer.open {
-  max-height: 500px; /* suficient pentru lista de task-uri + buton */
+  max-height: 500px;
 }
 
-/* Pe desktop: păstrează lățimea fixă când e deschis */
 .taskContainer.open:not(.mobileFullscreen) {
   width: 240px;
 }
 
-/* Când e deschis pe mobil (≤768px), să ocupe întreg ecranul */
 @media (max-width: 768px) {
   .taskContainer.mobileFullscreen {
     top: 0;
@@ -49,7 +42,6 @@
   }
 }
 
-/* Header-ul dropdown-ului (titlu + iconiță) */
 .taskHeader {
   display: flex;
   align-items: center;
@@ -68,14 +60,12 @@
   align-items: center;
 }
 
-/* Conținutul din interior (apasă pentru a afișa lista) */
 .taskListContent {
   background-color: rgba(0, 0, 0, 0.85);
   padding: 12px 16px 16px;
   overflow-y: auto;
 }
 
-/* Lista de <ul> și <li> */
 .taskUl {
   list-style: none;
   margin-bottom: 12px;
@@ -91,13 +81,12 @@
   border-bottom: none;
 }
 
-/* Task completat: culoare verde + text tăiat */
 .taskLi.completed {
   color: #4caf50;
   text-decoration: line-through;
 }
 
-/* Butonul de navigare */
+
 .taskButton {
   display: block;
   width: 100%;
@@ -116,18 +105,15 @@
   background-color: #388e3c;
 }
 
-/* Buton disabled */
 .disabled {
   background-color: #777 !important;
   cursor: not-allowed !important;
 }
 
-/* Pe mobil: previne overflow orizontal intern */
+
 @media (max-width: 768px) {
   .taskListContent {
-    height: calc(100vh - 48px); /* Header de 48px + restul spațiului vertical */
+    height: calc(100vh - 48px);
     overflow-x: hidden;
   }
 }
-/* TaskList.module.css - Stiluri pentru lista de task-uri */
-/* TaskList.module.css - Stiluri pentru lista de task-uri */

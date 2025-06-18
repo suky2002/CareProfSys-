@@ -10,7 +10,6 @@ export default function TaskList({ tasks }) {
   const allDone = tasks.every((t) => t.completed);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Detectează dacă ecranul este <= 768px pentru a aplica modul "fullscreen" pe mobil
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   useEffect(() => {
     const onResize = () => {
@@ -28,15 +27,13 @@ export default function TaskList({ tasks }) {
         ${isMobile && isOpen ? styles.mobileFullscreen : ""}
       `}
     >
-      {/* Header-ul dropdown-ului */}
       <div className={styles.taskHeader} onClick={() => setIsOpen((p) => !p)}>
-        <span className={styles.taskTitle}>Task-uri</span>
+        <span className={styles.taskTitle}>Tasks</span>
         <span className={styles.taskIcon}>
           {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </span>
       </div>
 
-      {/* Conținutul dropdown-ului (afișat doar când isOpen == true) */}
       {isOpen && (
         <div className={styles.taskListContent}>
           <ul className={styles.taskUl}>
@@ -54,7 +51,7 @@ export default function TaskList({ tasks }) {
             onClick={() => navigate("/course-recommendations")}
             disabled={!allDone}
           >
-            {allDone ? "Continuă la recomandări" : "Finalizați task-urile"}
+            {allDone ? "Continue to Recommendations" : "Complete all tasks"}
           </button>
         </div>
       )}

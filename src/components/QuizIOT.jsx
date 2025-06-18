@@ -1,5 +1,3 @@
-// src/components/QuizIOT.jsx
-
 import React, { useState } from 'react';
 
 const IOT_QUESTIONS = [
@@ -18,9 +16,9 @@ const IOT_QUESTIONS = [
       "Processing data close to where it is generated",
       "Using a high-latency network connection"
     ],
-    correctIndex: 2, // processing close to source
+    correctIndex: 2,
   },
-  // …you can add more questions here if needed
+
 ];
 
 export default function QuizIOT({ onClose, onComplete }) {
@@ -42,7 +40,6 @@ export default function QuizIOT({ onClose, onComplete }) {
     }
   };
 
-  // If we've answered all questions, show the final score screen
   if (currentIdx >= IOT_QUESTIONS.length) {
     return (
       <div
@@ -95,7 +92,6 @@ export default function QuizIOT({ onClose, onComplete }) {
     );
   }
 
-  // Otherwise, show the current question
   return (
     <div
       style={{
@@ -118,7 +114,7 @@ export default function QuizIOT({ onClose, onComplete }) {
       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
         <h2 style={{ margin: 0 }}>IoT Quiz</h2>
         <div>
-          🏆 Score: {score} / {IOT_QUESTIONS.length}  
+          🏆 Score: {score} / {IOT_QUESTIONS.length}
           ❓ Question: {currentIdx + 1} / {IOT_QUESTIONS.length}
         </div>
       </div>
