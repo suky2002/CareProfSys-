@@ -82,7 +82,8 @@ export default function Level2() {
         setShowProblem(true);
       } else {
         playSound("success.mpeg");
-        setShowResults(true); // <-- ADĂUGĂ ASTA
+        setShowProblem(false);    // <-- adaugă asta!
+        setShowResults(true);     // <-- și asta!
       }
     }, 1500);
   };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { fixSignalTasks } from "../data/fixSignalTasks";
 import InstructionOverlayFix from "../components/InstructionOverlayFix";
 import ProblemOverlayFix from "../components/ProblemOverlayFix";
+import { useNavigate } from "react-router-dom";
 
 function getBadge(score, total) {
     if (score === total) {
@@ -21,7 +22,9 @@ export default function FixSignal() {
     const [showInstruction, setShowInstruction] = useState(true);
     const [showProblem, setShowProblem] = useState(false);
     const [score, setScore] = useState(0);
-    const [answers, setAnswers] = useState([]); // array cu {selected, correct, prompt}
+    const [answers, setAnswers] = useState([]);
+    const [showResults, setShowResults] = useState(false);
+    const navigate = useNavigate();
 
     const task = fixSignalTasks[currentTask];
 
@@ -53,8 +56,30 @@ export default function FixSignal() {
                 setShowProblem(true);
             } else {
                 playSound("success.mpeg");
+                setShowProblem(false);
+                setShowResults(true);
             }
         }, 1500);
+    };
+
+    // Reset pentru retry
+    const handleRetry = () => {
+        setCurrentTask(0);
+        setScore(0);
+        setAnswers([]);
+        setShowInstruction(true);
+        setShowResults(false);
+        setSelected(null);
+    };
+
+    // Mergi la Level 1
+    const handleBackToLevel1 = () => {
+        navigate("/level1");
+    };
+
+    // Mergi la Level 3
+    const handleToLevel3 = () => {
+        navigate("/control-room");
     };
 
     return (
@@ -70,7 +95,7 @@ export default function FixSignal() {
                 />
             )}
 
-            {!showInstruction && !showProblem && currentTask < fixSignalTasks.length && (
+            {!showInstruction && !showProblem && !showResults && currentTask < fixSignalTasks.length && (
                 <div className="max-w-5xl w-full">
                     {/* Progress bar */}
                     <div className="w-full max-w-xl mx-auto bg-gray-200 rounded-full h-4 mb-8 overflow-hidden">
@@ -79,10 +104,6 @@ export default function FixSignal() {
                             style={{ width: `${((currentTask + 1) / fixSignalTasks.length) * 100}%` }}
                         />
                     </div>
-
-                    <h2 className="text-2xl font-bold mb-6 text-center">
-                        Task {currentTask + 1} of {fixSignalTasks.length}
-                    </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         {task.options.map((option, index) => (
                             <button
@@ -110,7 +131,7 @@ export default function FixSignal() {
                 </div>
             )}
 
-            {!showInstruction && !showProblem && currentTask === fixSignalTasks.length && (
+            {showResults && (
                 <div className="text-center space-y-6 max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold text-green-400">Results</h2>
                     <p className="text-lg">
@@ -153,7 +174,7 @@ export default function FixSignal() {
                     {/* Redirect logic */}
                     {score >= Math.ceil(fixSignalTasks.length * 0.7) ? (
                         <button
-                            onClick={() => {/* navighează la level 3 */ }}
+                            onClick={handleToLevel3}
                             className="mt-6 px-6 py-2 bg-green-600 rounded hover:bg-green-700 transition text-white"
                         >
                             Proceed to Level 3: Control Room
@@ -165,18 +186,13 @@ export default function FixSignal() {
                                 Please review and try again!
                             </p>
                             <button
-                                onClick={() => {
-                                    setCurrentTask(0);
-                                    setScore(0);
-                                    setAnswers([]);
-                                    setShowInstruction(true);
-                                }}
+                                onClick={handleRetry}
                                 className="mt-4 px-6 py-2 bg-purple-600 rounded hover:bg-purple-700 transition text-white"
                             >
                                 Retry Level 2
                             </button>
                             <button
-                                onClick={() => {/* navighează la level 1 */ }}
+                                onClick={handleBackToLevel1}
                                 className="mt-4 ml-4 px-6 py-2 bg-gray-600 rounded hover:bg-gray-700 transition text-white"
                             >
                                 Back to Level 1
