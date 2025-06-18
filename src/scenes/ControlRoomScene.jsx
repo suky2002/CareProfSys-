@@ -79,7 +79,7 @@ function ControlRoomResults({ badges, results, onGoToHub, onAutoRecommend }) {
                                         <span className="text-green-600">{res.correctLabel}</span>
                                     </div>
                                 )}
-                                {/* Optional: afișează imaginile dacă există */}
+
                                 {res.answerImg && (
                                     <div className="flex items-center gap-2 mt-2">
                                         <span className="text-xs">Your image:</span>
@@ -178,32 +178,32 @@ export default function ControlRoomScene() {
     const [badges, setBadges] = useState([]);
     const [results, setResults] = useState([]);
 
-    // --- Hotspoturi extra pentru Marzipano ---
+    // --- Hotspoturi extra cu tematică de broadcasting engineer ---
     const extraHotspots = [
         {
             yaw: -2.2,
             pitch: 0.1,
-            type: "coffee",
-            label: "Coffee Machine",
-            description: "A must-have for long live broadcasts. Keeps the crew awake!"
+            type: "audio-mixer",
+            label: "Audio Mixer",
+            description: "Here you control and balance all audio sources for the live broadcast. A key tool for any broadcast engineer."
         },
         {
             yaw: 2.5,
             pitch: -0.1,
-            type: "clock",
-            label: "Studio Clock",
-            description: "Precise timing is crucial for live TV. Never miss a cue!"
+            type: "video-switcher",
+            label: "Video Switcher",
+            description: "Switch between camera feeds and video sources in real time. Essential for live production."
         },
         {
             yaw: -1.2,
             pitch: 0.2,
-            type: "whiteboard",
-            label: "Whiteboard",
-            description: "Used for quick notes, schedules, and troubleshooting diagrams."
+            type: "signal-monitor",
+            label: "Signal Monitor",
+            description: "Monitor the integrity and quality of all incoming and outgoing broadcast signals."
         }
     ];
 
-    // --- Simulare taskuri și rezultate (înlocuiește cu logica reală după caz) ---
+    // --- Simulare taskuri și rezultate  ---
     const handleAllTasksDone = (surveillanceResult) => {
         setBadges([
             { label: "Expert", image: "/Imagini/badge3.png" }
@@ -327,7 +327,7 @@ Broadcast engineer tasks:
 • Maintain signal quality and troubleshoot issues in real-time.`
                             },
                             ...extraHotspots,
-                            // Adaugă hotspotul pentru Surveillance doar când nu rulează taskurile
+                            // Surveillance hotspot rămâne neschimbat
                             ...(!showWiringTask && !showSurveillanceTask ? [{
                                 yaw: -0.6,
                                 pitch: 0.1,
@@ -338,9 +338,9 @@ Broadcast engineer tasks:
                         onHotspotClick={(hotspot) => {
                             if (
                                 hotspot.type === "info" ||
-                                hotspot.type === "coffee" ||
-                                hotspot.type === "clock" ||
-                                hotspot.type === "whiteboard"
+                                hotspot.type === "audio-mixer" ||
+                                hotspot.type === "video-switcher" ||
+                                hotspot.type === "signal-monitor"
                             ) setShowPopup(hotspot);
                             if (hotspot.type === "navigation") navigate(hotspot.targetScene);
                             if (hotspot.type === "surveillance") setShowSurveillanceTask(true);
