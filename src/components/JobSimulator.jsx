@@ -7,23 +7,56 @@ function JobSimulator({ onClose, onComplete }) {
       id: 'pcb',
       label: 'Name two common PCB design rules',
       type: 'pcb',
-
       keywords: ['trace', 'copper', 'etch', 'clearance', 'mask', 'silkscreen']
+    },
+    {
+      id: 'pcb2',
+      label: 'What is a via used for in a PCB?',
+      type: 'pcb',
+      keywords: ['via', 'layer', 'connect', 'hole', 'trace']
+    },
+    {
+      id: 'pcb3',
+      label: 'Name one reason why PCB traces shouldn’t be too thin',
+      type: 'pcb',
+      keywords: ['current', 'resistance', 'heat', 'burn']
     },
     {
       id: 'code',
       label: 'Write a valid C++ function signature for calculating factorial',
       type: 'code',
-
       keywords: ['int', 'factorial', '()']
+    },
+    {
+      id: 'code2',
+      label: 'Write a C++ loop that calculates the factorial of a number using a for loop',
+      type: 'code',
+      keywords: ['for', 'factorial', 'int']
+    },
+    {
+      id: 'code3',
+      label: 'What is the purpose of #include <iostream> in C++?',
+      type: 'code',
+      keywords: ['input', 'output', 'cin', 'cout']
     },
     {
       id: 'model',
       label: 'In Blender, describe how to subdivide a mesh',
       type: 'model',
-
       keywords: ['subdivide', 'edit mode', 'apply', 'mesh', 'modifier']
     },
+    {
+      id: 'model2',
+      label: 'How do you move an object in Blender using the keyboard?',
+      type: 'model',
+      keywords: ['g', 'move', 'grab', 'axis', 'shift']
+    },
+    {
+      id: 'model3',
+      label: 'What does the "Tab" key do in Blender?',
+      type: 'model',
+      keywords: ['edit mode', 'toggle', 'object mode']
+    }
   ];
 
   const [slots, setSlots] = useState(shuffle(taskTemplates));
@@ -35,7 +68,6 @@ function JobSimulator({ onClose, onComplete }) {
 
   useEffect(() => {
     if (timeLeft <= 0) {
-
       onComplete(score);
       return;
     }
@@ -54,31 +86,26 @@ function JobSimulator({ onClose, onComplete }) {
     let ok = false;
 
     if (current.type === 'pcb') {
-
       let count = 0;
       current.keywords.forEach((kw) => {
         if (answer.toLowerCase().includes(kw)) {
           count += 1;
         }
       });
-
       ok = count >= 2;
     }
 
     if (current.type === 'code') {
-
       ok = current.keywords.every((kw) => answer.includes(kw));
     }
 
     if (current.type === 'model') {
-
       let count = 0;
       current.keywords.forEach((kw) => {
         if (answer.toLowerCase().includes(kw)) {
           count += 1;
         }
       });
-
       ok = count >= 2;
     }
 
@@ -115,29 +142,6 @@ function JobSimulator({ onClose, onComplete }) {
 
       <div style={{ width: '60%', textAlign: 'center', marginBottom: '2rem' }}>
         <h3>{current.label}</h3>
-
-        {current.type === 'pcb' && (
-          <p>
-            Provide at least two common PCB design rules (for example: trace width, clearance, etc.).
-            <br />
-            <em>(Hint: mention words like “trace”, “copper”, “etch”, “clearance”, “mask”, “silkscreen”)</em>
-          </p>
-        )}
-        {current.type === 'code' && (
-          <p>
-            Write a valid C++ function signature for calculating factorial.
-            <br />
-            <em>(It must include “int”, “factorial”, and parentheses “()” in your answer.)</em>
-          </p>
-        )}
-        {current.type === 'model' && (
-          <p>
-            In Blender, explain how to subdivide a mesh.
-            <br />
-            <em>(Include at least two of: “subdivide”, “edit mode”, “apply”, “mesh”, “modifier”)</em>
-          </p>
-        )}
-
         <textarea
           rows={5}
           cols={50}
