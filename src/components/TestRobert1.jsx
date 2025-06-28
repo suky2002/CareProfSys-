@@ -1133,13 +1133,13 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
       />
 
       <mesh
-        position={[7, 1, 5]}
+        position={[7, 1.2, 5]}
         onPointerDown={e => {
           e.stopPropagation();
           openJobSimulator();
         }}
       >
-        <boxGeometry args={[1, 1, 0.2]} />
+        <boxGeometry args={[1, 0.5, 0.2]} />
         <meshStandardMaterial color="orange" />
       </mesh>
     </group>
