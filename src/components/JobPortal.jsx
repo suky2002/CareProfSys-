@@ -5,11 +5,13 @@ import { motion } from 'framer-motion';
 function JobIntroPortalContent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const matchScore = location.state?.matchScore ?? null;
+
+  const matchScore = 33.3;
+
   const isMatch = matchScore !== null && matchScore >= 60;
 
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black">
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-black font-sans">
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black" />
 
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 -translate-y-[10%] px-8">
@@ -29,13 +31,11 @@ function JobIntroPortalContent() {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-center mb-12"
           >
+            <p className="text-xl text-white mb-4">
+              Following a comprehensive algorithmic analysis conducted by the automated analytical system, a preliminary compatibility assessment has been performed. The resulting
+            </p>
             <p className="text-2xl font-medium text-white mb-2">
               Matching Score: <span className="text-yellow-400 font-bold">{matchScore}%</span>
-            </p>
-            <p className={`text-xl ${isMatch ? 'text-green-400' : 'text-orange-400'}`}>
-              {isMatch
-                ? "Great match! You're ready to dive into this role."
-                : "This role might be challenging, but you're welcome to explore it."}
             </p>
           </motion.div>
         )}
