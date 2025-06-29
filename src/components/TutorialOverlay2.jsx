@@ -34,21 +34,19 @@ const TutorialOverlay2 = ({ onClose }) => {
       content: (
         <>
           <p>
-            There are <strong>7 tasks</strong> you need to complete to learn how
-            an electronics engineer works:
+            As part of your engineering simulation, you’ll go through <strong>7 interactive steps</strong> that reflect a typical workflow in an electronics lab:
           </p>
           <ul>
-            <li>1. Press the LCD screen (Task 1)</li>
-            <li>2. Turn on the computer (blue button) (Task 2)</li>
-            <li>3. Examine the Arduino board (Task 3)</li>
-            <li>4. Interact with the light sensor (LSR) (Task 4)</li>
-            <li>5. Measure voltage at the multimeter area (Task 5)</li>
-            <li>6. Answer the Arduino quiz question (Task 6)</li>
-            <li>7. Press the buzzer (Task 7)</li>
+            <li>1. Start by <strong>turning on the PC</strong>. Press the blue button to power up the system.</li>
+            <li>2. Once the PC is running, <strong>open the IoT quiz</strong> and answer the questions to test your basic knowledge.</li>
+            <li>3. Head over to the shelf and <strong>inspect the components</strong> available for this session.</li>
+            <li>4. Move to the wall and <strong>verify the electric panel</strong> to ensure everything is safe and properly connected.</li>
+            <li>5. Go to your designated desk and <strong>check the layout and setup of your workspace</strong>.</li>
+            <li>6. Take a closer look at the <strong>Arduino board</strong> on your table and analyze how it's connected.</li>
+            <li>7. Finally, <strong>check the printed documents</strong> on the desk to complete your assessment.</li>
           </ul>
           <p>
-            Completing all tasks will unlock extra features and let you freely
-            explore the lab.
+            Completing all steps will unlock extra features and allow you to freely explore the lab.
           </p>
         </>
       ),

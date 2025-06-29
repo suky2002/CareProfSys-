@@ -713,7 +713,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent, lcdRef }) {
         position={[-1.3, 1.2, -11.5]}
         rotation={[3, 0, 0]}
         scale={[1.3, 0.7, 1]}
-        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/US.png'); }}
+        onClick={(e) => { e.stopPropagation(); onShowComponent('/Imagini/us.jpg'); }}
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial transparent opacity={0} />
@@ -757,7 +757,7 @@ function BoardModel({ onLCDClick, onComplete, onShowComponent, lcdRef }) {
         scale={[0.3, 0.3, 1]}
         onClick={(e) => {
           e.stopPropagation();
-          onShowComponent('/Imagini/led.jpg');
+          onShowComponent('/Imagini/ldr.jpg');
           onComplete?.(4);
         }}
       >
@@ -1046,6 +1046,7 @@ const Room = ({ characterRef, monitorImage, handleComputerClick, handleRedClick,
         onPointerDown={(e) => {
           e.stopPropagation();
           handleShowDiagram(true);
+          completeTask(10);
         }}
       />
 
@@ -1181,14 +1182,15 @@ const Environment = () => {
   // 1) tasks state
   const [tasks, setTasks] = useState([
     { id: 2, description: "Open the PC", completed: false },
+    { id: 9, description: "Open the IOT quiz", completed: false },        
     { id: 5, description: "Check the objects from shelf", completed: false },
-    { id: 6, description: 'Verify the Electric Panel', completed: false },
+    { id: 6, description: "Verify the Electric Panel", completed: false },
     { id: 3, description: "Go to your desk and verify your table", completed: false },
-    { id: 1, description: "Examinează Arduino-ul de pe masă", completed: false }
-
+    { id: 1, description: "Check the Arduino Board", completed: false },
+    { id: 10, description: "Check the papers", completed: false }           
   ]);
   const handleIotQuizComplete = (finalScore) => {
-
+    completeTask(9);
     setIotScore(finalScore);
     setShowIotQuiz(false);
     console.log('IoT Quiz score:', finalScore);
@@ -1310,20 +1312,23 @@ const Environment = () => {
           zIndex: 1000
         }}
       >
-        <button
-          onClick={() => setFreeCamera(false)}
-          style={{
-            background: "#4caf50",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            padding: "6px 12px",
-            cursor: "pointer",
-            fontSize: "0.9rem"
-          }}
-        >
-          Revenire Cameră
-        </button>
+      <button
+  onClick={() => {
+    const event = new KeyboardEvent('keydown', { key: 'p' });
+    window.dispatchEvent(event);
+  }}
+  style={{
+    background: "#4caf50",
+    color: "#fff",
+    border: "none",
+    borderRadius: 4,
+    padding: "6px 12px",
+    cursor: "pointer",
+    fontSize: "0.9rem"
+  }}
+>
+  Revenire Cameră
+</button>
       </div>
 
       <div
@@ -1391,14 +1396,15 @@ const Environment = () => {
             &times;
           </button>
           <img
-            src="/Imagini/buzzer_electricaldiagram.jpg"
-            alt="Buzzer Electrical Diagram"
-            style={{
-              maxWidth: "90%",
-              maxHeight: "90%",
-              objectFit: "contain",
-              boxShadow: "0 0 16px rgba(0,0,0,0.5)",
-              borderRadius: 8,
+             src="/Imagini/buzzer_electricaldiagram.jpg"
+             alt="Buzzer Electrical Diagram"
+             onClick={() => completeTask(10)}
+             style={{
+               maxWidth: "90%",
+               maxHeight: "90%",
+               objectFit: "contain",
+               boxShadow: "0 0 16px rgba(0,0,0,0.5)",
+               borderRadius: 8,
             }}
           />
         </div>

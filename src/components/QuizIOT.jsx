@@ -37,6 +37,7 @@ export default function QuizIOT({ onClose, onComplete }) {
     } else {
       // Quiz finished
       onComplete(score + (chosenIdx === currentQ.correctIndex ? 1 : 0));
+     
     }
   };
 
