@@ -1,7 +1,5 @@
-// utils/skills.js
 import Papa from 'papaparse';
 
-// Funcție pentru clasificarea manuală a industriei pe baza titlului jobului
 function classifyIndustry(jobTitle, originalIndustry) {
   const title = jobTitle.toLowerCase();
 
@@ -35,15 +33,13 @@ function classifyIndustry(jobTitle, originalIndustry) {
     return "Hospitality";
   }
 
-  // Dacă nu s-a potrivit niciuna dintre regulile de mai sus, folosim industria originală,
-  // iar dacă nici ea nu e definită, clasificăm ca "Others"
   return originalIndustry || "Others";
 }
 
 export async function fetchSkills() {
   const response = await fetch('/Career_Path_Jobs_With_Skills_and_MatchScores.csv');
   if (!response.ok) {
-    console.error("Nu am putut accesa fișierul CSV", response.status);
+    console.error("Could not access the CSV file", response.status);
     return [];
   }
   
@@ -60,21 +56,20 @@ export async function fetchSkills() {
     }
   });
 
-  console.log("Skill-uri unice extrase:", Array.from(skills));
+  console.log("Extracted unique skills:", Array.from(skills));
   return Array.from(skills);
 }
 
 export async function fetchJobs() {
   const response = await fetch('/Career_Path_Jobs_With_Skills_and_MatchScores.csv');
   if (!response.ok) {
-    console.error("Nu am putut accesa fișierul CSV", response.status);
+    console.error("Could not access the CSV file", response.status);
     return [];
   }
   
   const text = await response.text();
   const parsedData = Papa.parse(text, { header: true, skipEmptyLines: true });
 
-  // Mapăm fiecare rând într-un obiect job, apoi filtrăm pe cele cu industrie validă (nu "Others").
   const allJobs = parsedData.data.map((row) => {
     const title = row.JobTitle;
     const originalIndustry = row.IndustryCluster;
@@ -90,9 +85,9 @@ export async function fetchJobs() {
     };
   });
 
-  // Excludem job-urile clasificate drept "Others" și pe cele fără industrie definită
   const filteredJobs = allJobs.filter(job => job.industry && job.industry !== "Others");
 
-  console.log("Joburi procesate din CSV (fără Others):", filteredJobs);
+  console.log("Jobs processed from CSV (excluding 'Others'):", filteredJobs);
   return filteredJobs;
 }
+

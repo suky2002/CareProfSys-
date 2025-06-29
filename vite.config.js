@@ -10,9 +10,9 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',    // ascultă pe toate interfețele, inclusiv localhost
-    port: 5173,         // portul implicit
-    strictPort: true,   // eșuează dacă portul e deja folosit
-    open: false,        // nu deschide automat browserul
+    host: '0.0.0.0',    
+    port: 5173,         
+    strictPort: true,   
+    open: false,        
   },
 });

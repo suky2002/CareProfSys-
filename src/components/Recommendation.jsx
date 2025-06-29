@@ -1,13 +1,10 @@
-
-
 import "./css/Recommendation.module.css";
-
 import React from "react";
 
 const Recommendation = ({ recommendedJobs }) => {
   return (
     <div className="recommendation-container">
-      <h2>Recomandările Tale</h2>
+      <h2>Your Recommendations</h2>
       {Object.keys(recommendedJobs).length > 0 ? (
         <div className="recommendation-grid">
           {Object.keys(recommendedJobs).map((industry, index) => (
@@ -17,7 +14,7 @@ const Recommendation = ({ recommendedJobs }) => {
                 {recommendedJobs[industry].map((job, idx) => (
                   <div key={idx} className="recommendation-card">
                     <h4>{job.title}</h4>
-                    <p>Scor: {(job.score * 100).toFixed(0)}%</p>
+                    <p>Match Score: {(job.score * 100).toFixed(0)}%</p>
                     <a
                       href={
                         job.type === "vr"
@@ -28,7 +25,7 @@ const Recommendation = ({ recommendedJobs }) => {
                       }
                       className="recommendation-link"
                     >
-                      Explorează în VR
+                      Explore in VR
                     </a>
                   </div>
                 ))}
@@ -37,11 +34,10 @@ const Recommendation = ({ recommendedJobs }) => {
           ))}
         </div>
       ) : (
-        <p>Nicio experiență disponibilă pentru skill-urile selectate.</p>
+        <p>No available experience matches your selected skills.</p>
       )}
     </div>
   );
 };
 
 export default Recommendation;
-

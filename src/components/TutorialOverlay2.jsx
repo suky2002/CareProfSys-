@@ -11,17 +11,15 @@ const TutorialOverlay2 = ({ onClose }) => {
       title: "Welcome to the Electronics Lab!",
       content: (
         <>
-          <p>
-            You have entered a simulated electronics laboratory. Use the{" "}
-            <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and{" "}
-            <strong>D</strong> keys to move around. Click on objects to interact.
-          </p>
-          <p>
-            Point‐and‐click anywhere on the floor to have your character walk there.
-            Press <strong>M</strong> at any time to switch to free‐camera mode,
-            then rotate/zoom with the mouse.
-          </p>
-        </>
+        <p>
+          Welcome to the virtual electronics lab! Navigate the space using <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> on your keyboard, or simply tap anywhere on your screen if you're on a mobile device.
+        </p>
+        <p>
+          Interact with the environment by clicking or tapping on objects. You can freely explore the surroundings using a mouse, touch gestures, or your VR headset.
+        </p>
+       
+      </>
+      
       ),
       image: (
         <img

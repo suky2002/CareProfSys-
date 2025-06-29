@@ -90,7 +90,7 @@ export default function LandingPage() {
 
   const faqs = [
     { question: "How do I access the VR simulations?", answer: "Simply click 'Start Exploring' and follow the onboarding steps; no additional installs needed." },
-    { question: "Can I track my progress?", answer: "Yes—our dashboard logs your sessions, earned credentials, and AI insights over time." },
+    { question: "Can I track my progress?", answer: "We will provide an update for this one, please follow up on email." },
     { question: "Are educational credentials recognized?", answer: "We partner with accredited institutions to issue microcredentials that boost your portfolio." },
   ];
 
