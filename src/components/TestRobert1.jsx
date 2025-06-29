@@ -50,27 +50,34 @@ function KeyboardTeleport({ controlsRef, setFreeCamera, setSavedCameraPosition }
   const { camera } = useThree();
 
   useEffect(() => {
+    const teleport = () => {
+      setFreeCamera(true);
+      setSavedCameraPosition(camera.position.clone());
+
+      if (controlsRef.current) {
+        controlsRef.current.enabled = true;
+        controlsRef.current.target.set(0, 0, 0);
+      }
+
+      camera.position.set(0, 5, -15);
+      camera.lookAt(0, 0, 0);
+    };
+
     const onKeyDown = (e) => {
       if (e.key.toLowerCase() === 'm') {
-        setFreeCamera(true);
-        setSavedCameraPosition(camera.position.clone());
-
-        if (controlsRef.current) {
-          controlsRef.current.enabled = true;
-
-          controlsRef.current.target.set(0, 0, 0);
-        }
-
-        camera.position.set(0, 5, -15);
-        camera.lookAt(0, 0, 0);
+        // call teleport twice
+        teleport();
+        teleport();
       }
     };
+
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [camera, controlsRef, setFreeCamera, setSavedCameraPosition]);
 
   return null;
 }
+
 
 function centerModelAtGround(scene) {
   scene.traverse((child) => {
