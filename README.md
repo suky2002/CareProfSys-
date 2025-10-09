@@ -48,7 +48,6 @@ CareProfSys-/
 │   │   ├── InstructionOverlay.jsx
 │   │   ├── SurveillanceTask.jsx
 │   │   ├── WiringTask.jsx
-│   │   └── ... (other UI and utility components)
 │   ├── data/
 │   ├── scenes/
 │   ├── utils/
